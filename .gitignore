@@ -153,9 +153,9 @@ cython_debug/
 .idea/
 
 # Kitchen
-/json/files.json
-/resources/editor/Actor
-/resources/editor/Music
-/resources/editor/Prop
-/resources/editor/Particle
-/resources/editor/Sound
+*.json
+resources/editor/Actor/
+resources/editor/Music/
+resources/editor/Prop/
+resources/editor/Particle/
+resources/editor/Sound/
