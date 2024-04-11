@@ -5,6 +5,7 @@ import os
 import sys
 import pathlib
 from pathlib import Path
+from lxml import etree as ET
 import json
 
 import tkinter as tk
@@ -28,8 +29,6 @@ for folder in current_path.split("\\"):
 sys.path.append(project_path)
 os.chdir(project_path)
 load_settings(project_path)
-
-from lxml import etree as ET
 
 from direct.showbase.ShowBase import ShowBase
 from direct.gui.DirectGui import DirectButton, DirectFrame

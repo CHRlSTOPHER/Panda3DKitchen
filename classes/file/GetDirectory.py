@@ -28,7 +28,7 @@ def get_resource_and_filename(title="", initialdir="", multiple=False):
             item_name = path_list[0].split('.')[0]
 
             print(item_name, filepath)
-        else:
+        elif file_location != "":
             print(f'"{file_location}" {PATH_NOT_FOUND}')
 
         return item_name, filepath

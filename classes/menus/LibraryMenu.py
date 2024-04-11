@@ -128,8 +128,9 @@ class LibraryMenu(CanvasMenu, LibraryGui):
         camera = base.make_camera(buffer)
         camera.node().get_lens().set_fov(G.PREVIEW_FOV)
         camera.reparent_to(base.preview_render)
-        path = f"{G.RESOURCES}{G.R_EDITOR}{self.mode}/{self.item_name}.png"
-        file_name = Filename.from_os_specific(path)
+        path = f"{G.RESOURCES}{G.EDITOR}{self.mode}/{self.item_name}.png"
+        # reassign the destination to the entire directory location
+        file_name = Filename.from_os_specific(base.root_folder + path)
 
         base.graphicsEngine.render_frame()
         buffer.save_screenshot(file_name)

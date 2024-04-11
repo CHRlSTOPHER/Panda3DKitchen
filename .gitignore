@@ -20,7 +20,6 @@ parts/
 sdist/
 var/
 venv/
-.idea/
 wheels/
 share/python-wheels/
 *.egg-info/
@@ -151,4 +150,12 @@ cython_debug/
 #  be found at https://github.com/github/gitignore/blob/main/Global/JetBrains.gitignore
 #  and can be added to the global gitignore or merged into this file.  For a more nuclear
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
-#.idea/
+.idea/
+
+# Kitchen
+/json/files.json
+/resources/editor/Actor
+/resources/editor/Music
+/resources/editor/Prop
+/resources/editor/Particle
+/resources/editor/Sound

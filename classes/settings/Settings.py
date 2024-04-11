@@ -10,14 +10,13 @@ def load_settings(current_path):
     json_settings = json.loads(open(G.SETTINGS_JSON).read())
     file_settings = json.loads(open(G.FILE_JSON).read())
 
-    # Define default resources
+    # Define external resource directories.
+    model_paths = file_settings[G.EXTERNAL_RESOURCES]
+    # Define and add the default resource directory
     default_path = current_path + G.RESOURCES
-    model_paths = [default_path]
-    # Define external resources and add to list of model paths
-    for resource_dir in file_settings[G.EXTERNAL_RESOURCES]:
-        model_paths.append(resource_dir)
+    model_paths.append(default_path)
 
-    # Add resource directories to model path prc file
+    # Add resource directories to the prc model-path variable
     for path in model_paths:
         loadPrcFileData("", f"model-path {path}")
 
