@@ -1,0 +1,16 @@
+{
+	"full_screen": false,
+	"window_size": "1350 720",
+	"monitor_resolution": "1920 1080",
+	"borderless": false,
+
+	"default_model_extension": ".egg",
+	"bits": 24,
+	"framebuffer-multisample": 1,
+	"multisamples": 8,
+	"show_fps_meter": true,
+
+	"auto_walker": false,
+	"fov": 50,
+	"sfx_volume": 1
+}
