@@ -63,6 +63,11 @@ def get_node_data(xml_file):
 
     return node_list
 
+def add_default_transform(root_node):
+    for data in transform_data:
+        transform = ET.SubElement(root_node, data)
+        transform.text = transform_data[data]
+
 def append_node_data(xml_file, node_type, item_name):
     tree, root = load_xml(xml_file)
     # check if instances of the node already exist
@@ -76,8 +81,6 @@ def append_node_data(xml_file, node_type, item_name):
     item = ET.SubElement(root, node_type, name=item_name, index=f"{instances}")
     # Define the child sub element. Set it to none since this is the parent.
     root_node = ET.SubElement(item, 'root_node')
-    for data in transform_data:
-        transform = ET.SubElement(root_node, data)
-        transform.text = transform_data[data]
+    add_default_transform(root_node)
 
     tree.write(xml_file, pretty_print=True, encoding="utf-8")

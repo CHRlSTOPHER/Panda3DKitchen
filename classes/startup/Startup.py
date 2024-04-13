@@ -12,6 +12,7 @@ import tkinter as tk
 from tkinter import filedialog
 import shutil
 
+from classes.file.HandleXMLData import add_default_transform
 from classes.settings.Settings import load_settings
 
 """
@@ -33,7 +34,7 @@ load_settings(project_path)
 from direct.showbase.ShowBase import ShowBase
 from direct.gui.DirectGui import DirectButton, DirectFrame
 
-from classes.apps.AppGlobals import XML_FILE_NAMES
+from classes.apps.AppGlobals import XML_FILE_NAMES, PROPS
 from classes.file.HandleJsonData import (FILES_JSON,
                                          update_json_last_selected)
 from classes.editors.SceneEditor import SceneEditor
@@ -100,7 +101,12 @@ class Startup(ShowBase):
             # otherwise, create the file.
             root = ET.Element(name)
             tree = ET.ElementTree(root)
-            tree.write(file)
+            # add camera data to the prop xml file
+            if name == PROPS:
+                item = ET.SubElement(root, 'prop', name='camera', index='0')
+                root_node = ET.SubElement(item, 'root_node')
+                add_default_transform(root_node)
+            tree.write(file, pretty_print=True, encoding="utf-8")
 
     def load_project(self):
         base.project_location = self.get_folder_location()

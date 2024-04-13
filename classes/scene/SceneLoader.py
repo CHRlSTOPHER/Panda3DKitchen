@@ -57,10 +57,13 @@ class SceneLoader:
 
             for data_name in node_data:
                 name, index, part = data_name.split("|")
-                model = json_data[name]
-                node = self.generate_node(model)
-                self.set_transforms(node, node_data[data_name])
-                self.props.append(node)
+                if name not in G.SPECIAL_NODES:
+                    model = json_data[name]
+                    node = self.generate_node(model)
+                    self.set_transforms(node, node_data[data_name])
+                    self.props.append(node)
+                elif name == 'camera':
+                    self.set_transforms(camera, node_data[data_name])
 
         if mode == AG.PARTICLES:
             print('particles', node_data)
