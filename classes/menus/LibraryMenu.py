@@ -1,6 +1,5 @@
 import json
 
-from direct.gui.DirectGui import DGG
 from panda3d.core import Filename, Texture
 
 from classes.file.GetDirectory import get_resource_and_filename
@@ -121,19 +120,19 @@ class LibraryMenu(CanvasMenu, LibraryGui):
         self.preview_menu.hide_special_buttons()
 
     def capture_and_save_image(self):
-        # make a temporary scene off screen to get a picture and save it.
         buffer = base.win.make_texture_buffer("buffer", 128, 128, Texture(),
                                               to_ram=True)
         buffer.set_sort(-100)
+
         camera = base.make_camera(buffer)
-        camera.node().get_lens().set_fov(G.PREVIEW_FOV)
         camera.reparent_to(base.preview_render)
+        camera.node().get_lens().set_fov(G.PREVIEW_FOV)
+
         path = f"{G.RESOURCES}{G.EDITOR}{self.mode}/{self.item_name}.png"
         # reassign the destination to the entire directory location
-        file_name = Filename.from_os_specific(base.root_folder + path)
-
+        filename = Filename.from_os_specific(base.root_folder + path)
         base.graphicsEngine.render_frame()
-        buffer.save_screenshot(file_name)
+        buffer.save_screenshot(filename)
 
         # cleanup
         base.graphicsEngine.remove_window(buffer)

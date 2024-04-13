@@ -211,6 +211,7 @@ class TextureMenu:
 class ParticleMenu:
 
     def __init__(self):
+        self.entity = None
         self.library_buttons = []
         self.scene_buttons = []
         self.get_buttons_dict = {

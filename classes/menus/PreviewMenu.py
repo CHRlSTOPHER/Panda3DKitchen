@@ -9,6 +9,7 @@ from classes.menus.PreviewGui import PreviewGui
 from classes.menus.PreviewModes import (ActorMenu, PropMenu,
                                         TextureMenu, ParticleMenu)
 from classes.props.PlaneModel import PlaneModel
+from classes.scene.SceneWindow import SCENE_REGION
 from classes.settings import Globals as G
 
 DISABLED_COLOR = (.9, .9, .9, 1)
@@ -68,11 +69,11 @@ class PreviewMenu(PreviewGui):
         base.preview_cam = base.make_camera(base.preview_buffer)
         base.preview_render = NodePath('preview_render')
 
+        base.preview_cam.reparent_to(base.preview_render)
+        base.preview_window.set_texture(base.preview_buffer.get_texture(), 1)
         base.preview_window.reparent_to(self.entity_frame)
         base.preview_cam.node().get_lens().set_fov(G.PREVIEW_FOV)
-        base.preview_cam.reparent_to(base.preview_render)
         base.preview_buffer.set_active(1)
-        base.preview_window.set_texture(base.preview_buffer.get_texture(), 1)
 
         # preview bg
         base.preview_bg = PlaneModel(pos=(0, 1000, 0), scale=320)
@@ -144,6 +145,7 @@ class PreviewMenu(PreviewGui):
         self.entity_frame['frameSize'] = (-.98, .98, .420, .99)
         self.entity_frame['geom_scale'] = (0, 0, 0)
 
+        base.scene_region.set_dimensions(*SCENE_REGION)
         self.mini_frame.show()
         self.scene_window.get_window().show()
         for node in self.hide_preview_nodes:
@@ -159,6 +161,7 @@ class PreviewMenu(PreviewGui):
         self.entity_frame['frameSize'] = (-1, 1, -1, 1)
         self.entity_frame['geom_scale'] = (1, 1, 1)
 
+        base.scene_region.set_dimensions(0, 0, 0, 0)
         self.mini_frame.hide()
         self.scene_window.get_window().hide()
         for node in self.hide_preview_nodes:

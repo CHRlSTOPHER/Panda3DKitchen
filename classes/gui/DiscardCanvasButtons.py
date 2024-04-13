@@ -117,7 +117,7 @@ class DiscardCanvasButtons:
 
             if self.json:  # remove the image file
                 image_path = (base.root_folder +
-                              f"{G.RESOURCES}{G.R_EDITOR}{mode}/{name}{G.PNG}")
+                              f"{G.RESOURCES}{G.EDITOR}{mode}/{name}{G.PNG}")
                 self.remove_file(image_path)
 
     def remove_file(self, image_path):

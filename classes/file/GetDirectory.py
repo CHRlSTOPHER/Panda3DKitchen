@@ -27,7 +27,10 @@ def get_resource_and_filename(title="", initialdir="", multiple=False):
             # grab the first item from the list and remove the file extension.
             item_name = path_list[0].split('.')[0]
 
-            print(item_name, filepath)
+            # cut off forward slash at the start of the path if there is one.
+            if filepath[0] == "/":
+                filepath = filepath[1:]
+
         elif file_location != "":
             print(f'"{file_location}" {PATH_NOT_FOUND}')
 
