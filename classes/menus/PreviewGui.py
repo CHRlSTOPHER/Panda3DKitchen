@@ -5,13 +5,17 @@ from classes.settings import Globals as G
 from classes.menus import MenuGlobals as MG
 
 
-class PreviewGui:
+class PreviewGui(DirectFrame):
 
     def __init__(self):
-        self.left_arrow = None
-        self.right_arrow = None
+        DirectFrame.__init__(self, parent=base.a2dBottomLeft)
+        self.initialiseoptions(PreviewGui)
         self.entity_frame = None
         self.entity_title = None
+        self.mini_frame = None
+        self.left_arrow = None
+        self.right_arrow = None
+        self.shrink_icon = None
         self.entity_button_frame = None
         self.entity_mode_buttons = {}
         self.camera_button = None
@@ -28,7 +32,7 @@ class PreviewGui:
         window_geom2 = PlaneModel(MG.EDITOR_MAP_PATH + MG.MENU_HOR_1)
 
         ''' PREVIEW WINDOW GUI '''
-        self.entity_frame = DirectFrame(parent=base.a2dBottomLeft,
+        self.entity_frame = DirectFrame(parent=self,
                                         scale=(0.49, 0.919, 0.689),
                                         pad=(0, 0),
                                         geom=window_geom1,
@@ -48,10 +52,10 @@ class PreviewGui:
         self.entity_button_frame = DirectFrame(parent=self.entity_frame)
 
         self.mini_frame = DirectFrame(parent=self.entity_frame,
-                                       geom=window_geom2,
-                                       pos=(0.0, 0.0, 0.699),
-                                       scale=(0.997, 1.0, 0.292),
-                                       pad=(0, 0))
+                                      geom=window_geom2,
+                                      pos=(0.0, 0.0, 0.699),
+                                      scale=(0.997, 1.0, 0.292),
+                                      pad=(0, 0))
         self.mini_frame.hide()
 
         # The 6 entity buttons
@@ -80,10 +84,10 @@ class PreviewGui:
                                         pad=(0.132, 0.834),
                                         extraArgs=[1])
         self.shrink_icon = DirectButton(parent=self.entity_frame,
-                                     text="-",
-                                     pos=(0.789, 0.0, 0.837),
-                                     scale=(0.307, 0.463, 0.223),
-                                     pad=(0.039, 0.081))
+                                        text="-",
+                                        pos=(0.789, 0.0, 0.837),
+                                        scale=(0.307, 0.463, 0.223),
+                                        pad=(0.039, 0.081))
 
         self.camera_button = DirectButton(parent=self.entity_frame,
                                           geom=cam_geom,

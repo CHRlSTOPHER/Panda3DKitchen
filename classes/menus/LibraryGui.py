@@ -6,14 +6,18 @@ from classes.props.PlaneModel import PlaneModel
 from classes.settings import Globals as G
 
 
-class LibraryGui:
+class LibraryGui(DirectFrame):
 
     def __init__(self):
+        DirectFrame.__init__(self, parent=base.a2dLeftCenter)
+        self.initialiseoptions(LibraryGui)
         self.library_window = None
         self.library_scroll = None
         self.library_title = None
+        self.swap_button = None
         self.library_folder = None
         self.library_trash = None
+        self.library_confirm = None
         self.computer_font = loader.load_font(f"{G.EDITOR}{MG.COMPUTER_FONT}")
 
         self.load_gui()
@@ -25,10 +29,10 @@ class LibraryGui:
         check_geom = PlaneModel(MG.EDITOR_MAP_PATH + MG.CHECK_TEXTURE)
         swap_geom = PlaneModel(MG.EDITOR_MAP_PATH + MG.SWAP_TEXTURE)
 
-        self.library_window = DirectFrame(parent=base.a2dLeftCenter,
+        self.library_window = DirectFrame(parent=self,
                                           geom=window_geom,
-                                          pos=(0.502, 0.0, -0.003),
-                                          scale=(0.493, 0.697, 0.571),
+                                          pos=(0.499, 0.0, -0.003),
+                                          scale=(0.454, 0.697, 0.571),
                                           suppressMouse=0)
 
         self.library_scroll = DirectScrolledFrame(

@@ -17,6 +17,7 @@ class LibraryMenu(CanvasMenu, LibraryGui):
         LibraryGui.__init__(self)
         CanvasMenu.__init__(self, preview_menu, self.library_window,
                             self.library_scroll, 'library')
+        self.discard_frame = None
         self.scene_menu = None
         self.scene_window = None
         self.item_name = None
@@ -48,10 +49,12 @@ class LibraryMenu(CanvasMenu, LibraryGui):
         if self.swap_menu:
             self.swap_button.wrt_reparent_to(self.scene_menu.scene_frame)
             self.scene_menu.scene_frame.show()
+            self.discard_frame.disable_trash_mode(restore=False)
             self.library_window.hide()
         else:
             self.swap_button.wrt_reparent_to(self.library_window)
             self.scene_menu.scene_frame.hide()
+            self.scene_menu.discard_frame.disable_trash_mode(restore=False)
             self.library_window.show()
 
     def choose_file(self, item_name=None, item_directory=None, search=True,
@@ -188,13 +191,13 @@ class LibraryMenu(CanvasMenu, LibraryGui):
                 self.scene_menu.add_item_to_xml(self.button_copy.get_name())
 
         if self.preview_menu.within:
-                item_name = self.button_copy.get_name()
-                json_path = f"{G.DATABASE_DIRECTORY}{mode}Library.json"
-                json_data = json.loads(open(json_path).read())
-                item_directory = self.check_for_actor(mode, json_data,
-                                                      item_name, class_mode)
-                self.choose_file(item_name, item_directory, search=False,
-                                 _camera=False)
+            item_name = self.button_copy.get_name()
+            json_path = f"{G.DATABASE_DIRECTORY}{mode}Library.json"
+            json_data = json.loads(open(json_path).read())
+            item_directory = self.check_for_actor(mode, json_data,
+                                                  item_name, class_mode)
+            self.choose_file(item_name, item_directory, search=False,
+                             _camera=False)
 
         self.button_copy.remove_node()
 

@@ -6,8 +6,8 @@ from classes.file.HandleJsonData import delete_json_entries
 from classes.file.HandleXMLData import delete_xml_entries
 from classes.settings import Globals as G
 
-SELECT_COLOR = (.8, .8, .8, 1)
 RED_COLOR = (.9, .4, .4, 1)
+BASE_GUI_COLOR = (.8, .8, .8, 1)
 BRIGHT_RED = (.9, 0, 0, 1)
 
 
@@ -69,7 +69,7 @@ class DiscardCanvasButtons:
     def disable_trash_mode(self, restore):
         self.confirm_button.hide()
         self.left_button.show()
-        self.trash_button['frameColor'] = (.75, .75, .75, 1)
+        self.trash_button['frameColor'] = BASE_GUI_COLOR
         self.trash_button.set_color_scale(1, 1, 1, 1)
         if restore:
             self.update_button_commands(None)
@@ -111,7 +111,7 @@ class DiscardCanvasButtons:
 
     def remove_discarded_files(self, mode):
         for button in self.discarded_buttons:
-            # store these names so we can remove them from the database.
+            # store these names, so we can remove them from the database.
             name = button.get_name()
             self.discarded_names.append(name)
 
@@ -122,7 +122,7 @@ class DiscardCanvasButtons:
 
     def remove_file(self, image_path):
         if self.preview_menu.mode == 'Texture':
-            return # no image file is saved for textures.
+            return  # no image file is saved for textures.
 
         try:
             os.remove(image_path)

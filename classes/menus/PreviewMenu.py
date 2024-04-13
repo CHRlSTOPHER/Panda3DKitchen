@@ -96,7 +96,7 @@ class PreviewMenu(PreviewGui):
                 texture = loader.load_texture(f"{G.EDITOR}bgs/{item}")
                 self.bg_textures.append(texture)
 
-        if self.bg_textures: # Make sure there's actually a file lol.
+        if self.bg_textures:  # Make sure there's actually a file lol.
             base.preview_bg.set_texture(self.bg_textures[0])
 
     def bind_buttons(self):
@@ -135,7 +135,7 @@ class PreviewMenu(PreviewGui):
             self.hide_mini_window()
 
     def show_mini_window(self):
-        self.cancel_preview() # close preview if they have it open
+        self.cancel_preview()  # close preview if they have it open
         self.entity_button_frame.wrt_reparent_to(self.mini_frame)
         self.entity_title.wrt_reparent_to(self.mini_frame)
         self.entity_frame.reparent_to(base.a2dBottomLeft)

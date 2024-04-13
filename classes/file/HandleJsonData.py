@@ -40,4 +40,3 @@ def delete_json_data(path, entries):
 def delete_json_entries(mode, entries):
     path = f"{G.DATABASE_DIRECTORY}{mode}Library.json"
     delete_json_data(path, entries)
-

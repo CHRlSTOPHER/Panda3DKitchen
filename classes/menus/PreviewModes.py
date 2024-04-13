@@ -187,7 +187,7 @@ class TextureMenu:
         for i in range(0, len(names)):
             self.textures[f"{names[i]}"] = f"{dirs[i]}"
 
-    def save_item(self, item_name, item_location): # don't remove these args.
+    def save_item(self, item_name, item_location):  # don't remove these args.
         save_data = self.textures
         update_library_database("Texture", save_data)
 

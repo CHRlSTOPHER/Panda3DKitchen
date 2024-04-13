@@ -5,6 +5,7 @@ from panda3d.core import loadPrcFileData, CullBinManager
 
 from classes.settings import Globals as G
 
+
 def load_settings(current_path):
     # Define json data
     json_settings = json.loads(open(G.SETTINGS_JSON).read())

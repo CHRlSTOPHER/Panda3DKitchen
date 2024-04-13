@@ -13,6 +13,7 @@ class SceneMenu(CanvasMenu, SceneLoader, SceneGui):
         CanvasMenu.__init__(self, preview_menu, self.scene_frame,
                             self.scene_scroll, 'scene')
         SceneLoader.__init__(self)
+        self.discard_frame = None
         self.add_item = False
 
     def generate(self):

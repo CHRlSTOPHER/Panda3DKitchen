@@ -9,12 +9,14 @@ transform_data = {
     'color_scale': "1, 1, 1, 1"
 }
 
+
 def load_xml(xml_file):
     # load xml in a way that allows for pretty print
     parser = ET.XMLParser(remove_blank_text=True)
     tree = ET.parse(xml_file, parser)
     root = tree.getroot()
     return tree, root
+
 
 def delete_xml_entries(mode, names):
     split_names = [name.split('|') for name in names]
@@ -36,15 +38,17 @@ def delete_xml_entries(mode, names):
                 root.remove(element)
                 # remove the name from the split names.
                 split_names.pop(i)
-                break # check completed. go to the next element.
+                break  # check completed. go to the next element.
             i += 1
 
     tree.write(xml_file, pretty_print=True, encoding="utf-8")
+
 
 def convert_string_to_tuple(string):
     split_string = string.split(',')
     transform = [int(num) for num in split_string]
     return transform
+
 
 def get_node_data(xml_file):
     tree, root = load_xml(xml_file)
@@ -63,19 +67,21 @@ def get_node_data(xml_file):
 
     return node_list
 
+
 def add_default_transform(root_node):
     for data in transform_data:
         transform = ET.SubElement(root_node, data)
         transform.text = transform_data[data]
+
 
 def append_node_data(xml_file, node_type, item_name):
     tree, root = load_xml(xml_file)
     # check if instances of the node already exist
     instances = 0
     for child in root:
-        name = child.attrib['name'] # get the name of the node
-        if item_name in name: # check if there are other instances of it
-            instances += 1 # if so, add to the counter
+        name = child.attrib['name']  # get the name of the node
+        if item_name in name:  # check if there are other instances of it
+            instances += 1  # if so, add to the counter
 
     # create a new prop / actor with a name and index
     item = ET.SubElement(root, node_type, name=item_name, index=f"{instances}")

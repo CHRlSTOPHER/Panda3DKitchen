@@ -6,14 +6,18 @@ from classes.settings import Globals as G
 from classes.menus import MenuGlobals as MG
 
 
-class SceneGui:
+class SceneGui(DirectFrame):
 
     def __init__(self):
+        DirectFrame.__init__(self, parent=base.a2dLeftCenter)
+        self.initialiseoptions(SceneGui)
+        self.scene_frame = None
         self.scene_window = None
         self.scene_scroll = None
         self.scene_title = None
         self.scene_inspect = None
         self.scene_trash = None
+        self.scene_confirm = None
         self.computer_font = loader.load_font(f"{G.EDITOR}{MG.COMPUTER_FONT}")
 
         self.load_gui()
@@ -24,11 +28,11 @@ class SceneGui:
         window_geom = PlaneModel(MG.EDITOR_MAP_PATH + MG.MENU_VERT_1)
         check_geom = PlaneModel(MG.EDITOR_MAP_PATH + MG.CHECK_TEXTURE)
 
-        self.scene_frame = DirectFrame(parent=base.a2dLeftCenter,
-                                        geom=window_geom,
-                                        pos=(0.502, 0.0, -0.003),
-                                        scale=(0.493, 0.697, 0.571),
-                                        suppressMouse=0)
+        self.scene_frame = DirectFrame(parent=self,
+                                       geom=window_geom,
+                                       pos=(0.499, 0.0, -0.003),
+                                       scale=(0.454, 0.697, 0.571),
+                                       suppressMouse=0)
         self.scene_frame.hide()
 
         self.scene_scroll = DirectScrolledFrame(
@@ -58,7 +62,8 @@ class SceneGui:
                                         scale=(0.202, 0.142, 0.19),
                                         pad=(1.11, -0.054))
         self.scene_confirm = DirectButton(self.scene_frame,
-                                  geom=check_geom,
-                                  pos=(-0.438, 0.0, -0.735),
-                                  scale=(0.229, 0.142, 0.187),
-                                  pad=(0.873, -0.054))
+                                          geom=check_geom,
+                                          pos=(-0.438, 0.0, -0.735),
+                                          scale=(0.229, 0.142, 0.187),
+                                          pad=(0.873, -0.054))
+        self.scene_confirm.hide()

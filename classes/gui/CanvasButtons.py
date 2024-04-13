@@ -85,7 +85,7 @@ class CanvasButtons:
             # slice up any complex names
             split_name = name.split("|")[0]
             if split_name in G.SPECIAL_NODES:
-                continue # skip over special nodes.
+                continue  # skip over special nodes.
 
             filepath = f"{G.EDITOR}{mode}/{split_name}.png"
             if mode == 'Texture':  # load the actual file.

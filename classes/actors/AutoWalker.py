@@ -1,6 +1,6 @@
 """
 Actors will inherit this class to automatically transition between
-animations like neutral and walk/run/etc..
+animations like neutral and walk/run/etc.
 Only 'neutral' and 'walk' animations are set by default.
 """
 import json

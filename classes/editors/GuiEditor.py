@@ -50,7 +50,8 @@ class GuiEditor(DirectObject):
             set = self.transform_inputs[input][1]
             value = self.transform_inputs[input][2]
             task = input + '_task'
-            self.accept(input, self.move_task, extraArgs=[get, set, value, task])
+            self.accept(input, self.move_task, extraArgs=[get, set,
+                                                          value, task])
             self.accept(input + "-up", taskMgr.remove, extraArgs=[task])
 
         # padding inputs

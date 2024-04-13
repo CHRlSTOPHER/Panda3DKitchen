@@ -1,9 +1,5 @@
-"""
-I'll make a description for this file later lol.
-"""
 import os
 import sys
-import pathlib
 from pathlib import Path
 from lxml import etree as ET
 import json
@@ -13,23 +9,6 @@ from tkinter import filedialog
 import shutil
 
 from classes.file.HandleXMLData import add_default_transform
-from classes.settings.Settings import load_settings
-
-"""
-The code under this comment needs to be ran before the other imports
-if you are running this file through CMD or IDE.
-(You will still need to use a version of python that comes with Panda3D)
-"""
-current_path = os.getcwd()
-project_path = ""
-for folder in current_path.split("\\"):
-    project_path += folder + "/"
-    if folder == "Panda3DKitchen":
-        break
-
-sys.path.append(project_path)
-os.chdir(project_path)
-load_settings(project_path)
 
 from direct.showbase.ShowBase import ShowBase
 from direct.gui.DirectGui import DirectButton, DirectFrame
@@ -52,10 +31,10 @@ NODE_MOVER = True
 
 class Startup(ShowBase):
 
-    def __init__(self):
+    def __init__(self, root_folder):
         ShowBase.__init__(self)
 
-        base.root_folder = ""
+        base.root_folder = root_folder
         base.project_location = None
         base.node_mover = None
         base.top_window = None
@@ -67,11 +46,6 @@ class Startup(ShowBase):
             self.delete_project,
             self.move_project,
         ]
-        current_path = pathlib.Path(__file__).parent.resolve()
-        # Cut off the last two directory files.
-        split_path = str(current_path).split("\\")[:-1][:-1]
-        for path in split_path:
-            base.root_folder += path + "/"
 
         base.disable_mouse()
         base.set_background_color(0, .502, .502, 1)
@@ -155,7 +129,7 @@ class Startup(ShowBase):
             # if file exists and mode is delete, remove file.
             if os.path.exists(file) and delete_mode:
                 os.remove(file)
-            # if file does not exist and mode is approve, return False.
+            # if file does not exist and mode is approved, return False.
             if not os.path.exists(file) and approve_mode:
                 return False
         return True  # otherwise default to True.
@@ -170,7 +144,3 @@ class Startup(ShowBase):
         update_json_last_selected(folder_location, "last-project")
 
         return folder_location
-
-
-project = Startup()
-project.run()
