@@ -8,7 +8,8 @@ from classes.props.PlaneModel import PlaneModel
 from classes.settings import Globals as G
 
 SCENE_BUFFER = [1920, 1080]
-SCENE_REGION = [0.281, 0.723, 0.255, 0.74]
+SCENE_REGION = [0.268, 0.735, 0.26, 0.737]
+BG_COLOR = (.7, .65, .7, 1)
 
 
 class SceneWindow:
@@ -44,6 +45,8 @@ class SceneWindow:
 
         # First, make display region that will render the main scene
         base.scene_region = base.win.makeDisplayRegion(*SCENE_REGION)
+        base.scene_region.set_clear_color_active(1)
+        base.scene_region.set_clear_color(BG_COLOR)
 
         # Second, we need a camera for the new display region
         scene_cam_node = Camera('main_cam')
