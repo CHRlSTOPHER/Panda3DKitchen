@@ -63,7 +63,7 @@ class SceneLoader:
                     self.set_transforms(node, node_data[data_name])
                     self.props.append(node)
                 elif name == 'camera':
-                    self.set_transforms(camera, node_data[data_name])
+                    self.set_transforms(base.scene_cam, node_data[data_name])
 
         if mode == AG.PARTICLES:
             print('particles', node_data)

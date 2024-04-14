@@ -8,6 +8,7 @@ transform_data = {
     "color": "1, 1, 1, 1",
     'color_scale': "1, 1, 1, 1"
 }
+TRANSFORM_NAMES = ['pos', 'hpr', 'scale', 'color', 'color_scale']
 
 
 def load_xml(xml_file):
@@ -66,6 +67,23 @@ def get_node_data(xml_file):
             node_list[f"{name}|{index}|{node.tag}"] = transforms
 
     return node_list
+
+
+def add_custom_transform(root_node, pos=None, hpr=None, scale=None,
+                         color=None, color_scale=None):
+    data = {}
+    i = 0
+    for transform in [pos, hpr, scale, color, color_scale]:
+        name = TRANSFORM_NAMES[i]
+        if transform:  # add custom pos if there is one
+            data[name] = f"{transform}"[1:][:-1]  # remove tuple encasing
+        else:  # otherwise fallback to the default value
+            data[name] = transform_data[name]
+        i += 1
+
+    for transform_name in data:
+        transform = ET.SubElement(root_node, transform_name)
+        transform.text = data[transform_name]
 
 
 def add_default_transform(root_node):

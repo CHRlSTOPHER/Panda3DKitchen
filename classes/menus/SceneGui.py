@@ -29,8 +29,8 @@ class SceneGui(DirectFrame):
 
         self.scene_frame = DirectFrame(parent=self,
                                        geom=window_geom,
-                                       pos=(0.499, 0.0, -0.003),
-                                       scale=(0.454, 0.697, 0.571),
+                                       pos=(0.457, 0.0, -0.009),
+                                       scale=(0.445, 0.688, 0.562),
                                        suppressMouse=0)
         self.scene_frame.hide()
 

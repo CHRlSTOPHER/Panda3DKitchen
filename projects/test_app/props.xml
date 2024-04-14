@@ -1,7 +1,7 @@
 <props>
   <prop name="camera" index="0">
     <root_node>
-      <pos>0, 0, 0</pos>
+      <pos>0, -15, 1</pos>
       <hpr>0, 0, 0</hpr>
       <scale>1, 1, 1</scale>
       <color>1, 1, 1, 1</color>

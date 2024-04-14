@@ -48,6 +48,7 @@ class SceneWindow:
         # Second, we need a camera for the new display region
         scene_cam_node = Camera('main_cam')
         base.scene_cam = NodePath(scene_cam_node)
+        base.scene_cam.node().get_lens().set_fov(fov)
         base.scene_region.setCamera(base.scene_cam)
 
         # Third, define the main area nodes will be reparented object too.
