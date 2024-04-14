@@ -18,6 +18,9 @@ from classes.file.HandleJsonData import (FILES_JSON,
                                          update_json_last_selected)
 from classes.editors.SceneEditor import SceneEditor
 from classes.menus.MasterMenu import MasterMenu
+from classes.menus import MenuGlobals as MG
+from classes.editors.GuiEditor import GuiEditor
+from classes.settings import Globals as G
 
 BUTTONS = [
     ("CREATE", (-.19, 0, -.77), (.103, .103, .103)),
@@ -36,8 +39,10 @@ class Startup(ShowBase):
 
         base.root_folder = root_folder
         base.project_location = None
+        base.gui_editor = None
         base.node_mover = None
         base.top_window = None
+        base.computer_font = loader.load_font(f"{G.EDITOR}{MG.COMPUTER_FONT}")
         self.project_frame = None
         self.display_regions = None
         self.commands = [
@@ -95,7 +100,8 @@ class Startup(ShowBase):
         self.project_frame.stash()
 
         # Load up all the editor tools
-        base.master_menu = MasterMenu(gui_editor=GUI_EDITOR)
+        base.gui_editor = GuiEditor()
+        base.master_menu = MasterMenu()
         base.scene_editor = SceneEditor([camera, base.scene_cam],
                                         base.scene_mouse_watcher,
                                         base.scene_region,

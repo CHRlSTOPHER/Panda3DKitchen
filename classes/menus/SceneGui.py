@@ -18,7 +18,6 @@ class SceneGui(DirectFrame):
         self.scene_inspect = None
         self.scene_trash = None
         self.scene_confirm = None
-        self.computer_font = loader.load_font(f"{G.EDITOR}{MG.COMPUTER_FONT}")
 
         self.load_gui()
 
@@ -46,7 +45,7 @@ class SceneGui(DirectFrame):
         self.scene_scroll.verticalScroll['frameColor'] = (.5, .5, .5, 1)
 
         self.scene_title = DirectFrame(parent=self.scene_frame,
-                                       text_font=self.computer_font,
+                                       text_font=base.computer_font,
                                        text_fg=(1, 1, 1, 1),
                                        frameVisibleScale=(0, 0),
                                        text="SCENE ITEMS", pad=(0, 0),

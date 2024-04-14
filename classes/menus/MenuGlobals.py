@@ -31,9 +31,10 @@ CANCEL_TEXTURE = 'cancel.png'
 CHECK_TEXTURE = "checkmark.png"
 SWAP_TEXTURE = "swap.png"
 COMPUTER_FONT = "fonts/computer.otf"
-MENU_VERT_1 = "menu1.png"
-MENU_HOR_1 = "menu2.png"
+MENU_VERT_1 = "menu1.jpg"
+MENU_HOR_1 = "menu2.jpg"
 MENU_HOR_2 = "menu3.png"
+MENU_HOR_3 = "menu4.jpg"
 VALUE = 'verticalScroll_value'
 
 EDITOR_MAP_PATH = f"{EDITOR}/maps/"

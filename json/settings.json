@@ -1,6 +1,7 @@
 {
 	"full_screen": false,
-	"window_size": "1350 720",
+
+	"window_size": "1920 1080",
 	"monitor_resolution": "1920 1080",
 	"borderless": false,
 

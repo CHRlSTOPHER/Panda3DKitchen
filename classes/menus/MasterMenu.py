@@ -8,9 +8,8 @@ from classes.scene.SceneWindow import SceneWindow
 
 class MasterMenu:
 
-    def __init__(self, sequence=None, gui_editor=False):
+    def __init__(self, sequence=None):
         self.sequence = sequence
-        base.gui_editor = gui_editor
         self.preview_menu = None
         self.library_menu = None
         self.scene_menu = None
@@ -24,8 +23,6 @@ class MasterMenu:
         # self.click_and_drag = ClickAndDrag(self.menu_frames)
 
     def generate(self):
-        if base.gui_editor:
-            base.gui_editor = GuiEditor()
 
         self.preview_menu = PreviewMenu()
         self.library_menu = LibraryMenu(self.preview_menu)

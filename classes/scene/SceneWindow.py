@@ -21,8 +21,8 @@ class SceneWindow:
                                         geom=self.window_geom,
                                         geom_pos=(0, 0, -.125),
                                         geom_scale=(1, 1, .89),
-                                        pos=(0.0, 0.0, 0.075),
-                                        scale=(0.89, 0.915, 0.645),
+                                        pos=(0.0, 0.0, 0.072),
+                                        scale=(0.884, 0.909, 0.639),
                                         frameVisibleScale=(0, 0),
                                         suppressMouse=0)
         self.scene_window.set_name('scene_window')

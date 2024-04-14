@@ -21,7 +21,6 @@ class PreviewGui(DirectFrame):
         self.camera_button = None
         self.random_anim_button = None
         self.cancel_button = None
-        self.computer_font = loader.load_font(f"{G.EDITOR}{MG.COMPUTER_FONT}")
 
         self.load_gui()
         self.load_preview_buttons()
@@ -42,7 +41,7 @@ class PreviewGui(DirectFrame):
         self.entity_frame['state'] = DGG.NORMAL
 
         self.entity_title = DirectFrame(parent=self.entity_frame,
-                                        text_font=self.computer_font,
+                                        text_font=base.computer_font,
                                         text_fg=(1, 1, 1, 1),
                                         frameVisibleScale=(0, 0),
                                         text="MODE PREVIEW", pad=(0, 0),

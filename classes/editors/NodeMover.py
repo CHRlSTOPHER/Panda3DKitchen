@@ -2,11 +2,11 @@
 Set a Node to move and rotate. Modify with keyboard inputs.
 The rate you can effect them can also be influenced by keyboard inputs.
 """
-from direct.showbase.DirectObject import DirectObject
 from direct.interval.IntervalGlobal import Sequence, Func, Wait
 from panda3d.core import NodePath
 import json
 
+from classes.editors.NodeMoverGui import NodeMoverGui
 from classes.settings import Globals as G
 
 KBS = json.loads(open(G.KEYBINDINGS_JSON).read())
@@ -14,10 +14,10 @@ BASE_MOVE_RATE = .1
 BASE_TURN_RATE = .5
 
 
-class NodeMover(NodePath, DirectObject):
+class NodeMover(NodeMoverGui, NodePath):
 
     def __init__(self, node=None, _camera=None):
-        DirectObject.__init__(self)
+        NodeMoverGui.__init__(self)
         self.move_options = None
         self.move_speed = BASE_MOVE_RATE
         self.turn_speed = BASE_TURN_RATE
@@ -54,6 +54,7 @@ class NodeMover(NodePath, DirectObject):
     def set_move_options(self):
         base_speed = G.NM_SPEEDS[-1][1]
         self.move_options = [
+            # in this instance, camel case is easier to read imo
             [self.setY, self.get_move_speed, base_speed],
             [self.setX, self.get_move_speed, -base_speed],
             [self.setY, self.get_move_speed, -base_speed],

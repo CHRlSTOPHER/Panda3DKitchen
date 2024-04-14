@@ -18,7 +18,6 @@ class LibraryGui(DirectFrame):
         self.library_folder = None
         self.library_trash = None
         self.library_confirm = None
-        self.computer_font = loader.load_font(f"{G.EDITOR}{MG.COMPUTER_FONT}")
 
         self.load_gui()
 
@@ -31,8 +30,8 @@ class LibraryGui(DirectFrame):
 
         self.library_window = DirectFrame(parent=self,
                                           geom=window_geom,
-                                          pos=(0.499, 0.0, -0.003),
-                                          scale=(0.454, 0.697, 0.571),
+                                          pos=(0.457, 0.0, -0.009),
+                                          scale=(0.445, 0.688, 0.562),
                                           suppressMouse=0)
 
         self.library_scroll = DirectScrolledFrame(
@@ -46,7 +45,7 @@ class LibraryGui(DirectFrame):
         self.library_scroll.verticalScroll['frameColor'] = (.5, .5, .5, 1)
 
         self.library_title = DirectFrame(parent=self.library_window,
-                                         text_font=self.computer_font,
+                                         text_font=base.computer_font,
                                          text_fg=(1, 1, 1, 1),
                                          frameVisibleScale=(0, 0),
                                          text="LIBRARY ITEMS",
