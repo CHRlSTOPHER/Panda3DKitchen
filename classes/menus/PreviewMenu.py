@@ -14,6 +14,11 @@ from classes.settings import Globals as G
 
 DISABLED_COLOR = (.9, .9, .9, 1)
 ENABLED_COLOR = (1, 1, 1, 1)
+ENTITY_FRAME_POS = [0.0, 0.0, -0.159]
+ENTITY_FRAME_SCALE = [0.514, 0.943, 0.713]
+MINI_FRAME_POS = [0.5, 0.0, -0.267]
+MINI_FRAME_SCALE = [0.49, 0.919, 0.689]
+
 MODES = {
     'Actor': ActorMenu,
     'Prop': PropMenu,
@@ -141,7 +146,8 @@ class PreviewMenu(PreviewGui):
         self.entity_frame.reparent_to(base.a2dBottomLeft)
 
         self.entity_button_frame.set_pos(-0.006, 0.0, 2.286)
-        self.entity_frame.set_pos(0.5, 0.0, -0.267)
+        self.entity_frame.set_pos(*MINI_FRAME_POS)
+        self.entity_frame.set_scale(*MINI_FRAME_SCALE)
         self.entity_frame['frameSize'] = (-.98, .98, .420, .99)
         self.entity_frame['geom_scale'] = (0, 0, 0)
 
@@ -157,7 +163,8 @@ class PreviewMenu(PreviewGui):
         self.entity_frame.reparent_to(base.aspect2d)
 
         self.entity_button_frame.set_pos((0, 0, 0))
-        self.entity_frame.set_pos(0, 0, 0)
+        self.entity_frame.set_pos(*ENTITY_FRAME_POS)
+        self.entity_frame.set_scale(*ENTITY_FRAME_SCALE)
         self.entity_frame['frameSize'] = (-1, 1, -1, 1)
         self.entity_frame['geom_scale'] = (1, 1, 1)
 

@@ -100,7 +100,7 @@ class Startup(ShowBase):
         self.project_frame.stash()
 
         # Load up all the editor tools
-        base.gui_editor = GuiEditor()
+        base.gui_editor = GuiEditor(activate=GUI_EDITOR)
         base.master_menu = MasterMenu()
         base.scene_editor = SceneEditor([camera, base.scene_cam],
                                         base.scene_mouse_watcher,

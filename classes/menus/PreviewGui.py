@@ -31,11 +31,8 @@ class PreviewGui(DirectFrame):
         window_geom2 = PlaneModel(MG.EDITOR_MAP_PATH + MG.MENU_HOR_1)
 
         ''' PREVIEW WINDOW GUI '''
-        self.entity_frame = DirectFrame(parent=self,
-                                        scale=(0.49, 0.919, 0.689),
-                                        pad=(0, 0),
-                                        geom=window_geom1,
-                                        suppressMouse=0)
+        self.entity_frame = DirectFrame(parent=self, pad=(0, 0),
+                                        geom=window_geom1, suppressMouse=0)
         self.entity_frame.set_name('preview_window')
         # bind frame to check for click and drags.
         self.entity_frame['state'] = DGG.NORMAL

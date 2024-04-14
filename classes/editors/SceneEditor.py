@@ -4,7 +4,6 @@ A collection of different classes. Mashes them together into an editor.
 from direct.showbase.DirectObject import DirectObject
 
 from classes.camera.RotationalCamera import RotationalCamera
-from classes.camera.FovScrollWheel import FovScrollWheel
 from .NodeMover import NodeMover
 from .NodeSelector import NodeSelector
 
@@ -13,7 +12,7 @@ class SceneEditor(DirectObject):
 
     def __init__(self, cameras=None, mouse_watcher=None,
                  display_region=None, _render=False,
-                 rot_cam_disable=True, fov=None):
+                 rot_cam_disable=True):
         DirectObject.__init__(self)
         self.cameras = []
         self.mouse_watcher = mouse_watcher
@@ -26,7 +25,6 @@ class SceneEditor(DirectObject):
         if not _render:
             self.render = render
         self.rot_cam_disable = rot_cam_disable
-        self.fov = fov
         self.node_selectors = None
         self.orb_cam = None
         self.hide_gui = False
@@ -38,13 +36,12 @@ class SceneEditor(DirectObject):
 
     def generate_features(self, camera):
         base.rot_cam = RotationalCamera(camera, self.rot_cam_disable)
-        base.fov_wheel = FovScrollWheel(self.fov, camera, self.mouse_watcher)
         base.node_mover = NodeMover(camera, camera)
         base.node_selector = NodeSelector(camera, self.render,
                                           self.mouse_watcher, base.node_mover)
 
     def cleanup(self):
-        classes = [base.node_mover, base.node_selector, base.fov_wheel]
+        classes = [base.node_mover, base.node_selector]
         if self.orb_cam:
             classes.append(self.orb_cam)
 

@@ -1,35 +1,27 @@
 import json
 
-from direct.gui.DirectGui import DirectFrame, DGG
+from direct.gui.DirectGui import DGG
 from panda3d.core import NodePath, Camera, MouseWatcher
 
-from classes.menus import MenuGlobals as MG
-from classes.props.PlaneModel import PlaneModel
+from classes.camera.FovScrollWheel import FovScrollWheel
+from classes.scene.SceneWindowGui import SceneWindowGui
 from classes.settings import Globals as G
 
 SCENE_BUFFER = [1920, 1080]
-SCENE_REGION = [0.268, 0.735, 0.26, 0.737]
+SCENE_REGION = [0.268, 0.735, 0.278, 0.755]
 BG_COLOR = (.7, .65, .7, 1)
 
 
-class SceneWindow:
+class SceneWindow(SceneWindowGui, FovScrollWheel):
 
     def __init__(self):
-        self.window_geom = PlaneModel(MG.EDITOR_MAP_PATH + MG.MENU_HOR_2)
+        SceneWindowGui.__init__(self)
         self.within = False
 
-        self.scene_window = DirectFrame(parent=aspect2d,
-                                        geom=self.window_geom,
-                                        geom_pos=(0, 0, -.125),
-                                        geom_scale=(1, 1, .89),
-                                        pos=(0.0, 0.0, 0.072),
-                                        scale=(0.884, 0.909, 0.639),
-                                        frameVisibleScale=(0, 0),
-                                        suppressMouse=0)
-        self.scene_window.set_name('scene_window')
-        self.scene_window['state'] = DGG.NORMAL
-
         self.generate()
+        # wait until the display region is generated to call the scene objects.
+        FovScrollWheel.__init__(self, None, base.scene_cam,
+                                base.scene_mouse_watcher)
 
     def generate(self):
         self.load_scene_region()

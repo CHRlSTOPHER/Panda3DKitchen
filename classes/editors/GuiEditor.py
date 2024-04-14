@@ -9,7 +9,9 @@ INCREMENT = .003
 
 class GuiEditor(DirectObject):
 
-    def __init__(self, gui=None, with_args=True):
+    def __init__(self, gui=None, with_args=True, activate=True):
+        if not activate:
+            return  # quick toggle option (mainly bts stuff)
         DirectObject.__init__(self)
         self.transform_inputs = {}
         self.gui = gui
