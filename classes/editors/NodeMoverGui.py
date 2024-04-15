@@ -55,3 +55,31 @@ class NodeMoverGui(DirectFrame):
                     pos=(pos[0]-.124, pos[1], pos[2]-.011),
                     scale=(0.1, 0.766, 0.256), text_fg=(0, 0, 0, 1))
         self.entries.append(entry)
+
+    def go_to_next_entry(self, direction):
+        # check which entry is selected, if one is selected.
+        in_focus = False
+        index = 0
+        for drag_object in self.click_and_drags:
+            if drag_object.in_focus:
+                in_focus = True
+                break # we found the current selected entry. leave
+            index += 1
+
+        if in_focus: # determine the next tab based on the current index
+            index += direction
+            index = self.validate_entry_index(index)
+            self.entries[index]['focus'] = 1
+        elif self.last_tab_entry != None: # use last tab entry to get next tab.
+            index = self.validate_entry_index(self.last_tab_entry + direction)
+            self.entries[index]['focus'] = 1
+        # store the last tab for later
+        self.last_tab_entry = index
+
+    def validate_entry_index(self, index):
+        # check if the index is valid
+        if index > len(self.entries) - 1:  # overflow
+            index = 0
+        elif index < 0:  # underflow
+            index = len(self.entries) - 1
+        return index

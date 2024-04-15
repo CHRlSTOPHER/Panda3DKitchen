@@ -54,9 +54,12 @@ class DirectEntryClickAndDrag:
         # check if the entry number is valid
         # remove the decimal and - num sign if there is one.
         value = self.entry.get().replace(".", "").replace("-", "")
+        set = self.func_catalog[self.entry_name][1]
         if value.isnumeric():
-            set = self.func_catalog[self.entry_name][1]
             # set the node value to the entry text value
+            set(float(self.entry.get()))
+        elif value == "": # set node and entry to 0 if empty.
+            self.entry.set(str(0))
             set(float(self.entry.get()))
 
     def modify_node(self, press, mouse_data):

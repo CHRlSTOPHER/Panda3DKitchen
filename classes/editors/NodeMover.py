@@ -25,6 +25,7 @@ class NodeMover(NodeMoverGui, NodePath, DirectEntryClickAndDrag):
         self.turn_speed = BASE_TURN_RATE
         self.allow_click = True
         self.allow_tasks = True
+        self.last_tab_entry = None
         self.move = True
 
         # The assigned key below will set the camera as the node being moved.
@@ -48,25 +49,6 @@ class NodeMover(NodeMoverGui, NodePath, DirectEntryClickAndDrag):
         for entry in self.entries:
             click_and_drag = DirectEntryClickAndDrag(entry, self)
             self.click_and_drags.append(click_and_drag)
-
-    def go_to_next_entry(self, direction):
-        # check which entry is selected, if one is selected.
-        in_focus = False
-        index = 0
-        for drag_object in self.click_and_drags:
-            if drag_object.in_focus:
-                in_focus = True
-                break # we found the current selected entry. leave
-            index += 1
-
-        if in_focus:
-            index += direction
-            # check if the index is valid
-            if index > len(self.entries) - 1:  # overflow
-                index = 0
-            elif index < 0:  # underflow
-                index = len(self.entries) - 1
-            self.entries[index]['focus'] = 1
 
     def set_node(self, node, flash_red=True):
         if node and self.allow_click:
