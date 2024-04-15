@@ -7,14 +7,16 @@ from panda3d.core import NodePath
 import json
 
 from classes.editors.NodeMoverGui import NodeMoverGui
+from classes.gui.DirectEntryClickAndDrag import DirectEntryClickAndDrag
 from classes.settings import Globals as G
 
 KBS = json.loads(open(G.KEYBINDINGS_JSON).read())
+VALID_ENTRIES = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '-']
 BASE_MOVE_RATE = .1
 BASE_TURN_RATE = .5
 
 
-class NodeMover(NodeMoverGui, NodePath):
+class NodeMover(NodeMoverGui, NodePath, DirectEntryClickAndDrag):
 
     def __init__(self, node=None, _camera=None):
         NodeMoverGui.__init__(self)
@@ -31,14 +33,45 @@ class NodeMover(NodeMoverGui, NodePath):
         else:
             cam = camera
 
+        self.generate(node, cam)
+
+    def generate(self, node, cam):
         self.accept(G.MIDDLE_MOUSE_BUTTON, self.set_node, extraArgs=[cam])
+        self.accept("tab", self.go_to_next_entry, extraArgs=[1])
+        self.accept("shift-tab", self.go_to_next_entry, extraArgs=[-1])
+        self.bind_gui()
         self.set_node(node)
         self.listen_for_key_inputs()
+
+    def bind_gui(self):
+        self.click_and_drags = []
+        for entry in self.entries:
+            click_and_drag = DirectEntryClickAndDrag(entry, self)
+            self.click_and_drags.append(click_and_drag)
+
+    def go_to_next_entry(self, direction):
+        # check which entry is selected, if one is selected.
+        in_focus = False
+        index = 0
+        for drag_object in self.click_and_drags:
+            if drag_object.in_focus:
+                in_focus = True
+                break # we found the current selected entry. leave
+            index += 1
+
+        if in_focus:
+            index += direction
+            # check if the index is valid
+            if index > len(self.entries) - 1:  # overflow
+                index = 0
+            elif index < 0:  # underflow
+                index = len(self.entries) - 1
+            self.entries[index]['focus'] = 1
 
     def set_node(self, node, flash_red=True):
         if node and self.allow_click:
             NodePath.__init__(self, node)
-            self.set_move_options()
+            self.define_move_options()
 
             if not flash_red:
                 return
@@ -50,25 +83,6 @@ class NodeMover(NodeMoverGui, NodePath):
                 Func(node.set_color_scale, *og_color_scale),
                 Func(self.toggle_click)
             ).start()
-
-    def set_move_options(self):
-        base_speed = G.NM_SPEEDS[-1][1]
-        self.move_options = [
-            # in this instance, camel case is easier to read imo
-            [self.setY, self.get_move_speed, base_speed],
-            [self.setX, self.get_move_speed, -base_speed],
-            [self.setY, self.get_move_speed, -base_speed],
-            [self.setX, self.get_move_speed, base_speed],
-            [self.setZ, self.getZ, self.get_move_speed, base_speed],
-            [self.setZ, self.getZ, self.get_move_speed, -base_speed],
-
-            [self.setP, self.getP, self.get_turn_speed, base_speed],
-            [self.setP, self.getP, self.get_turn_speed, -base_speed],
-            [self.setH, self.getH, self.get_turn_speed, base_speed],
-            [self.setH, self.getH, self.get_turn_speed, -base_speed],
-            [self.setR, self.getR, self.get_turn_speed, base_speed],
-            [self.setR, self.getR, self.get_turn_speed, -base_speed],
-        ]
 
     def listen_for_key_inputs(self):
         index = 0
@@ -88,8 +102,21 @@ class NodeMover(NodeMoverGui, NodePath):
             self.accept(f"{KBS[key]}-up", self.change_speed, extraArgs=[1])
 
     def start_movement(self, key, direction):
+        self.validate_entry_values()
         taskMgr.add(self.move_task, f"move_{key}",
                     extraArgs=[key, direction], appendTask=True)
+
+    def validate_entry_values(self):
+        for entry in self.entries:
+            value = entry.get()
+            new_value = ""
+            for digit in value:
+                # Only accept numbers, num signs, or decimals
+                if digit in VALID_ENTRIES:
+                    new_value += digit
+            entry.set(new_value)
+            # Do not accept direct entry changes once node mover has started
+            entry['focus'] = 0
 
     def move_task(self, key, index, task):
         if not self.move_options or not self.allow_tasks:
@@ -110,12 +137,29 @@ class NodeMover(NodeMoverGui, NodePath):
             direction = move_option[3]
             set_transform(get_transform() + get_speed() * direction)
 
-        print(self.get_pos(), self.get_hpr())
-
         return task.again
 
     def stop_move_task(self, key):
         taskMgr.remove(f"move_{key}")
+
+    def define_move_options(self):
+        base_speed = G.NM_SPEEDS[-1][1]
+        self.move_options = [
+            # in this instance, camel case is easier to read imo
+            [self.setY, self.get_move_speed, base_speed],
+            [self.setX, self.get_move_speed, -base_speed],
+            [self.setY, self.get_move_speed, -base_speed],
+            [self.setX, self.get_move_speed, base_speed],
+            [self.setZ, self.getZ, self.get_move_speed, base_speed],
+            [self.setZ, self.getZ, self.get_move_speed, -base_speed],
+
+            [self.setP, self.getP, self.get_turn_speed, base_speed],
+            [self.setP, self.getP, self.get_turn_speed, -base_speed],
+            [self.setH, self.getH, self.get_turn_speed, base_speed],
+            [self.setH, self.getH, self.get_turn_speed, -base_speed],
+            [self.setR, self.getR, self.get_turn_speed, base_speed],
+            [self.setR, self.getR, self.get_turn_speed, -base_speed],
+        ]
 
     def change_speed(self, speed):
         self.move_speed = BASE_MOVE_RATE / speed
@@ -129,6 +173,9 @@ class NodeMover(NodeMoverGui, NodePath):
 
     def get_turn_speed(self):
         return self.turn_speed
+
+    def get_move_options(self):
+        return self.move_options
 
     def set_click(self, click):
         self.allow_click = click

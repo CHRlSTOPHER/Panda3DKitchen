@@ -49,6 +49,7 @@ class NodeMoverGui(DirectFrame):
         entry = DirectEntry(parent=self.mover_frame, initialText=text,
                             pos=pos, width=4, scale=(0.088, 0.763, 0.253),
                             geom_scale=(.75, .75, .75), relief=0)
+        entry.set_name(label)
 
         DirectFrame(parent=self.mover_frame, text=label, relief=0,
                     pos=(pos[0]-.124, pos[1], pos[2]-.011),
