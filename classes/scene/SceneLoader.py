@@ -66,4 +66,4 @@ class SceneLoader:
                     self.set_transforms(base.scene_cam, node_data[data_name])
 
         if mode == AG.PARTICLES:
-            print('particles', node_data)
+            pass

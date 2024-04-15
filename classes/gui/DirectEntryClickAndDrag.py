@@ -1,4 +1,5 @@
 from direct.gui.DirectGui import DGG
+from direct.showbase.DirectObject import DirectObject
 
 UPDATE_TASK = "update_dced_task"
 MODIFY_TASK = "modify_node_trasform_task"
@@ -10,9 +11,10 @@ MODIFY_SPEED = {
 }
 
 
-class DirectEntryClickAndDrag:
+class DirectEntryClickAndDrag(DirectObject):
 
     def __init__(self, entry, func_catalog=None):
+        DirectObject.__init__(self)
         self.entry = entry
         self.func_catalog = func_catalog
         self.entry_name = entry.get_name()
@@ -28,6 +30,7 @@ class DirectEntryClickAndDrag:
         self.entry['command'] = self.update_value
         self.entry['focusInCommand'] = self.set_in_focus
         self.entry['focusOutCommand'] = self.set_out_focus
+        self.accept('control-a', self.delete_entry)
 
     # When the user presses enter, update the entry value.
     def update_value(self, mouse_data=None):
@@ -69,6 +72,10 @@ class DirectEntryClickAndDrag:
         modify_speed = self.get_modify_speed()
         set(current_value + (increment * modify_speed))
         return task.again
+
+    def delete_entry(self):
+        if self.in_focus:
+            self.entry.set("0.00")
 
     def get_modify_speed(self):
         for speed_type in MODIFY_SPEED:

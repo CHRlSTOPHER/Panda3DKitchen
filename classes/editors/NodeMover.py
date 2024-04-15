@@ -63,11 +63,10 @@ class NodeMover(NodeMoverGui, NodePath):
             func_catalog = object.get_func_catalog()
 
             get_value = func_catalog.get(name)[0]
+            self.validate_entry_data(entry)
             float_value = round(float(get_value()), 2)  # round float to .00
             string_value = str(float_value)  # convert back to string
             last_value = object.get_last_value()
-
-            self.validate_entry_data(entry)
 
             # check if the value changed
             if string_value == last_value:
@@ -83,20 +82,13 @@ class NodeMover(NodeMoverGui, NodePath):
     # make sure the entry only has valid numerical values
     def validate_entry_data(self, entry):
         value = entry.get()
-        # we only want numbers 1-9
-        numeric_value = value.replace(".", "").replace("-", "")
-        if numeric_value.isnumeric() is False:
-            entry['focus'] = 0  # unselect entry
-            value = self.fix_entry_data(value) # fix data
-            entry.set(value)
-
-    def fix_entry_data(self, value):
-        valid_value = ""
-        for digit in value:
-            # Only accept numbers, num signs, or decimals
-            if digit in VALID_ENTRIES:
-                valid_value += digit
-        return valid_value
+        string_value = ""
+        for character in value:
+            if character in VALID_ENTRIES:
+                string_value += character
+            elif character not in VALID_ENTRIES:
+                entry['focus'] = 0  # stop anymore invalid entries
+        entry.set(string_value)
 
     def get_func_catalog(self, node):
         func_catalog = {
