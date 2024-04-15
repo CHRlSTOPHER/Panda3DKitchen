@@ -1,5 +1,4 @@
-from direct.gui.DirectEntry import DirectEntry
-from direct.gui.DirectGui import DirectFrame
+from direct.gui.DirectGui import DirectFrame, DirectEntry, DGG
 
 from classes.menus import MenuGlobals as MG
 from classes.props.PlaneModel import PlaneModel
@@ -38,17 +37,15 @@ class NodeMoverGui(DirectFrame):
                                        text="NODE MOVER",
                                        pos=(-0.639, 0.0, 0.69),
                                        scale=(0.106, 0.166, 0.205))
-        # base.gui_editor.set_gui(self.mover_title)
 
         for label, pos in DIRECT_POS:
             self.create_direct_entry(label, pos)
 
-    def create_direct_entry(self, label, pos, text="0.00"):
-        if label[0] == "S":
-            text = "1.00"
-        entry = DirectEntry(parent=self.mover_frame, initialText=text,
-                            pos=pos, width=4, scale=(0.088, 0.763, 0.253),
-                            geom_scale=(.75, .75, .75), relief=0)
+    def create_direct_entry(self, label, pos):
+        entry = DirectEntry(parent=self.mover_frame, pos=pos, width=4,
+                            scale=(0.088, 0.763, 0.253),
+                            geom_scale=(.75, .75, .75), relief=0,
+                            state=DGG.DISABLED)
         entry.set_name(label)
 
         DirectFrame(parent=self.mover_frame, text=label, relief=0,
