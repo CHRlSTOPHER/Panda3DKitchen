@@ -12,12 +12,9 @@ ROT_CAM_TASK = "rot_cam_task"
 DELAY = .001
 
 
-class RotationalCamera(DirectObject):
+class CameraRotater(DirectObject):
 
-    def __init__(self, camera, disable=True):
-        if disable:
-            return
-
+    def __init__(self, camera):
         DirectObject.__init__(self)
 
         self.camera = camera

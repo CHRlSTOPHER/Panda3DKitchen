@@ -3,7 +3,8 @@ A collection of different classes. Mashes them together into an editor.
 """
 from direct.showbase.DirectObject import DirectObject
 
-from classes.camera.RotationalCamera import RotationalCamera
+from classes.camera.CameraMover import CameraMover
+from classes.camera.CameraRotater import CameraRotater
 from .NodeMover import NodeMover
 from .NodeSelector import NodeSelector
 
@@ -35,8 +36,9 @@ class SceneEditor(DirectObject):
             self.generate_features(camera)
 
     def generate_features(self, camera):
-        base.rot_cam = RotationalCamera(camera, self.rot_cam_disable)
-        base.node_mover = NodeMover(camera, camera)
+        base.cam_mover = CameraMover(camera)
+        base.cam_rotater = CameraRotater(camera)
+        base.node_mover = NodeMover()
         base.node_selector = NodeSelector(camera, self.render,
                                           self.mouse_watcher, base.node_mover)
 
