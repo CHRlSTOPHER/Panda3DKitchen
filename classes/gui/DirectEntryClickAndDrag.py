@@ -2,6 +2,12 @@ from direct.gui.DirectGui import DGG
 
 UPDATE_TASK = "update_dced_task"
 MODIFY_TASK = "modify_node_trasform_task"
+MODIFY_SPEED = {
+    "XYZ": 1.0,
+    "HPR": 5.0,
+    "SXSYSZ": 0.1,
+    "FOV": 1.0
+}
 
 
 class DirectEntryClickAndDrag:
@@ -12,8 +18,7 @@ class DirectEntryClickAndDrag:
         self.entry_name = entry.get_name()
         self.func_catalog = {}
         self.last_value = 0
-        self.mouse_x = 0
-        self.last_mouse_x = 0
+        self.mouse_start_x = 0
         self.in_focus = False
 
         self.define_func_catalog()
@@ -55,7 +60,33 @@ class DirectEntryClickAndDrag:
             set(float(self.entry.get()))
 
     def modify_node(self, press, mouse_data):
-        pass # MODIFY_TASK
+        if press:
+            self.mouse_start_x = base.mouseWatcherNode.get_mouse_x()
+            taskMgr.add(self.modify_entry, MODIFY_TASK)
+        else:
+            taskMgr.remove(MODIFY_TASK)
+
+    # when the user clicks and drags, move value based on how far mouse is
+    def modify_entry(self, task):
+        mouse_x = base.mouseWatcherNode.get_mouse_x()
+        # define the get and set functions for the desired transform func
+        get = self.func_catalog[self.entry_name][0]
+        set = self.func_catalog[self.entry_name][1]
+        current_value = get()
+        # determine which way to go
+        if mouse_x > self.mouse_start_x:
+            increment = mouse_x - self.mouse_start_x
+        else:
+            increment = -(self.mouse_start_x - mouse_x)
+
+        modify_speed = self.get_modify_speed()
+        set(current_value + (increment * modify_speed))
+        return task.again
+
+    def get_modify_speed(self):
+        for speed_type in MODIFY_SPEED:
+            if self.entry_name in speed_type:
+                return MODIFY_SPEED.get(speed_type)
 
     # update very often in case node mover changed the transform values
     def update_entry(self, task):
@@ -64,7 +95,7 @@ class DirectEntryClickAndDrag:
         value = round(float(get()), 2)
 
         if self.last_value == value:
-            return task.again # no need to update the same value
+            return task.again  # no need to update the same value
 
         self.entry.set(str(value))
         self.entry.setCursorPosition(6)  # Mandatory camel case >:(
