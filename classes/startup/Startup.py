@@ -40,7 +40,10 @@ class Startup(ShowBase):
         base.root_folder = root_folder
         base.project_location = None
         base.gui_editor = None
+        base.cam_mover = None
+        base.cam_rotater = None
         base.node_mover = None
+        base.node_selector = None
         base.top_window = None
         base.computer_font = loader.load_font(f"{G.EDITOR}{MG.COMPUTER_FONT}")
         self.project_frame = None

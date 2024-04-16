@@ -15,7 +15,7 @@ VALID_ENTRIES = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '-']
 
 class NodeMover(NodeMoverGui, NodePath):
 
-    def __init__(self):
+    def __init__(self, camera):
         NodeMoverGui.__init__(self)
         self.click_and_drags = None
         self.move_options = None
@@ -23,9 +23,10 @@ class NodeMover(NodeMoverGui, NodePath):
         self.allow_tasks = True
         self.last_tab_entry = None
 
-        self.generate()
+        self.generate(camera)
 
-    def generate(self):
+    def generate(self, cam):
+        self.accept(G.MIDDLE_MOUSE_BUTTON, self.set_node, extraArgs=[cam])
         self.accept("tab", self.go_to_next_entry, extraArgs=[1])
         self.accept("shift-tab", self.go_to_next_entry, extraArgs=[-1])
         self.bind_gui()
@@ -40,11 +41,12 @@ class NodeMover(NodeMoverGui, NodePath):
         if node and self.allow_click:
             NodePath.__init__(self, node)
             # apply necessary steps for direct entries
-            taskMgr.doMethodLater(.03, self.update_entries,
-                                  "update_de_entries")
             for drag in self.click_and_drags:
                 drag.set_func_catalog(self.get_func_catalog(node))
-                drag.entry['state'] = DGG.NORMAL
+                drag.set_node(node)
+                drag.enable_entry()
+            taskMgr.doMethodLater(.03, self.update_entries,
+                                  "update_de_entries")
 
             if not flash_red:
                 return
@@ -59,6 +61,11 @@ class NodeMover(NodeMoverGui, NodePath):
 
     # update very often in case node mover changed the transform values
     def update_entries(self, task):
+        object = self.click_and_drags[0]
+        if not object.get_node():
+            self.disable_entries()
+            return task.done
+
         for object in self.click_and_drags:
             entry = object.get_entry()
             name = entry.get_name()
@@ -80,6 +87,14 @@ class NodeMover(NodeMoverGui, NodePath):
             object.set_last_value(string_value)
 
         return task.again
+
+    def disable_entries(self):
+        for object in self.click_and_drags:
+            object.disable_entry()
+
+    def enable_entries(self):
+        for object in self.click_and_drags:
+            object.enable_entry()
 
     # make sure the entry only has valid numerical values
     def validate_entry_data(self, entry):

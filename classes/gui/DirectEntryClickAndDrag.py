@@ -18,6 +18,7 @@ class DirectEntryClickAndDrag(DirectObject):
         self.entry = entry
         self.func_catalog = func_catalog
         self.entry_name = entry.get_name()
+        self.node = None
         self.last_value = None
         self.mouse_start_x = 0
         self.in_focus = False
@@ -76,6 +77,21 @@ class DirectEntryClickAndDrag(DirectObject):
     def delete_entry(self):
         if self.in_focus:
             self.entry.set("0.00")
+            set = self.func_catalog[self.entry_name][1]
+            set(0.00) # set transform to 0.00
+
+    def disable_entry(self):
+        self.entry['state'] = DGG.DISABLED
+        self.entry.set("") # clear entry
+        self.func_catalog = {}
+        self.node = None
+
+    def enable_entry(self):
+        if self.node:
+            get_transform = self.func_catalog.get(self.entry_name)[0]
+            converted_float = round(float(get_transform()), 2)
+            self.entry.set(str(converted_float))
+        self.entry['state'] = DGG.NORMAL
 
     def get_modify_speed(self):
         for speed_type in MODIFY_SPEED:
@@ -102,3 +118,12 @@ class DirectEntryClickAndDrag(DirectObject):
 
     def set_func_catalog(self, func_catalog):
         self.func_catalog = func_catalog
+
+    def get_node(self):
+        if self.node:
+            return self.node
+        else: # node is empty and cannot be called what-so-ever
+            return None
+
+    def set_node(self, node):
+        self.node = node

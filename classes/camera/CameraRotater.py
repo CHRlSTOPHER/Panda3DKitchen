@@ -20,6 +20,7 @@ class CameraRotater(DirectObject):
         self.camera = camera
         self.window_properties = WindowProperties()
         self.toggle_value = True
+        self.disabled = False
         self.cam_task = True
 
         base.disable_mouse()
@@ -27,6 +28,9 @@ class CameraRotater(DirectObject):
         self.accept(G.RIGHT_MOUSE_BUTTON, self.toggle_orb_cam)
 
     def toggle_orb_cam(self):
+        if self.disabled:
+            return
+
         self.window_properties.set_cursor_hidden(self.toggle_value)
 
         if self.toggle_value:
@@ -67,6 +71,14 @@ class CameraRotater(DirectObject):
 
             self.camera.set_h(new_cam_h_value)
             self.camera.set_p(new_cam_p_value)
+
+    def disable(self):
+        self.toggle_value = False
+        self.toggle_orb_cam() # turn it off in case by some miracle it was on.
+        self.disabled = True
+
+    def enable(self):
+        self.disabled = False
 
     def cleanup(self):
         if not self.toggle_value:

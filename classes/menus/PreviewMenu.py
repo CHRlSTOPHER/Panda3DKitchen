@@ -136,8 +136,21 @@ class PreviewMenu(PreviewGui):
         self.mini_window = not self.mini_window
         if self.mini_window:
             self.show_mini_window()
+            self.toggle_scene_objects(True)
         else:
             self.hide_mini_window()
+            self.toggle_scene_objects(False)
+
+    def toggle_scene_objects(self, toggle):
+        if base.node_mover and base.cam_rotater:
+            if toggle:
+                base.node_mover.enable_entries()
+                base.node_mover.set_click(True)
+                base.cam_rotater.enable()
+            else:
+                base.node_mover.disable_entries()
+                base.node_mover.set_click(False)
+                base.cam_rotater.disable()
 
     def show_mini_window(self):
         self.cancel_preview()  # close preview if they have it open
@@ -256,7 +269,6 @@ class PreviewMenu(PreviewGui):
             LerpFunc(flash, duration=.35, fromData=1, toData=0),
             LerpFunc(fade, duration=.3, fromData=1, toData=0),
             Func(mode_class.cleanup_entity),
-            Func(base.node_mover.set_click, True)
         ).start()
 
     def hide_special_buttons(self):

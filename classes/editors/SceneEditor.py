@@ -38,7 +38,7 @@ class SceneEditor(DirectObject):
     def generate_features(self, camera):
         base.cam_mover = CameraMover(camera)
         base.cam_rotater = CameraRotater(camera)
-        base.node_mover = NodeMover()
+        base.node_mover = NodeMover(camera)
         base.node_selector = NodeSelector(camera, self.render,
                                           self.mouse_watcher, base.node_mover)
 
