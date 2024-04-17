@@ -38,6 +38,8 @@ class NodeMover(NodeMoverGui, NodePath):
             click_and_drag = DirectEntryClickAndDrag(entry)
             click_and_drag.set_combined_entries(['SX', 'SY', 'SZ'])
             self.click_and_drags.append(click_and_drag)
+        for object in self.click_and_drags[-3:]: # Scale entries
+            object.set_delete_value(1.0)
 
         self.scale_one['command'] = self.toggle_scale_type
         self.scale_all['command'] = self.toggle_scale_type

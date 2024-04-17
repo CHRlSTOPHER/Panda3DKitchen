@@ -23,6 +23,7 @@ class DirectEntryClickAndDrag(DirectObject):
         self.mouse_start_x = 0
         self.in_focus = False
         self.combined_toggle = True
+        self.delete_value = 0.0
         self.bind_entries()
 
     def bind_entries(self):
@@ -84,9 +85,9 @@ class DirectEntryClickAndDrag(DirectObject):
 
     def delete_entry(self):
         if self.in_focus:
-            self.entry.set("0.00")
+            self.entry.set(str(self.delete_value))
             set = self.func_catalog[self.entry_name][1]
-            set(0.00) # set transform to 0.00
+            set(self.delete_value) # set transform to 0.00
 
     def disable_entry(self):
         self.entry['state'] = DGG.DISABLED
@@ -139,6 +140,9 @@ class DirectEntryClickAndDrag(DirectObject):
 
     def set_combined_toggle(self, toggle):
         self.combined_toggle = toggle
+
+    def set_delete_value(self, value):
+        self.delete_value = value
 
     def set_node(self, node):
         self.node = node
