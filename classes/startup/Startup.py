@@ -28,7 +28,7 @@ BUTTONS = [
     ("DELETE", (-.19, 0, -.902), (.109, .109, .109)),
     ("MOVE", (.193, 0, -.902), (.103, .103, .108)),
 ]
-GUI_EDITOR = False
+GUI_EDITOR = True
 NODE_MOVER = True
 
 
@@ -110,8 +110,6 @@ class Startup(ShowBase):
                                         base.scene_region,
                                         base.scene_render,
                                         rot_cam_disable=False)
-        if GUI_EDITOR or not NODE_MOVER:
-            base.node_mover.set_move(False)
 
     def delete_project(self):
         base.project_location = self.get_folder_location()

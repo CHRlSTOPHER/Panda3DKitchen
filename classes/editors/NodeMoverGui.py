@@ -1,4 +1,5 @@
-from direct.gui.DirectGui import DirectFrame, DirectEntry, DGG
+from direct.gui.DirectGui import (DirectFrame, DirectEntry,
+                                  DirectButton, DGG)
 
 from classes.menus import MenuGlobals as MG
 from classes.props.PlaneModel import PlaneModel
@@ -27,6 +28,8 @@ class NodeMoverGui(DirectFrame):
 
     def load_gui(self):
         geom = PlaneModel(MG.EDITOR_MAP_PATH + MG.MENU_HOR_3)
+        scale_all_geom = PlaneModel(MG.EDITOR_MAP_PATH + MG.SCALE_ALL_TEXTURE)
+        scale_one_geom = PlaneModel(MG.EDITOR_MAP_PATH + MG.SCALE_ONE_TEXTURE)
         self.mover_frame = DirectFrame(parent=self, geom=geom,
                                        pos=(0.0, 0.0, -0.219),
                                        scale=(0.511, 0.424, 0.211))
@@ -37,6 +40,16 @@ class NodeMoverGui(DirectFrame):
                                        text="NODE MOVER",
                                        pos=(-0.639, 0.0, 0.69),
                                        scale=(0.106, 0.166, 0.205))
+        self.scale_one = DirectButton(parent=self.mover_frame,
+                                      geom=scale_one_geom,
+                                      pos=(0.9, 0.0, -0.15),
+                                      scale=(0.106, 0.904, 0.562),
+                                      pad=(-0.485, -0.2),)
+        self.scale_all = DirectButton(parent=self.mover_frame,
+                                      geom=scale_all_geom,
+                                      pos=(0.9, 0.0, -0.15),
+                                      scale=(0.106, 0.904, 0.562),
+                                      pad=(-0.485, -0.2))
 
         for label, pos in DIRECT_POS:
             self.create_direct_entry(label, pos)

@@ -22,6 +22,7 @@ class NodeMover(NodeMoverGui, NodePath):
         self.allow_click = True
         self.allow_tasks = True
         self.last_tab_entry = None
+        self.scale_toggle = True
 
         self.generate(camera)
 
@@ -35,17 +36,36 @@ class NodeMover(NodeMoverGui, NodePath):
         self.click_and_drags = []
         for entry in self.entries:
             click_and_drag = DirectEntryClickAndDrag(entry)
+            click_and_drag.set_combined_entries(['SX', 'SY', 'SZ'])
             self.click_and_drags.append(click_and_drag)
+
+        self.scale_one['command'] = self.toggle_scale_type
+        self.scale_all['command'] = self.toggle_scale_type
+
+    def toggle_scale_type(self):
+        self.scale_toggle = not self.scale_toggle
+        # scale all axis
+        if self.scale_toggle:
+            for object in self.click_and_drags:
+                object.set_combined_toggle(True)
+            self.scale_one.hide()
+            self.scale_all.show()
+        # scale one axis
+        else:
+            for object in self.click_and_drags:
+                object.set_combined_toggle(False)
+            self.scale_one.show()
+            self.scale_all.hide()
 
     def set_node(self, node, flash_red=True):
         if node and self.allow_click:
             NodePath.__init__(self, node)
             # apply necessary steps for direct entries
             for drag in self.click_and_drags:
-                drag.set_func_catalog(self.get_func_catalog(node))
+                drag.set_func_catalog(self.get_func_catalog())
                 drag.set_node(node)
                 drag.enable_entry()
-            taskMgr.doMethodLater(.03, self.update_entries,
+            taskMgr.doMethodLater(.01, self.update_entries,
                                   "update_de_entries")
 
             if not flash_red:
@@ -107,18 +127,19 @@ class NodeMover(NodeMoverGui, NodePath):
                 entry['focus'] = 0  # stop anymore invalid entries
         entry.set(string_value)
 
-    def get_func_catalog(self, node):
+    def get_func_catalog(self):
         func_catalog = {
-            'X': [node.get_x, node.set_x],
-            'Y': [node.get_y, node.set_y],
-            'Z': [node.get_z, node.set_z],
-            'H': [node.get_h, node.set_h],
-            'P': [node.get_p, node.set_p],
-            'R': [node.get_r, node.set_r],
-            'SX': [node.get_sx, node.set_sx],
-            'SY': [node.get_sy, node.set_sy],
-            'SZ': [node.get_sz, node.set_sz],
+            'X': [self.get_x, self.set_x],
+            'Y': [self.get_y, self.set_y],
+            'Z': [self.get_z, self.set_z],
+            'H': [self.get_h, self.set_h],
+            'P': [self.get_p, self.set_p],
+            'R': [self.get_r, self.set_r],
+            'SX': [self.get_sx, self.set_sx],
+            'SY': [self.get_sy, self.set_sy],
+            'SZ': [self.get_sz, self.set_sz]
         }
+
         return func_catalog
 
     def toggle_click(self):

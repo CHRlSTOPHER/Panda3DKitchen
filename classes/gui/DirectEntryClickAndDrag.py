@@ -22,6 +22,7 @@ class DirectEntryClickAndDrag(DirectObject):
         self.last_value = None
         self.mouse_start_x = 0
         self.in_focus = False
+        self.combined_toggle = True
         self.bind_entries()
 
     def bind_entries(self):
@@ -63,7 +64,6 @@ class DirectEntryClickAndDrag(DirectObject):
         # define the get and set functions for the desired transform func
         get = self.func_catalog[self.entry_name][0]
         set = self.func_catalog[self.entry_name][1]
-        current_value = get()
         # determine which way to go
         if mouse_x > self.mouse_start_x:
             increment = mouse_x - self.mouse_start_x
@@ -71,7 +71,15 @@ class DirectEntryClickAndDrag(DirectObject):
             increment = -(self.mouse_start_x - mouse_x)
 
         modify_speed = self.get_modify_speed()
-        set(current_value + (increment * modify_speed))
+        # check if the entry is in the combined entries and
+        # check if it's okay to do multiple entry adjustments at once.
+        if self.entry_name in self.combined_entries and self.combined_toggle:
+            for entry_name in self.combined_entries:
+                get = self.func_catalog[entry_name][0]
+                set = self.func_catalog[entry_name][1]
+                set(get() + (increment * modify_speed))
+        else:
+            set(get() + (increment * modify_speed))
         return task.again
 
     def delete_entry(self):
@@ -124,6 +132,13 @@ class DirectEntryClickAndDrag(DirectObject):
             return self.node
         else: # node is empty and cannot be called what-so-ever
             return None
+
+    # pass in a list of entry names. if one of them is modified, they all are.
+    def set_combined_entries(self, entry_names):
+        self.combined_entries = entry_names
+
+    def set_combined_toggle(self, toggle):
+        self.combined_toggle = toggle
 
     def set_node(self, node):
         self.node = node
