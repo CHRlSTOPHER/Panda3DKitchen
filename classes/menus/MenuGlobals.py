@@ -21,6 +21,7 @@ CANVAS_BUTTON_SCALE = (.094, 1, .105)
 CANVAS_INCREMENT_X = .228
 CANVAS_INCREMENT_Z = .251
 
+CLICK_DRAG_CUR = "click-drag-indicator.cur"
 BUTTON_MOVE_TASK = 'button_move'
 FOLDER = "folder-color.png"
 TRASH = "trash-can-color.png"

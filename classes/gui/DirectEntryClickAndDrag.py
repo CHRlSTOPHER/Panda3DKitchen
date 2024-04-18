@@ -1,5 +1,9 @@
 from direct.gui.DirectGui import DGG
 from direct.showbase.DirectObject import DirectObject
+from panda3d.core import WindowProperties, Filename
+
+from classes.menus import MenuGlobals as MG
+from classes.settings import Globals as G
 
 UPDATE_TASK = "update_dced_task"
 MODIFY_TASK = "modify_node_trasform_task"
@@ -24,12 +28,20 @@ class DirectEntryClickAndDrag(DirectObject):
         self.in_focus = False
         self.combined_toggle = True
         self.delete_value = 0.0
+        self.within = False
+        self.mouse_release = False
+
+        self.drag_cursor = f"{G.RESOURCES}{MG.EDITOR}cur/{MG.CLICK_DRAG_CUR}"
+        self.win_props = WindowProperties()
+
         self.bind_entries()
 
     def bind_entries(self):
         self.entry.bind(DGG.B1PRESS, self.modify_task_toggle, extraArgs=[True])
         self.entry.bind(DGG.B1RELEASE, self.modify_task_toggle,
                         extraArgs=[False])
+        self.entry.bind(DGG.WITHIN, self.change_cursor, extraArgs=[True])
+        self.entry.bind(DGG.WITHOUT, self.change_cursor, extraArgs=[False])
         self.entry['command'] = self.update_value
         self.entry['focusInCommand'] = self.set_in_focus
         self.entry['focusOutCommand'] = self.set_out_focus
@@ -52,10 +64,16 @@ class DirectEntryClickAndDrag(DirectObject):
 
     def modify_task_toggle(self, press, mouse_data):
         if press:
+            self.mouse_release = False
             self.mouse_start_x = base.mouseWatcherNode.get_mouse_x()
             taskMgr.add(self.modify_entry, MODIFY_TASK)
         else:
+            self.mouse_release = True
             taskMgr.remove(MODIFY_TASK)
+            # check if mouse needs to change the cursor
+            if not self.within and self.mouse_release:
+                self.win_props.set_cursor_filename(Filename())
+                base.win.request_properties(self.win_props)
 
     # when the user clicks and drags, move value based on how far mouse is
     def modify_entry(self, task):
@@ -106,6 +124,15 @@ class DirectEntryClickAndDrag(DirectObject):
         for speed_type in MODIFY_SPEED:
             if self.entry_name in speed_type:
                 return MODIFY_SPEED.get(speed_type)
+
+    def change_cursor(self, within, mouse_data):
+        self.within = within
+        if within:
+            self.win_props.set_cursor_filename(self.drag_cursor)
+
+        if not within and self.mouse_release:
+            self.win_props.set_cursor_filename(Filename()) # restores default
+        base.win.request_properties(self.win_props)
 
     def set_in_focus(self):
         self.in_focus = True
