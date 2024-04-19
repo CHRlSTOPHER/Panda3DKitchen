@@ -13,6 +13,7 @@ MODIFY_SPEED = {
     "SXSYSZ": 0.1,
     "FOV": 1.0
 }
+SPEED_MULTIPLIER = 2.0
 
 
 class DirectEntryClickAndDrag(DirectObject):
@@ -29,7 +30,6 @@ class DirectEntryClickAndDrag(DirectObject):
         self.combined_toggle = True
         self.delete_value = 0.0
         self.within = False
-        self.mouse_release = False
 
         self.drag_cursor = f"{G.RESOURCES}{MG.EDITOR}cur/{MG.CLICK_DRAG_CUR}"
         self.win_props = WindowProperties()
@@ -64,16 +64,10 @@ class DirectEntryClickAndDrag(DirectObject):
 
     def modify_task_toggle(self, press, mouse_data):
         if press:
-            self.mouse_release = False
             self.mouse_start_x = base.mouseWatcherNode.get_mouse_x()
             taskMgr.add(self.modify_entry, MODIFY_TASK)
         else:
-            self.mouse_release = True
             taskMgr.remove(MODIFY_TASK)
-            # check if mouse needs to change the cursor
-            if not self.within and self.mouse_release:
-                self.win_props.set_cursor_filename(Filename())
-                base.win.request_properties(self.win_props)
 
     # when the user clicks and drags, move value based on how far mouse is
     def modify_entry(self, task):
@@ -85,9 +79,9 @@ class DirectEntryClickAndDrag(DirectObject):
         set = self.func_catalog[self.entry_name][1]
         # determine which way to go
         if mouse_x > self.mouse_start_x:
-            increment = mouse_x - self.mouse_start_x
+            increment = (mouse_x - self.mouse_start_x) ** SPEED_MULTIPLIER
         else:
-            increment = -(self.mouse_start_x - mouse_x)
+            increment = -(self.mouse_start_x - mouse_x) ** SPEED_MULTIPLIER
 
         modify_speed = self.get_modify_speed()
         # check if the entry is in the combined entries and
@@ -129,8 +123,7 @@ class DirectEntryClickAndDrag(DirectObject):
         self.within = within
         if within:
             self.win_props.set_cursor_filename(self.drag_cursor)
-
-        if not within and self.mouse_release:
+        if not within:
             self.win_props.set_cursor_filename(Filename()) # restores default
         base.win.request_properties(self.win_props)
 
