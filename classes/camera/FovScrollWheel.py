@@ -28,7 +28,6 @@ class FovScrollWheel(DirectObject):
         self.new_fov = fov
         self.fov_increment = 1
 
-        self.set_fov(self.new_fov)
         self.accept(G.MOUSE_WHEEL_UP, self.zoom_in)
         self.accept(G.MOUSE_WHEEL_DOWN, self.zoom_out)
 
@@ -45,10 +44,7 @@ class FovScrollWheel(DirectObject):
             self.set_fov(self.new_fov)
 
     def set_fov(self, fov):
-        if self.camera == camera:
-            base.camLens.set_fov(fov)
-        else:
-            self.camera.node().get_lens().set_fov(fov)
+        self.camera.node().get_lens().set_fov(fov)
 
     def cleanup(self):
         self.ignore_all()

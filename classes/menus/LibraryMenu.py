@@ -15,8 +15,10 @@ class LibraryMenu(CanvasMenu, LibraryGui):
 
     def __init__(self, preview_menu):
         LibraryGui.__init__(self)
-        CanvasMenu.__init__(self, preview_menu, self.library_window,
+        CanvasMenu.__init__(self, preview_menu,
+                            self.library_window,
                             self.library_scroll, 'library')
+        self.kitchen = None
         self.discard_frame = None
         self.scene_menu = None
         self.scene_window = None
@@ -31,8 +33,14 @@ class LibraryMenu(CanvasMenu, LibraryGui):
         self.swap_menu = False
 
     def generate(self):
+        self.load_gui()
+        CanvasMenu.__init__(self, self.kitchen.preview_menu,
+                            self.library_window,
+                            self.library_scroll, 'library')
+        self.generate_canvas()
         self.discard_frame = DiscardCanvasButtons('library',
-                                                  self.preview_menu, self,
+                                                  self.kitchen.preview_menu,
+                                                  self,
                                                   self.library_scroll,
                                                   self.library_trash,
                                                   self.library_confirm,
@@ -216,3 +224,6 @@ class LibraryMenu(CanvasMenu, LibraryGui):
 
     def set_scene_window(self, window):
         self.scene_window = window
+
+    def set_kitchen(self, kitchen):
+        self.kitchen = kitchen

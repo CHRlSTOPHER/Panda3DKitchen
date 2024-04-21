@@ -19,8 +19,6 @@ class LibraryGui(DirectFrame):
         self.library_trash = None
         self.library_confirm = None
 
-        self.load_gui()
-
     def load_gui(self):
         folder_geom = PlaneModel(MG.EDITOR_MAP_PATH + MG.FOLDER)
         trash_geom = PlaneModel(MG.EDITOR_MAP_PATH + MG.TRASH)

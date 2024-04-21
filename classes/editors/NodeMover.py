@@ -15,8 +15,9 @@ VALID_ENTRIES = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '-']
 
 class NodeMover(NodeMoverGui, NodePath):
 
-    def __init__(self, camera):
+    def __init__(self):
         NodeMoverGui.__init__(self)
+        self.kitchen = None
         self.click_and_drags = None
         self.move_options = None
         self.allow_click = True
@@ -24,10 +25,10 @@ class NodeMover(NodeMoverGui, NodePath):
         self.last_tab_entry = None
         self.scale_toggle = True
 
-        self.generate(camera)
-
-    def generate(self, cam):
-        self.accept(G.MIDDLE_MOUSE_BUTTON, self.set_node, extraArgs=[cam])
+    def generate(self):
+        self.load_gui()
+        self.accept(G.MIDDLE_MOUSE_BUTTON, self.set_node,
+                    extraArgs=[self.kitchen.scene_camera])
         self.accept("tab", self.go_to_next_entry, extraArgs=[1])
         self.accept("shift-tab", self.go_to_next_entry, extraArgs=[-1])
         self.bind_gui()
@@ -149,6 +150,9 @@ class NodeMover(NodeMoverGui, NodePath):
 
     def set_click(self, click):
         self.allow_click = click
+    
+    def set_kitchen(self, kitchen):
+        self.kitchen = kitchen
 
     def cleanup(self):
         self.allow_tasks = False

@@ -6,24 +6,29 @@ from classes.menus.SceneGui import SceneGui
 from classes.scene.SceneLoader import SceneLoader
 
 
-class SceneMenu(CanvasMenu, SceneLoader, SceneGui):
+class SceneMenu(SceneGui, CanvasMenu, SceneLoader):
 
     def __init__(self, preview_menu):
         SceneGui.__init__(self)
+        SceneLoader.__init__(self)
         CanvasMenu.__init__(self, preview_menu, self.scene_frame,
                             self.scene_scroll, 'scene')
-        SceneLoader.__init__(self)
+        self.kitchen = None
         self.discard_frame = None
         self.add_item = False
 
     def generate(self):
+        self.load_gui()
+        CanvasMenu.__init__(self, self.kitchen.preview_menu, self.scene_frame,
+                            self.scene_scroll, 'scene')
+        self.generate_canvas()
         self.discard_frame = DiscardCanvasButtons('scene',
-                                                  self.preview_menu, self,
+                                                  self.kitchen.preview_menu,
+                                                  self,
                                                   self.scene_scroll,
                                                   self.scene_trash,
                                                   self.scene_confirm,
-                                                  self.scene_inspect,
-                                                  xml=True)
+                                                  self.scene_inspect, xml=True)
 
     def add_item_to_xml(self, item_name):
         mode = self.preview_menu.get_mode().lower()
@@ -36,9 +41,9 @@ class SceneMenu(CanvasMenu, SceneLoader, SceneGui):
 
     def reload(self, xml_file=None, mode=None):
         if not mode:
-            mode = self.preview_menu.get_mode().lower() + "s"
+            mode = self.kitchen.preview_menu.get_mode().lower() + "s"
         if not xml_file:
-            xml_file = f"{base.project_location}/{mode}.xml"
+            xml_file = f"{self.kitchen.project_location}/{mode}.xml"
 
         if mode != AG.TEXTURES:
             node_data = get_node_data(xml_file)
@@ -51,3 +56,7 @@ class SceneMenu(CanvasMenu, SceneLoader, SceneGui):
             button.destroy()
 
         self.load_picture_list(node_data, color=(.7, .9, .9, 1))
+
+    def set_kitchen(self, kitchen):
+        self.kitchen = kitchen
+        super().set_kitchen(kitchen)

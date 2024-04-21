@@ -11,6 +11,7 @@ class SceneGui(DirectFrame):
     def __init__(self):
         DirectFrame.__init__(self, parent=base.a2dLeftCenter)
         self.initialiseoptions(SceneGui)
+        self.kitchen = None
         self.scene_frame = None
         self.scene_window = None
         self.scene_scroll = None
@@ -18,8 +19,6 @@ class SceneGui(DirectFrame):
         self.scene_inspect = None
         self.scene_trash = None
         self.scene_confirm = None
-
-        self.load_gui()
 
     def load_gui(self):
         trash_geom = PlaneModel(MG.EDITOR_MAP_PATH + MG.TRASH)
@@ -66,3 +65,6 @@ class SceneGui(DirectFrame):
                                           scale=(0.229, 0.142, 0.187),
                                           pad=(0.873, -0.054))
         self.scene_confirm.hide()
+
+    def set_kitchen(self, kitchen):
+        self.kitchen = kitchen

@@ -9,6 +9,7 @@ from classes.settings import Globals as G
 class SceneLoader:
 
     def __init__(self):
+        self.kitchen = None
         self.actors = []
         self.props = []
 
@@ -63,7 +64,11 @@ class SceneLoader:
                     self.set_transforms(node, node_data[data_name])
                     self.props.append(node)
                 elif name == 'camera':
-                    self.set_transforms(base.scene_cam, node_data[data_name])
+                    self.set_transforms(self.kitchen.scene_camera,
+                                        node_data[data_name])
 
         if mode == AG.PARTICLES:
             pass
+
+    def set_kitchen(self, kitchen):
+        self.kitchen = kitchen

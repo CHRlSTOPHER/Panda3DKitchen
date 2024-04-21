@@ -1,8 +1,9 @@
 import json
 
-from direct.showbase.DirectObject import DirectObject
 from panda3d.core import NodePath
 
+from classes.camera.FovScrollWheel import FovScrollWheel
+from classes.camera.CameraRotater import CameraRotater
 from classes.settings import Globals as G
 
 KBS = json.loads(open(G.KEYBINDINGS_JSON).read())
@@ -10,17 +11,23 @@ BASE_MOVE_RATE = .1
 BASE_TURN_RATE = .5
 
 
-class CameraMover(DirectObject, NodePath):
+class CameraMover(CameraRotater, NodePath, FovScrollWheel):
 
-    def __init__(self, cam=None):
-        DirectObject.__init__(self)
-        if not cam:
-            cam = camera
+    def __init__(self):
+        CameraRotater.__init__(self, "temp_node2")
+        self.kitchen = None
         self.move = True
         self.move_speed = BASE_MOVE_RATE
         self.turn_speed = BASE_TURN_RATE
-        NodePath.__init__(self, cam)
+        NodePath.__init__(self, "temp_node")
 
+
+    def generate(self):
+        NodePath.__init__(self, self.kitchen.camera)
+        CameraRotater.__init__(self, self.kitchen.camera)
+        FovScrollWheel.__init__(self, None, self.kitchen.scene_camera,
+                                self.kitchen.scene_mw)
+        super().generate()
         self.define_move_options()
         self.listen_for_key_inputs()
 
@@ -100,3 +107,6 @@ class CameraMover(DirectObject, NodePath):
 
     def set_move(self, move):
         self.move = move
+
+    def set_kitchen(self, kitchen):
+        self.kitchen = kitchen

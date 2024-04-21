@@ -32,6 +32,7 @@ class PreviewMenu(PreviewGui):
 
     def __init__(self):
         PreviewGui.__init__(self)
+        self.kitchen = None
         self.preview_render = None
         self.preview_cam = None
         self.preview_buffer = None
@@ -53,6 +54,8 @@ class PreviewMenu(PreviewGui):
         self.last_disabled_button = None
 
     def generate(self):
+        self.load_gui()
+        self.load_preview_buttons()
         for name, mode in MODES.items():
             self.modes[name] = mode()
 
@@ -68,41 +71,42 @@ class PreviewMenu(PreviewGui):
             self.set_mode(mode, self.entity_mode_buttons[mode], reload=True)
 
     def load_preview_region(self):
-        base.preview_window = PlaneModel(pos=(0.0133, 0, 0.0788),
+        self.preview_window = PlaneModel(pos=(0.0133, 0, 0.0788),
                                          scale=(.87, 1, .655))
-        base.preview_buffer = base.win.make_texture_buffer('preview', 512, 512)
-        base.preview_cam = base.make_camera(base.preview_buffer)
-        base.preview_render = NodePath('preview_render')
+        self.preview_buffer = self.kitchen.win.make_texture_buffer('preview',
+                                                                   512, 512)
+        self.preview_cam = self.kitchen.make_camera(self.preview_buffer)
+        self.preview_render = NodePath('preview_render')
 
-        base.preview_cam.reparent_to(base.preview_render)
-        base.preview_window.set_texture(base.preview_buffer.get_texture(), 1)
-        base.preview_window.reparent_to(self.entity_frame)
-        base.preview_cam.node().get_lens().set_fov(G.PREVIEW_FOV)
-        base.preview_buffer.set_active(1)
+        self.preview_cam.reparent_to(self.preview_render)
+        self.preview_window.set_texture(self.preview_buffer.get_texture(), 1)
+        self.preview_window.reparent_to(self.entity_frame)
+        self.preview_cam.node().get_lens().set_fov(G.PREVIEW_FOV)
+        self.preview_buffer.set_active(1)
 
         # preview bg
-        base.preview_bg = PlaneModel(pos=(0, 1000, 0), scale=320)
-        base.preview_bg.reparent_to(base.preview_render)
+        self.preview_bg = PlaneModel(pos=(0, 1000, 0), scale=320)
+        self.preview_bg.reparent_to(self.preview_render)
 
         # define this here since this we finally defined preview_window.
-        self.hide_preview_nodes = [base.preview_window,
+        self.hide_preview_nodes = [self.preview_window,
                                    self.left_arrow, self.right_arrow]
 
     def add_fog(self):
         self.fog = Fog("Photo Fog")  # Play on Photo Fun
         self.fog.set_color(1, 1, 1)
         self.fog.set_exp_density(0)
-        base.preview_render.set_fog(self.fog)
+        self.preview_render.set_fog(self.fog)
 
     def load_backgrounds(self):
         self.bg_textures = []
         for item in listdir(BG_PATH):
             if isfile(join(BG_PATH, item)):
-                texture = loader.load_texture(f"{G.EDITOR}bgs/{item}")
+                texture = self.kitchen.load_texture(f"{G.EDITOR}bgs/{item}")
                 self.bg_textures.append(texture)
 
         if self.bg_textures:  # Make sure there's actually a file lol.
-            base.preview_bg.set_texture(self.bg_textures[0])
+            self.preview_bg.set_texture(self.bg_textures[0])
 
     def bind_buttons(self):
         for name in self.entity_mode_buttons:
@@ -114,7 +118,8 @@ class PreviewMenu(PreviewGui):
         self.left_arrow['command'] = self.change_background
         self.right_arrow['command'] = self.change_background
         self.shrink_icon['command'] = self.change_preview_size
-        self.camera_button['command'] = self.library_menu.handle_image_data
+        self.camera_button['command'] = (self.kitchen.library_menu.
+                                         handle_image_data)
         self.modes[self.mode].define_rng_button(self.random_anim_button)
         self.cancel_button['command'] = self.cancel_preview
 
@@ -130,7 +135,8 @@ class PreviewMenu(PreviewGui):
             self.current_bg = len(self.bg_textures) - 1
 
         if self.bg_textures:
-            base.preview_bg.set_texture(self.bg_textures[self.current_bg], 1)
+            self.preview_bg.set_texture(self.bg_textures[self.current_bg], 1)
+
 
     def change_preview_size(self):
         self.mini_window = not self.mini_window
@@ -142,21 +148,21 @@ class PreviewMenu(PreviewGui):
             self.toggle_scene_objects(False)
 
     def toggle_scene_objects(self, toggle):
-        if base.node_mover and base.cam_rotater:
+        if self.kitchen.node_mover and self.kitchen.camera_mover:
             if toggle:
-                base.node_mover.enable_entries()
-                base.node_mover.set_click(True)
-                base.cam_rotater.enable()
+                self.kitchen.node_mover.enable_entries()
+                self.kitchen.node_mover.set_click(True)
+                self.kitchen.camera_mover.enable()
             else:
-                base.node_mover.disable_entries()
-                base.node_mover.set_click(False)
-                base.cam_rotater.disable()
+                self.kitchen.node_mover.disable_entries()
+                self.kitchen.node_mover.set_click(False)
+                self.kitchen.camera_mover.disable()
 
     def show_mini_window(self):
         self.cancel_preview()  # close preview if they have it open
         self.entity_button_frame.wrt_reparent_to(self.mini_frame)
         self.entity_title.wrt_reparent_to(self.mini_frame)
-        self.entity_frame.reparent_to(base.a2dBottomLeft)
+        self.entity_frame.reparent_to(self.kitchen.a2dBottomLeft)
 
         self.entity_button_frame.set_pos(-0.006, 0.0, 2.286)
         self.entity_frame.set_pos(*MINI_FRAME_POS)
@@ -164,16 +170,16 @@ class PreviewMenu(PreviewGui):
         self.entity_frame['frameSize'] = (-.98, .98, .420, .99)
         self.entity_frame['geom_scale'] = (0, 0, 0)
 
-        base.scene_region.set_dimensions(*SCENE_REGION)
+        self.kitchen.scene_region.set_dimensions(*SCENE_REGION)
         self.mini_frame.show()
-        self.scene_window.get_window().show()
+        self.kitchen.scene_window.get_window().show()
         for node in self.hide_preview_nodes:
             node.hide()
 
     def hide_mini_window(self):
         self.entity_button_frame.wrt_reparent_to(self.entity_frame)
         self.entity_title.wrt_reparent_to(self.entity_frame)
-        self.entity_frame.reparent_to(base.aspect2d)
+        self.entity_frame.reparent_to(self.kitchen.aspect2d)
 
         self.entity_button_frame.set_pos((0, 0, 0))
         self.entity_frame.set_pos(*ENTITY_FRAME_POS)
@@ -181,7 +187,7 @@ class PreviewMenu(PreviewGui):
         self.entity_frame['frameSize'] = (-1, 1, -1, 1)
         self.entity_frame['geom_scale'] = (1, 1, 1)
 
-        base.scene_region.set_dimensions(0, 0, 0, 0)
+        self.kitchen.scene_region.set_dimensions(0, 0, 0, 0)
         self.mini_frame.hide()
         self.scene_window.get_window().hide()
         for node in self.hide_preview_nodes:
@@ -204,14 +210,14 @@ class PreviewMenu(PreviewGui):
 
         if reload:
             # load the new data from the specified library.
-            self.library_menu.reload()
-            self.scene_menu.reload()
+            self.kitchen.library_menu.reload()
+            self.kitchen.scene_menu.reload()
 
         # update canvas sizes
         library_buttons = self.get_mode_class().library_buttons
         scene_buttons = self.get_mode_class().scene_buttons
-        self.library_menu.update_canvas_size(library_buttons)
-        self.scene_menu.update_canvas_size(scene_buttons)
+        self.kitchen.library_menu.update_canvas_size(library_buttons)
+        self.kitchen.scene_menu.update_canvas_size(scene_buttons)
 
         self.hide_special_buttons()  # buttons used for specific modes
 
@@ -306,3 +312,6 @@ class PreviewMenu(PreviewGui):
 
     def get_within(self):
         return self.within
+
+    def set_kitchen(self, kitchen):
+        self.kitchen = kitchen

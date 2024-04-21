@@ -22,9 +22,6 @@ class PreviewGui(DirectFrame):
         self.random_anim_button = None
         self.cancel_button = None
 
-        self.load_gui()
-        self.load_preview_buttons()
-
     def load_gui(self):
         # define all the geom
         window_geom1 = PlaneModel(MG.EDITOR_MAP_PATH + MG.MENU_VERT_1)

@@ -24,8 +24,6 @@ class NodeMoverGui(DirectFrame):
         self.initialiseoptions(NodeMoverGui)
         self.entries = []
 
-        self.load_gui()
-
     def load_gui(self):
         geom = PlaneModel(MG.EDITOR_MAP_PATH + MG.MENU_HOR_3)
         scale_all_geom = PlaneModel(MG.EDITOR_MAP_PATH + MG.SCALE_ALL_TEXTURE)

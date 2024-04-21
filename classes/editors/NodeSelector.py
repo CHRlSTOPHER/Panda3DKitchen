@@ -13,27 +13,21 @@ RAY_MOUSE_TASK = "ray_mouse_task"
 
 class NodeSelector(DirectObject):
 
-    def __init__(self, _camera, _render, mouse_watcher, class_object=None):
+    def __init__(self, class_object=None):
         DirectObject.__init__(self)
-
-        self.camera = _camera
-        self.render = _render
-        self.ray_node = None
+        self.kitchen = None
         self.class_object = class_object
+        self.camera = None
+        self.render = None
+        self.mouse_watcher = None
+        self.ray_node = None
         self.mouse_ray = None
         self.ray_collision_node = None
         self.collision_handler = None
         self.collision_handler = CollisionHandlerQueue()
         self.coll_traverser = CollisionTraverser("coll_traverser")
 
-        if mouse_watcher:
-            self.mouse_watcher = mouse_watcher
-        else:
-            self.mouse_watcher = base.mouseWatcher
-
-        if _camera == camera:
-            self.camera = base.cam
-
+    def generate(self):
         self.create_ray_collision()
         self.accept(G.LEFT_MOUSE_BUTTON, self.select_node)
         taskMgr.add(self.sync_ray_with_mouse_pos, RAY_MOUSE_TASK)
@@ -46,7 +40,7 @@ class NodeSelector(DirectObject):
         self.ray_collision_node.set_from_collide_mask(
             GeomNode.get_default_collide_mask())
 
-        self.ray_node = self.camera.attach_new_node(self.ray_collision_node)
+        self.ray_node = self.kitchen.camera.attach_new_node(self.ray_collision_node)
 
     def select_node(self):
         # check if mouse is in the display_region
@@ -88,11 +82,15 @@ class NodeSelector(DirectObject):
         return node
 
     def sync_ray_with_mouse_pos(self, task):
-        if self.mouse_watcher.has_mouse():
-            mouse = self.mouse_watcher.get_mouse()
-            self.mouse_ray.set_from_lens(self.camera.node(), mouse.x, mouse.y)
+        if self.kitchen.scene_mw.has_mouse():
+            mouse = self.kitchen.scene_mw.get_mouse()
+            self.mouse_ray.set_from_lens(self.kitchen.scene_camera.node(),
+                                         mouse.x, mouse.y)
 
         return task.again
+
+    def set_kitchen(self, kitchen):
+        self.kitchen = kitchen
 
     def cleanup(self):
         taskMgr.remove(RAY_MOUSE_TASK)

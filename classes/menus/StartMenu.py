@@ -1,6 +1,8 @@
 import os
 import sys
 from pathlib import Path
+
+from direct.showbase.DirectObject import DirectObject
 from lxml import etree as ET
 import json
 
@@ -10,14 +12,11 @@ import shutil
 
 from classes.file.HandleXMLData import add_custom_transform
 
-from direct.showbase.ShowBase import ShowBase
 from direct.gui.DirectGui import DirectButton, DirectFrame
 
 from classes.apps.AppGlobals import XML_FILE_NAMES, PROPS
 from classes.file.HandleJsonData import (FILES_JSON,
                                          update_json_last_selected)
-from classes.editors.SceneEditor import SceneEditor
-from classes.menus.MasterMenu import MasterMenu
 from classes.menus import MenuGlobals as MG
 from classes.editors.GuiEditor import GuiEditor
 from classes.settings import Globals as G
@@ -32,22 +31,11 @@ GUI_EDITOR = True
 NODE_MOVER = True
 
 
-class Startup(ShowBase):
+class StartMenu(DirectObject):
 
-    def __init__(self, root_folder):
-        ShowBase.__init__(self)
-
-        base.root_folder = root_folder
-        base.project_location = None
-        base.gui_editor = None
-        base.cam_mover = None
-        base.cam_rotater = None
-        base.node_mover = None
-        base.node_selector = None
-        base.top_window = None
-        base.computer_font = loader.load_font(f"{G.EDITOR}{MG.COMPUTER_FONT}")
-        self.project_frame = None
-        self.display_regions = None
+    def __init__(self):
+        DirectObject.__init__(self)
+        self.kitchen = None
         self.commands = [
             self.create_project,
             self.load_project,
@@ -55,10 +43,11 @@ class Startup(ShowBase):
             self.move_project,
         ]
 
-        base.disable_mouse()
-        base.set_background_color(0, .502, .502, 1)
         self.load_gui()
         self.accept('escape', exit)
+
+    def generate(self):
+        self.kitchen.set_background_color(0, .502, .502, 1)
 
     def load_gui(self):
         self.project_frame = DirectFrame(pos=(0, 0, .1), scale=1.1)
@@ -69,12 +58,12 @@ class Startup(ShowBase):
             i += 1
 
     def create_project(self):
-        base.project_location = self.get_folder_location()
-        if not base.project_location:
+        self.project_location = self.get_folder_location()
+        if not self.project_location:
             return
         # create xml files
         for name in XML_FILE_NAMES:
-            file = f"{base.project_location}/{name}.xml"
+            file = f"{self.project_location}/{name}.xml"
             # check if file already exists.
             file_check = Path(file)
             if file_check.is_file():
@@ -91,7 +80,7 @@ class Startup(ShowBase):
             tree.write(file, pretty_print=True, encoding="utf-8")
 
     def load_project(self):
-        base.project_location = self.get_folder_location()
+        self.project_location = self.get_folder_location()
         # check if all project xml files are present.
         valid_files = self.validate_file(approve_mode=True)
         if not valid_files:
@@ -99,20 +88,14 @@ class Startup(ShowBase):
             return
 
         # Add directory to path in case directory is in a different location.
-        sys.path.append(base.project_location)
+        sys.path.append(self.project_location)
         self.project_frame.stash()
-
-        # Load up all the editor tools
-        base.gui_editor = GuiEditor(activate=GUI_EDITOR)
-        base.master_menu = MasterMenu()
-        base.scene_editor = SceneEditor([camera, base.scene_cam],
-                                        base.scene_mouse_watcher,
-                                        base.scene_region,
-                                        base.scene_render,
-                                        rot_cam_disable=False)
+        self.kitchen.set_project_location(self.project_location)
+        self.kitchen.generate_classes()
+        self.kitchen.define_variable_names()
 
     def delete_project(self):
-        base.project_location = self.get_folder_location()
+        self.project_location = self.get_folder_location()
         self.validate_file(delete_mode=True)
 
     def move_project(self):
@@ -132,7 +115,7 @@ class Startup(ShowBase):
 
     def validate_file(self, approve_mode=False, delete_mode=False):
         for filename in XML_FILE_NAMES:
-            file = f"{base.project_location}/{filename}.xml"
+            file = f"{self.project_location}/{filename}.xml"
             # if file exists and mode is delete, remove file.
             if os.path.exists(file) and delete_mode:
                 os.remove(file)
@@ -151,3 +134,6 @@ class Startup(ShowBase):
         update_json_last_selected(folder_location, "last-project")
 
         return folder_location
+
+    def set_kitchen(self, kitchen):
+        self.kitchen = kitchen

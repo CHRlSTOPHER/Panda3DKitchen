@@ -10,6 +10,7 @@ INCREMENT = .003
 class GuiEditor(DirectObject):
 
     def __init__(self, gui=None, with_args=True, activate=True):
+        self.kitchen = None
         if not activate:
             return  # quick toggle option (mainly bts stuff)
         DirectObject.__init__(self)
@@ -19,8 +20,9 @@ class GuiEditor(DirectObject):
         self.single_scale_inputs = None
         self.pad_inputs = None
 
-        if gui:
-            self.set_gui(gui, with_args)
+    def generate(self):
+        if self.gui:
+            self.set_gui(self.gui, self.with_args)
 
     def load_input_dict(self):
         self.transform_inputs = {
@@ -131,3 +133,6 @@ class GuiEditor(DirectObject):
         self.with_args = with_args
         self.load_input_dict()
         self.load_inputs()
+
+    def set_kitchen(self, kitchen):
+        self.kitchen = kitchen

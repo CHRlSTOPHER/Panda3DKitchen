@@ -16,12 +16,9 @@ class CanvasMenu:
         self.canvas_buttons = None
         self.within = False
 
-        self.generate_canvas()
-
     def generate_canvas(self):
         self.canvas_buttons = CanvasButtons()
         self.canvas_buttons.set_scroll_frame(self.scroll)
-
         self.bind_canvas_gui()
 
     def bind_canvas_gui(self):
