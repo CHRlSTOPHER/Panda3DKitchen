@@ -19,12 +19,12 @@ class SceneLoader:
             # loop first anim in dict
             actor.loop(next(iter(anims)))
         actor.set_blend(frameBlend=True)
-        actor.reparent_to(base.scene_render)
+        actor.reparent_to(self.kitchen.scene_render)
         return actor
 
     def generate_node(self, model):
-        node = loader.load_model(model)
-        node.reparent_to(base.scene_render)
+        node = self.kitchen.load_model(model)
+        node.reparent_to(self.kitchen.scene_render)
         return node
 
     def set_transforms(self, node, transforms):

@@ -8,22 +8,20 @@ from classes.scene.SceneLoader import SceneLoader
 
 class SceneMenu(SceneGui, CanvasMenu, SceneLoader):
 
-    def __init__(self, preview_menu):
+    def __init__(self):
         SceneGui.__init__(self)
         SceneLoader.__init__(self)
-        CanvasMenu.__init__(self, preview_menu, self.scene_frame,
-                            self.scene_scroll, 'scene')
+        CanvasMenu.__init__(self)
         self.kitchen = None
         self.discard_frame = None
         self.add_item = False
 
     def generate(self):
         self.load_gui()
-        CanvasMenu.__init__(self, self.kitchen.preview_menu, self.scene_frame,
+        self.generate_canvas(self.kitchen.preview_menu, self.scene_frame,
                             self.scene_scroll, 'scene')
-        self.generate_canvas()
         self.discard_frame = DiscardCanvasButtons('scene',
-                                                  self.kitchen.preview_menu,
+                                                  self.kitchen,
                                                   self,
                                                   self.scene_scroll,
                                                   self.scene_trash,
@@ -32,7 +30,7 @@ class SceneMenu(SceneGui, CanvasMenu, SceneLoader):
 
     def add_item_to_xml(self, item_name):
         mode = self.preview_menu.get_mode().lower()
-        xml_file = base.project_location + "/{}" + ".xml"
+        xml_file = self.kitchen.project_location + "/{}" + ".xml"
         if mode == 'actor' or mode == 'prop':
             xml_file = xml_file.format(f"{mode}s")
             append_node_data(xml_file, mode, item_name)

@@ -24,6 +24,7 @@ def get_distance(item):
 class ActorMenu:
 
     def __init__(self):
+        self.kitchen = None
         self.library_buttons = []
         self.scene_buttons = []
         self.entity = None
@@ -50,7 +51,7 @@ class ActorMenu:
             first_anim = next(iter(self.anim_list))
             self.actor.pose(first_anim, 3)
         self.actor.set_transparency(TransparencyAttrib.MDual)
-        self.actor.reparent_to(base.preview_render)
+        self.actor.reparent_to(self.kitchen.preview_render)
         self.actor.node().set_bounds(OmniBoundingVolume())
         self.actor.node().set_final(1)
 
@@ -61,9 +62,9 @@ class ActorMenu:
 
         # get y2 and y1 for the distance formula
         distance = get_distance(self.actor)
-        base.node_mover.set_node(self.actor, flash_red=False)
-        base.node_mover.set_pos(0, distance * 2.0, -(distance / 2.0))
-        base.node_mover.set_click(False)
+        self.kitchen.node_mover.set_node(self.actor, flash_red=False)
+        self.kitchen.node_mover.set_pos(0, distance * 2.0, -(distance / 2.0))
+        self.kitchen.node_mover.set_click(False)
 
     def set_anims(self, anim_names, anim_dirs):
         self.anim_list = {}
@@ -106,11 +107,15 @@ class ActorMenu:
 
     def set_scene_buttons(self, buttons):
         self.scene_buttons = buttons
+    
+    def set_kitchen(self, kitchen):
+        self.kitchen = kitchen
 
 
 class PropMenu:
 
     def __init__(self):
+        self.kitchen = None
         self.library_buttons = []
         self.scene_buttons = []
         self.entity = None
@@ -128,14 +133,14 @@ class PropMenu:
         self.prop = loader.load_model(directory)
         self.entity = self.prop
         self.prop.set_transparency(TransparencyAttrib.MDual)
-        self.prop.reparent_to(base.preview_render)
+        self.prop.reparent_to(self.kitchen.preview_render)
         self.prop.node().set_bounds(OmniBoundingVolume())
         self.prop.node().set_final(1)
 
         distance = get_distance(self.prop)
-        base.node_mover.set_node(self.prop, flash_red=False)
-        base.node_mover.set_pos(0, distance * 2.0, -(distance / 2.0))
-        base.node_mover.set_click(False)
+        self.kitchen.node_mover.set_node(self.prop, flash_red=False)
+        self.kitchen.node_mover.set_pos(0, distance * 2.0, -(distance / 2.0))
+        self.kitchen.node_mover.set_click(False)
 
     def save_item(self, item_name, item_location):
         save_data = {item_name: item_location}
@@ -156,11 +161,15 @@ class PropMenu:
 
     def set_scene_buttons(self, buttons):
         self.scene_buttons = buttons
+    
+    def set_kitchen(self, kitchen):
+        self.kitchen = kitchen
 
 
 class TextureMenu:
 
     def __init__(self):
+        self.kitchen = None
         self.library_buttons = []
         self.scene_buttons = []
         self.entity = None
@@ -179,7 +188,7 @@ class TextureMenu:
     def load_entity(self, directory):
         if isinstance(directory, str):
             self.texture_node = PlaneModel(directory,
-                                           parent=base.preview_render)
+                                           parent=self.kitchen.preview_render)
             self.texture_node.set_y(3)
 
     def set_textures(self, names, dirs):
@@ -206,11 +215,15 @@ class TextureMenu:
 
     def set_scene_buttons(self, buttons):
         self.scene_buttons = buttons
+    
+    def set_kitchen(self, kitchen):
+        self.kitchen = kitchen
 
 
 class ParticleMenu:
 
     def __init__(self):
+        self.kitchen = None
         self.entity = None
         self.library_buttons = []
         self.scene_buttons = []
@@ -240,3 +253,6 @@ class ParticleMenu:
 
     def set_scene_buttons(self, buttons):
         self.scene_buttons = buttons
+    
+    def set_kitchen(self, kitchen):
+        self.kitchen = kitchen

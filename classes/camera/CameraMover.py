@@ -49,7 +49,7 @@ class CameraMover(CameraRotater, NodePath, FovScrollWheel):
             self.accept(f"{KBS[key]}-up", self.change_speed, extraArgs=[1])
 
     def start_movement(self, key, direction):
-        taskMgr.add(self.move_task, f"move_{key}",
+        self.kitchen.taskMgr.add(self.move_task, f"move_{key}",
                     extraArgs=[key, direction], appendTask=True)
 
     def move_task(self, key, index, task):
@@ -71,7 +71,7 @@ class CameraMover(CameraRotater, NodePath, FovScrollWheel):
         return task.again
 
     def stop_move_task(self, key):
-        taskMgr.remove(f"move_{key}")
+        self.kitchen.taskMgr.remove(f"move_{key}")
 
     def define_move_options(self):
         base_speed = G.NM_SPEEDS[-1][1]
@@ -110,3 +110,4 @@ class CameraMover(CameraRotater, NodePath, FovScrollWheel):
 
     def set_kitchen(self, kitchen):
         self.kitchen = kitchen
+        super().set_kitchen(kitchen)

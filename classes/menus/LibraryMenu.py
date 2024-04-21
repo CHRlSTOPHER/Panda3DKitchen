@@ -13,11 +13,9 @@ BUTTON_MOVE_TASK = 'button_move'
 
 class LibraryMenu(CanvasMenu, LibraryGui):
 
-    def __init__(self, preview_menu):
+    def __init__(self):
         LibraryGui.__init__(self)
-        CanvasMenu.__init__(self, preview_menu,
-                            self.library_window,
-                            self.library_scroll, 'library')
+        CanvasMenu.__init__(self)
         self.kitchen = None
         self.discard_frame = None
         self.scene_menu = None
@@ -34,12 +32,10 @@ class LibraryMenu(CanvasMenu, LibraryGui):
 
     def generate(self):
         self.load_gui()
-        CanvasMenu.__init__(self, self.kitchen.preview_menu,
-                            self.library_window,
-                            self.library_scroll, 'library')
-        self.generate_canvas()
+        self.generate_canvas(self.kitchen.preview_menu, self.library_window,
+                             self.library_scroll, 'library')
         self.discard_frame = DiscardCanvasButtons('library',
-                                                  self.kitchen.preview_menu,
+                                                  self.kitchen,
                                                   self,
                                                   self.library_scroll,
                                                   self.library_trash,
@@ -55,14 +51,16 @@ class LibraryMenu(CanvasMenu, LibraryGui):
     def swap_menus(self):
         self.swap_menu = not self.swap_menu
         if self.swap_menu:
-            self.swap_button.wrt_reparent_to(self.scene_menu.scene_frame)
-            self.scene_menu.scene_frame.show()
+            self.swap_button.wrt_reparent_to(self.kitchen.
+                                             scene_menu.scene_frame)
+            self.kitchen.scene_frame.show()
             self.discard_frame.disable_trash_mode(restore=False)
             self.library_window.hide()
         else:
             self.swap_button.wrt_reparent_to(self.library_window)
-            self.scene_menu.scene_frame.hide()
-            self.scene_menu.discard_frame.disable_trash_mode(restore=False)
+            self.kitchen.scene_frame.hide()
+            self.kitchen.scene_menu.discard_frame.disable_trash_mode(
+                                                                restore=False)
             self.library_window.show()
 
     def choose_file(self, item_name=None, item_directory=None, search=True,
@@ -82,7 +80,7 @@ class LibraryMenu(CanvasMenu, LibraryGui):
         if search:
             self.check_for_textures()
             self.check_for_anims()
-        base.node_mover.set_click(True)
+        self.kitchen.node_mover.set_click(True)
         self.class_mode.cleanup_entity()
 
         # try to load the file. return an error if the file cannot be found.
@@ -131,22 +129,22 @@ class LibraryMenu(CanvasMenu, LibraryGui):
         self.preview_menu.hide_special_buttons()
 
     def capture_and_save_image(self):
-        buffer = base.win.make_texture_buffer("buffer", 128, 128, Texture(),
+        buffer = self.kitchen.win.make_texture_buffer("buffer", 128, 128, Texture(),
                                               to_ram=True)
         buffer.set_sort(-100)
 
-        camera = base.make_camera(buffer)
-        camera.reparent_to(base.preview_render)
+        camera = self.kitchen.make_camera(buffer)
+        camera.reparent_to(self.kitchen.preview_render)
         camera.node().get_lens().set_fov(G.PREVIEW_FOV)
 
         path = f"{G.RESOURCES}{G.EDITOR}{self.mode}/{self.item_name}.png"
         # reassign the destination to the entire directory location
-        filename = Filename.from_os_specific(base.root_folder + path)
-        base.graphicsEngine.render_frame()
+        filename = Filename.from_os_specific(self.kitchen.root_folder + path)
+        self.kitchen.graphicsEngine.render_frame()
         buffer.save_screenshot(filename)
 
         # cleanup
-        base.graphicsEngine.remove_window(buffer)
+        self.kitchen.graphicsEngine.remove_window(buffer)
         camera.remove_node()
 
     def reload(self):
@@ -170,16 +168,16 @@ class LibraryMenu(CanvasMenu, LibraryGui):
         self.last_mouse_y = 0
         # generate a copy and set the position.
         self.button_copy = button['geom'].copy_to(button)
-        self.button_copy.wrt_reparent_to(aspect2d)
+        self.button_copy.wrt_reparent_to(self.kitchen.aspect2d)
         self.button_copy.set_alpha_scale(.75)
         self.button_copy.set_name(button.get_name())
 
-        taskMgr.add(self.update_button_copy_pos, BUTTON_MOVE_TASK)
+        self.kitchen.taskMgr.add(self.update_button_copy_pos, BUTTON_MOVE_TASK)
 
     def update_button_copy_pos(self, task):
-        if base.mouseWatcherNode.has_mouse() and self.button_copy:
-            mouse_pos = base.mouseWatcherNode.getMouse()
-            aspect = base.getAspectRatio()
+        if self.kitchen.mouseWatcherNode.has_mouse() and self.button_copy:
+            mouse_pos = self.kitchen.mouseWatcherNode.getMouse()
+            aspect = self.kitchen.getAspectRatio()
             self.button_copy.set_pos(mouse_pos.x * aspect, 0, mouse_pos.y)
             return task.again
         else:
@@ -190,15 +188,14 @@ class LibraryMenu(CanvasMenu, LibraryGui):
         # preview scene or the actual scene
         if self.discard_frame.trash_mode:  # Don't add during trash mode.
             return
-        mode = self.preview_menu.get_mode()
-        class_mode = self.preview_menu.get_mode_class()
+        mode = self.kitchen.preview_menu.get_mode()
+        class_mode = self.kitchen.preview_menu.get_mode_class()
 
-        if self.scene_window.within:
-            if (base.top_window != 'preview_window'
-                    or not self.preview_menu.within):
-                self.scene_menu.add_item_to_xml(self.button_copy.get_name())
+        if self.kitchen.scene_window.within:
+                self.kitchen.scene_menu.add_item_to_xml(
+                    self.button_copy.get_name())
 
-        if self.preview_menu.within:
+        if self.kitchen.preview_menu.within:
             item_name = self.button_copy.get_name()
             json_path = f"{G.DATABASE_DIRECTORY}{mode}Library.json"
             json_data = json.loads(open(json_path).read())
@@ -227,3 +224,4 @@ class LibraryMenu(CanvasMenu, LibraryGui):
 
     def set_kitchen(self, kitchen):
         self.kitchen = kitchen
+        super().set_kitchen(kitchen)

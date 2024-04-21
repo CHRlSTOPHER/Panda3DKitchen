@@ -19,10 +19,10 @@ def load_xml(xml_file):
     return tree, root
 
 
-def delete_xml_entries(mode, names):
+def delete_xml_entries(project_location, mode, names):
     split_names = [name.split('|') for name in names]
     mode_name = AG.FILE_MODES[mode]
-    xml_file = f"{base.project_location}/{mode_name}.xml"
+    xml_file = f"{project_location}/{mode_name}.xml"
     tree, root = load_xml(xml_file)
     # run through all the elements
     for element in root:

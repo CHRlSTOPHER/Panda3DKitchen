@@ -13,12 +13,12 @@ BRIGHT_RED = (.9, 0, 0, 1)
 
 class DiscardCanvasButtons:
 
-    def __init__(self, menu_name, preview_menu, reload_menu, scroll_frame,
+    def __init__(self, menu_name, kitchen, reload_menu, scroll_frame,
                  trash_button, confirm_button, left_button,
                  json=False, xml=False):
         self.menu_name = menu_name
-        # preview menu stores the mode types
-        self.preview_menu = preview_menu
+        self.kitchen = kitchen
+        self.preview_menu = kitchen.preview_menu
         self.reload_menu = reload_menu
         self.scroll_frame = scroll_frame
         self.trash_button = trash_button
@@ -105,7 +105,8 @@ class DiscardCanvasButtons:
         if self.json:
             delete_json_entries(mode, self.discarded_names)
         if self.xml:
-            delete_xml_entries(mode, self.discarded_names)
+            delete_xml_entries(self.kitchen.project_location,
+                               mode, self.discarded_names)
         self.reload_menu.reload()
         self.toggle_trash_mode(restore=False)
 
@@ -116,7 +117,7 @@ class DiscardCanvasButtons:
             self.discarded_names.append(name)
 
             if self.json:  # remove the image file
-                image_path = (base.root_folder +
+                image_path = (self.kitchen.root_folder +
                               f"{G.RESOURCES}{G.EDITOR}{mode}/{name}{G.PNG}")
                 self.remove_file(image_path)
 

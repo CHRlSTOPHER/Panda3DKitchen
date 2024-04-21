@@ -25,7 +25,7 @@ class Panda3DKitchen(ShowBase):
 
     def __init__(self):
         ShowBase.__init__(self)
-        self.root_folder = CWD
+        self.root_folder = CWD + "/"
         self.scene_window = SceneWindow()
         self.start_menu = StartMenu()
         self.gui_editor = GuiEditor()
@@ -33,8 +33,8 @@ class Panda3DKitchen(ShowBase):
         self.node_mover = NodeMover()
         self.node_selector = NodeSelector()
         self.preview_menu = PreviewMenu()
-        self.library_menu = LibraryMenu(self.preview_menu)
-        self.scene_menu = SceneMenu(self.preview_menu)
+        self.library_menu = LibraryMenu()
+        self.scene_menu = SceneMenu()
         self.class_objects = [self.start_menu, self.gui_editor,
                               self.camera_mover, self.node_mover,
                               self.node_selector, self.library_menu,
@@ -44,6 +44,11 @@ class Panda3DKitchen(ShowBase):
         self.scene_mw = None
         self.scene_region = None
         self.project_location = None
+        self.library_window = None
+        self.library_scroll = None
+        self.library_trash = None
+        self.scene_frame = None
+        self.preview_render = None
 
         self.load_model = self.loader.load_model
         self.load_texture = self.loader.load_texture
@@ -67,6 +72,8 @@ class Panda3DKitchen(ShowBase):
         self.library_window = self.library_menu.library_window
         self.library_scroll = self.library_menu.library_scroll
         self.library_trash = self.library_menu.library_trash
+        self.scene_frame = self.scene_menu.scene_frame
+        self.preview_render = self.preview_menu.preview_render
 
     def set_project_location(self, project_location):
         self.project_location = project_location

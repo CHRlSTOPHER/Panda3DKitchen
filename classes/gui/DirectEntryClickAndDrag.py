@@ -64,16 +64,16 @@ class DirectEntryClickAndDrag(DirectObject):
 
     def modify_task_toggle(self, press, mouse_data):
         if press:
-            self.mouse_start_x = base.mouseWatcherNode.get_mouse_x()
-            taskMgr.add(self.modify_entry, MODIFY_TASK)
+            self.mouse_start_x = self.kitchen.mouseWatcherNode.get_mouse_x()
+            self.kitchen.taskMgr.add(self.modify_entry, MODIFY_TASK)
         else:
-            taskMgr.remove(MODIFY_TASK)
+            self.kitchen.taskMgr.remove(MODIFY_TASK)
 
     # when the user clicks and drags, move value based on how far mouse is
     def modify_entry(self, task):
         if not self.func_catalog:
             return
-        mouse_x = base.mouseWatcherNode.get_mouse_x()
+        mouse_x = self.kitchen.mouseWatcherNode.get_mouse_x()
         # define the get and set functions for the desired transform func
         get = self.func_catalog[self.entry_name][0]
         set = self.func_catalog[self.entry_name][1]
@@ -125,7 +125,7 @@ class DirectEntryClickAndDrag(DirectObject):
             self.win_props.set_cursor_filename(self.drag_cursor)
         if not within:
             self.win_props.set_cursor_filename(Filename()) # restores default
-        base.win.request_properties(self.win_props)
+        self.kitchen.win.request_properties(self.win_props)
 
     def set_in_focus(self):
         self.in_focus = True
@@ -166,3 +166,6 @@ class DirectEntryClickAndDrag(DirectObject):
 
     def set_node(self, node):
         self.node = node
+
+    def set_kitchen(self, kitchen):
+        self.kitchen = kitchen

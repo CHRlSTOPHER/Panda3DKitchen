@@ -10,17 +10,18 @@ from classes.settings import Globals as G
 class SceneWindowGui(DirectFrame):
 
     def __init__(self):
-        DirectFrame.__init__(self, parent=aspect2d)
+        DirectFrame.__init__(self)
+        self.kitchen = None
         self.scene_window = None
         self.fov_title = None
         self.fov_entry = None
 
         self.initialiseoptions(SceneWindowGui)
-        self.load_gui()
 
     def load_gui(self):
+        self.reparent_to(self.kitchen.aspect2d)
         window_geom = PlaneModel(MG.EDITOR_MAP_PATH + MG.MENU_HOR_2)
-        self.scene_window = DirectFrame(parent=aspect2d,
+        self.scene_window = DirectFrame(parent=self.kitchen.aspect2d,
                                         geom=window_geom,
                                         geom_pos=(0, 0, -.125),
                                         geom_scale=(1, 1, .89),
@@ -42,3 +43,6 @@ class SceneWindowGui(DirectFrame):
                                      scale=(0.073, 0.1, 0.1), width=2,
                                      initialText=str(settings['fov']),
                                      frameVisibleScale=(0, 0))
+
+    def set_kitchen(self, kitchen):
+        self.kitchen = kitchen

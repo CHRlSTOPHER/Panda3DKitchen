@@ -20,11 +20,13 @@ DIRECT_POS = [
 class NodeMoverGui(DirectFrame):
 
     def __init__(self):
-        DirectFrame.__init__(self, parent=base.a2dTopCenter)
+        DirectFrame.__init__(self)
+        self.kitchen = None
         self.initialiseoptions(NodeMoverGui)
         self.entries = []
 
     def load_gui(self):
+        self.reparent_to(self.kitchen.a2dTopCenter)
         geom = PlaneModel(MG.EDITOR_MAP_PATH + MG.MENU_HOR_3)
         scale_all_geom = PlaneModel(MG.EDITOR_MAP_PATH + MG.SCALE_ALL_TEXTURE)
         scale_one_geom = PlaneModel(MG.EDITOR_MAP_PATH + MG.SCALE_ONE_TEXTURE)
@@ -33,7 +35,7 @@ class NodeMoverGui(DirectFrame):
                                        scale=(0.511, 0.424, 0.211))
 
         self.mover_title = DirectFrame(parent=self.mover_frame,
-                                       text_font=base.computer_font,
+                                       text_font=self.kitchen.computer_font,
                                        text_fg=(1, 1, 1, 1), relief=0,
                                        text="NODE MOVER",
                                        pos=(-0.639, 0.0, 0.69),
@@ -91,3 +93,6 @@ class NodeMoverGui(DirectFrame):
         elif index < 0:  # underflow
             index = len(self.entries) - 1
         return index
+
+    def set_kitchen(self, kitchen):
+        self.kitchen = kitchen

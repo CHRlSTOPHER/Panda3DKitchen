@@ -3,7 +3,6 @@ Set a Node to move and rotate. Modify with keyboard inputs.
 The rate you can effect them can also be influenced by keyboard inputs.
 """
 from direct.interval.IntervalGlobal import Sequence, Func, Wait
-from direct.gui.DirectGui import DGG
 from panda3d.core import NodePath
 
 from classes.editors.NodeMoverGui import NodeMoverGui
@@ -38,6 +37,7 @@ class NodeMover(NodeMoverGui, NodePath):
         for entry in self.entries:
             click_and_drag = DirectEntryClickAndDrag(entry)
             click_and_drag.set_combined_entries(['SX', 'SY', 'SZ'])
+            click_and_drag.set_kitchen(self.kitchen)
             self.click_and_drags.append(click_and_drag)
         for object in self.click_and_drags[-3:]: # Scale entries
             object.set_delete_value(1.0)
@@ -68,8 +68,8 @@ class NodeMover(NodeMoverGui, NodePath):
                 drag.set_func_catalog(self.get_func_catalog())
                 drag.set_node(node)
                 drag.enable_entry()
-            taskMgr.doMethodLater(.01, self.update_entries,
-                                  "update_de_entries")
+            self.kitchen.taskMgr.doMethodLater(.01, self.update_entries,
+                                               "update_de_entries")
 
             if not flash_red:
                 return

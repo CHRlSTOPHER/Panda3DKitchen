@@ -19,7 +19,7 @@ def load_settings(current_path):
 
     # Add resource directories to the prc model-path variable
     for path in model_paths:
-        loadPrcFileData("", f"model-path {path}")
+        loadPrcFileData("", f"model-path {path}/")
 
     loadPrcFileData("", f"default-model-extension "
                         f"{json_settings['default_model_extension']}")

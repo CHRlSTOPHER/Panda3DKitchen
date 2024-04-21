@@ -9,7 +9,7 @@ from classes.settings import Globals as G
 class LibraryGui(DirectFrame):
 
     def __init__(self):
-        DirectFrame.__init__(self, parent=base.a2dLeftCenter)
+        DirectFrame.__init__(self)
         self.initialiseoptions(LibraryGui)
         self.library_window = None
         self.library_scroll = None
@@ -20,6 +20,7 @@ class LibraryGui(DirectFrame):
         self.library_confirm = None
 
     def load_gui(self):
+        self.reparent_to(self.kitchen.a2dLeftCenter)
         folder_geom = PlaneModel(MG.EDITOR_MAP_PATH + MG.FOLDER)
         trash_geom = PlaneModel(MG.EDITOR_MAP_PATH + MG.TRASH)
         window_geom = PlaneModel(MG.EDITOR_MAP_PATH + MG.MENU_VERT_1)
@@ -43,7 +44,7 @@ class LibraryGui(DirectFrame):
         self.library_scroll.verticalScroll['frameColor'] = (.5, .5, .5, 1)
 
         self.library_title = DirectFrame(parent=self.library_window,
-                                         text_font=base.computer_font,
+                                         text_font=self.kitchen.computer_font,
                                          text_fg=(1, 1, 1, 1),
                                          frameVisibleScale=(0, 0),
                                          text="LIBRARY ITEMS",
@@ -73,3 +74,6 @@ class LibraryGui(DirectFrame):
                                             scale=(0.229, 0.142, 0.187),
                                             pad=(0.873, -0.054))
         self.library_confirm.hide()
+
+    def set_kitchen(self, kitchen):
+        self.kitchen = kitchen

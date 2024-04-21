@@ -7,16 +7,21 @@ from classes.menus import MenuGlobals as MG
 
 class CanvasMenu:
 
-    def __init__(self, preview_menu, window, scroll, menu_name):
-        self.preview_menu = preview_menu
-        self.window = window
-        self.scroll = scroll
-        self.menu_name = menu_name
+    def __init__(self):
+        self.kitchen = None
+        self.preview_menu = None
+        self.window = None
+        self.scroll = None
+        self.menu_name = None
         self.mode_class_buttons = None
         self.canvas_buttons = None
         self.within = False
 
-    def generate_canvas(self):
+    def generate_canvas(self, preview_menu, window, scroll, menu_name):
+        self.preview_menu = preview_menu
+        self.window = window
+        self.scroll = scroll
+        self.menu_name = menu_name
         self.canvas_buttons = CanvasButtons()
         self.canvas_buttons.set_scroll_frame(self.scroll)
         self.bind_canvas_gui()
@@ -74,3 +79,6 @@ class CanvasMenu:
 
     def get_within(self):
         return self.within
+
+    def set_kitchen(self, kitchen):
+        self.kitchen = kitchen

@@ -58,6 +58,7 @@ class PreviewMenu(PreviewGui):
         self.load_preview_buttons()
         for name, mode in MODES.items():
             self.modes[name] = mode()
+            self.modes[name].set_kitchen(self.kitchen)
 
         self.load_preview_region()
         self.add_fog()
@@ -189,7 +190,7 @@ class PreviewMenu(PreviewGui):
 
         self.kitchen.scene_region.set_dimensions(0, 0, 0, 0)
         self.mini_frame.hide()
-        self.scene_window.get_window().hide()
+        self.kitchen.scene_window.get_window().hide()
         for node in self.hide_preview_nodes:
             node.show()
 
@@ -315,3 +316,4 @@ class PreviewMenu(PreviewGui):
 
     def set_kitchen(self, kitchen):
         self.kitchen = kitchen
+        super().set_kitchen(kitchen)

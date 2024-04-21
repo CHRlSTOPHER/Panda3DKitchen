@@ -56,14 +56,16 @@ class GuiEditor(DirectObject):
             task = input + '_task'
             self.accept(input, self.move_task, extraArgs=[get, set,
                                                           value, task])
-            self.accept(input + "-up", taskMgr.remove, extraArgs=[task])
+            self.accept(input + "-up", self.kitchen.taskMgr.remove,
+                        extraArgs=[task])
 
         # padding inputs
         for input in self.pad_inputs:
             value = self.pad_inputs[input]
             task = input + '_task'
             self.accept(input, self.pad_task, extraArgs=[value, task])
-            self.accept(input + "-up", taskMgr.remove, extraArgs=[task])
+            self.accept(input + "-up", self.kitchen.taskMgr.remove,
+                        extraArgs=[task])
 
         # scaling single axis inputs
         for input in self.single_scale_inputs:
@@ -81,8 +83,8 @@ class GuiEditor(DirectObject):
             self.print_gui_data()
             return task.again
 
-        taskMgr.add(move_gui, task, appendTask=True,
-                    extraArgs=[get, set, value])
+        self.kitchen.taskMgr.add(move_gui, task, appendTask=True,
+                                 extraArgs=[get, set, value])
 
     def pad_task(self, value, task):
         def pad_gui(value, task):
@@ -92,7 +94,8 @@ class GuiEditor(DirectObject):
             self.print_gui_data()
             return task.again
 
-        taskMgr.add(pad_gui, task, appendTask=True, extraArgs=[value])
+        self.kitchen.taskMgr.add(pad_gui, task, appendTask=True,
+                                 extraArgs=[value])
 
     def single_scale_task(self, get, set, value, task):
         def single_scale_gui(get, set, value, task):
@@ -100,11 +103,15 @@ class GuiEditor(DirectObject):
             set(current_scale + value)
             self.print_gui_data()
 
-            shift = base.mouseWatcherNode.isButtonDown(KeyboardButton.shift())
-            up = base.mouseWatcherNode.isButtonDown(KeyboardButton.up())
-            down = base.mouseWatcherNode.isButtonDown(KeyboardButton.down())
-            left = base.mouseWatcherNode.isButtonDown(KeyboardButton.left())
-            right = base.mouseWatcherNode.isButtonDown(
+            shift = self.kitchen.mouseWatcherNode.isButtonDown(
+                KeyboardButton.shift())
+            up = self.kitchen.mouseWatcherNode.isButtonDown(
+                KeyboardButton.up())
+            down = self.kitchen.mouseWatcherNode.isButtonDown(
+                KeyboardButton.down())
+            left = self.kitchen.mouseWatcherNode.isButtonDown(
+                KeyboardButton.left())
+            right = self.kitchen.mouseWatcherNode.isButtonDown(
                 KeyboardButton.right())
             self.keys = {'up': up, 'down': down, 'left': left, 'right': right}
 
@@ -113,8 +120,8 @@ class GuiEditor(DirectObject):
                 return task.done
             return task.again
 
-        taskMgr.add(single_scale_gui, task, appendTask=True,
-                    extraArgs=[get, set, value])
+        self.kitchen.taskMgr.add(single_scale_gui, task, appendTask=True,
+                                 extraArgs=[get, set, value])
 
     def print_gui_data(self):
         x, y, z = self.gui.get_pos()

@@ -8,7 +8,8 @@ from classes.menus import MenuGlobals as MG
 class PreviewGui(DirectFrame):
 
     def __init__(self):
-        DirectFrame.__init__(self, parent=base.a2dBottomLeft)
+        DirectFrame.__init__(self)
+        self.kitchen = None
         self.initialiseoptions(PreviewGui)
         self.entity_frame = None
         self.entity_title = None
@@ -23,6 +24,7 @@ class PreviewGui(DirectFrame):
         self.cancel_button = None
 
     def load_gui(self):
+        self.reparent_to(self.kitchen.a2dBottomLeft)
         # define all the geom
         window_geom1 = PlaneModel(MG.EDITOR_MAP_PATH + MG.MENU_VERT_1)
         window_geom2 = PlaneModel(MG.EDITOR_MAP_PATH + MG.MENU_HOR_1)
@@ -35,7 +37,7 @@ class PreviewGui(DirectFrame):
         self.entity_frame['state'] = DGG.NORMAL
 
         self.entity_title = DirectFrame(parent=self.entity_frame,
-                                        text_font=base.computer_font,
+                                        text_font=self.kitchen.computer_font,
                                         text_fg=(1, 1, 1, 1),
                                         frameVisibleScale=(0, 0),
                                         text="MODE PREVIEW", pad=(0, 0),
@@ -102,3 +104,6 @@ class PreviewGui(DirectFrame):
                                           scale=(0.213, 0.135, 0.144),
                                           pad=(0.315, 0.066),
                                           frameVisibleScale=(.95, .95))
+    
+    def set_kitchen(self, kitchen):
+        self.kitchen = kitchen

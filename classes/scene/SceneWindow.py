@@ -14,11 +14,12 @@ BG_COLOR = (.7, .65, .7, 1)
 class SceneWindow(SceneWindowGui):
 
     def __init__(self):
+        SceneWindowGui.__init__(self)
         self.kitchen = None
         self.within = False
 
     def generate(self):
-        SceneWindowGui.__init__(self)
+        self.load_gui()
         self.load_scene_region()
         self.bind_gui()
 
@@ -66,3 +67,4 @@ class SceneWindow(SceneWindowGui):
 
     def set_kitchen(self, kitchen):
         self.kitchen = kitchen
+        super().set_kitchen(kitchen)

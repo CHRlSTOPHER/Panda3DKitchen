@@ -30,7 +30,7 @@ class NodeSelector(DirectObject):
     def generate(self):
         self.create_ray_collision()
         self.accept(G.LEFT_MOUSE_BUTTON, self.select_node)
-        taskMgr.add(self.sync_ray_with_mouse_pos, RAY_MOUSE_TASK)
+        self.kitchen.taskMgr.add(self.sync_ray_with_mouse_pos, RAY_MOUSE_TASK)
 
     def create_ray_collision(self):
         self.mouse_ray = CollisionRay()
@@ -44,7 +44,7 @@ class NodeSelector(DirectObject):
 
     def select_node(self):
         # check if mouse is in the display_region
-        if not self.mouse_watcher.has_mouse():
+        if not self.kitchen.scene_mw.has_mouse():
             return
 
         # detect what is being collided.
