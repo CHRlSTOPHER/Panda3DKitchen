@@ -45,9 +45,6 @@ class PreviewMenu(PreviewGui):
         self.mode = 'Actor'
         self.modes = {}
         self.mode_buttons = []
-        self.library_menu = None
-        self.scene_menu = None
-        self.scene_window = None
         self.add_item = False
         self.mini_window = False
         self.hide_preview_nodes = []
@@ -298,15 +295,6 @@ class PreviewMenu(PreviewGui):
 
     def get_mode_class(self):
         return self.modes[self.mode]
-
-    def set_library_menu(self, menu):
-        self.library_menu = menu
-
-    def set_scene_menu(self, menu):
-        self.scene_menu = menu
-
-    def set_scene_window(self, window):
-        self.scene_window = window
 
     def set_within(self, state, mouse_data):
         self.within = state

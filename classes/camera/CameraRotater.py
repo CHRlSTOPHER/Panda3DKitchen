@@ -17,6 +17,7 @@ class CameraRotater(DirectObject):
     def __init__(self, camera):
         DirectObject.__init__(self)
 
+        self.kitchen = None
         self.camera = camera
         self.window_properties = WindowProperties()
         self.toggle_value = True
@@ -34,7 +35,8 @@ class CameraRotater(DirectObject):
 
         if self.toggle_value:
             self.recenter_mouse_cursor()
-            self.kitchen.taskMgr.do_method_later(DELAY, self.rot_cam_task, ROT_CAM_TASK)
+            self.kitchen.taskMgr.do_method_later(DELAY, self.rot_cam_task,
+                                                 ROT_CAM_TASK)
         else:
             self.kitchen.taskMgr.remove(ROT_CAM_TASK)
 
@@ -73,7 +75,7 @@ class CameraRotater(DirectObject):
 
     def disable(self):
         self.toggle_value = False
-        self.toggle_orb_cam() # turn it off in case by some miracle it was on.
+        self.toggle_orb_cam()  # turn it off in case by some miracle it was on.
         self.disabled = True
 
     def enable(self):

@@ -18,8 +18,6 @@ class LibraryMenu(CanvasMenu, LibraryGui):
         CanvasMenu.__init__(self)
         self.kitchen = None
         self.discard_frame = None
-        self.scene_menu = None
-        self.scene_window = None
         self.item_name = None
         self.item_location = None
         self.resources = G.RESOURCES
@@ -215,12 +213,6 @@ class LibraryMenu(CanvasMenu, LibraryGui):
             self.preview_menu.show_dice()
 
         return item_directory
-
-    def set_scene_menu(self, menu):
-        self.scene_menu = menu
-
-    def set_scene_window(self, window):
-        self.scene_window = window
 
     def set_kitchen(self, kitchen):
         self.kitchen = kitchen

@@ -40,7 +40,8 @@ class NodeSelector(DirectObject):
         self.ray_collision_node.set_from_collide_mask(
             GeomNode.get_default_collide_mask())
 
-        self.ray_node = self.kitchen.camera.attach_new_node(self.ray_collision_node)
+        self.ray_node = self.kitchen.scene_camera.attach_new_node(
+                                                self.ray_collision_node)
 
     def select_node(self):
         # check if mouse is in the display_region
@@ -49,7 +50,7 @@ class NodeSelector(DirectObject):
 
         # detect what is being collided.
         self.coll_traverser.add_collider(self.ray_node, self.collision_handler)
-        self.coll_traverser.traverse(self.render)
+        self.coll_traverser.traverse(self.kitchen.scene_render)
         if (not self.class_object
                 or not self.collision_handler.get_num_entries()):
             return
@@ -74,7 +75,7 @@ class NodeSelector(DirectObject):
         while True:
             if node.get_name() == "":
                 """Ignore nodes without names."""
-            elif (node.get_parent() == self.render or
+            elif (node.get_parent() == self.kitchen.scene_render or
                   node.get_name()[0] in G.SPECIAL_NODE_IFIER_FLAG):
                 break
             node = node.get_parent()
@@ -93,5 +94,5 @@ class NodeSelector(DirectObject):
         self.kitchen = kitchen
 
     def cleanup(self):
-        taskMgr.remove(RAY_MOUSE_TASK)
+        self.kitchen.taskMgr.remove(RAY_MOUSE_TASK)
         self.ignore_all()

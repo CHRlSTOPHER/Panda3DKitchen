@@ -31,7 +31,7 @@ class Panda3DKitchen(ShowBase):
         self.gui_editor = GuiEditor()
         self.camera_mover = CameraMover()
         self.node_mover = NodeMover()
-        self.node_selector = NodeSelector()
+        self.node_selector = NodeSelector(self.node_mover)
         self.preview_menu = PreviewMenu()
         self.library_menu = LibraryMenu()
         self.scene_menu = SceneMenu()
