@@ -20,6 +20,8 @@ class DirectEntryClickAndDrag(DirectObject):
 
     def __init__(self, entry, func_catalog=None):
         DirectObject.__init__(self)
+        self.kitchen = None
+        self.combined_entries = None
         self.entry = entry
         self.func_catalog = func_catalog
         self.entry_name = entry.get_name()
@@ -58,7 +60,7 @@ class DirectEntryClickAndDrag(DirectObject):
         if value.isnumeric():
             # set the node value to the entry text value
             set(float(self.entry.get()))
-        elif value == "": # set node and entry to 0 if empty.
+        elif value == "":  # set node and entry to 0 if empty.
             self.entry.set(str(0))
             set(float(self.entry.get()))
 
@@ -99,11 +101,11 @@ class DirectEntryClickAndDrag(DirectObject):
         if self.in_focus:
             self.entry.set(str(self.delete_value))
             set = self.func_catalog[self.entry_name][1]
-            set(self.delete_value) # set transform to 0.00
+            set(self.delete_value)  # set transform to 0.00
 
     def disable_entry(self):
         self.entry['state'] = DGG.DISABLED
-        self.entry.set("") # clear entry
+        self.entry.set("")  # clear entry
         self.func_catalog = {}
         self.node = None
 
@@ -124,7 +126,7 @@ class DirectEntryClickAndDrag(DirectObject):
         if within:
             self.win_props.set_cursor_filename(self.drag_cursor)
         if not within:
-            self.win_props.set_cursor_filename(Filename()) # restores default
+            self.win_props.set_cursor_filename(Filename())  # restores default
         self.kitchen.win.request_properties(self.win_props)
 
     def set_in_focus(self):
@@ -151,7 +153,7 @@ class DirectEntryClickAndDrag(DirectObject):
     def get_node(self):
         if self.node:
             return self.node
-        else: # node is empty and cannot be called what-so-ever
+        else:  # node is empty and cannot be called what-so-ever
             return None
 
     # pass in a list of entry names. if one of them is modified, they all are.

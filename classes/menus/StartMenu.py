@@ -1,25 +1,20 @@
 import os
 import sys
 from pathlib import Path
-
-from direct.showbase.DirectObject import DirectObject
 from lxml import etree as ET
 import json
-
 import tkinter as tk
 from tkinter import filedialog
 import shutil
 
-from classes.file.HandleXMLData import add_custom_transform
-
+from direct.showbase.DirectObject import DirectObject
 from direct.gui.DirectGui import DirectButton, DirectFrame
+from direct.interval.IntervalGlobal import Sequence, Wait
 
 from classes.apps.AppGlobals import XML_FILE_NAMES, PROPS
+from classes.file.HandleXMLData import add_custom_transform
 from classes.file.HandleJsonData import (FILES_JSON,
                                          update_json_last_selected)
-from classes.menus import MenuGlobals as MG
-from classes.editors.GuiEditor import GuiEditor
-from classes.settings import Globals as G
 
 BUTTONS = [
     ("CREATE", (-.19, 0, -.77), (.103, .103, .103)),
@@ -35,6 +30,8 @@ class StartMenu(DirectObject):
 
     def __init__(self):
         DirectObject.__init__(self)
+        self.project_location = None
+        self.project_frame = None
         self.kitchen = None
         self.commands = [
             self.create_project,
@@ -91,6 +88,7 @@ class StartMenu(DirectObject):
         sys.path.append(self.project_location)
         self.project_frame.stash()
         self.kitchen.set_project_location(self.project_location)
+        self.kitchen.sequence_slider.set_sequence(Sequence(Wait(50)))
         self.kitchen.generate_classes()
         self.kitchen.define_variable_names()
 

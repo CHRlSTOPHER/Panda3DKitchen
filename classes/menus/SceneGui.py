@@ -2,14 +2,13 @@ from direct.gui.DirectGui import (DirectFrame, DirectButton,
                                   DirectScrolledFrame)
 
 from classes.props.PlaneModel import PlaneModel
-from classes.settings import Globals as G
 from classes.menus import MenuGlobals as MG
 
 
 class SceneGui(DirectFrame):
 
     def __init__(self):
-        DirectFrame.__init__(self, parent=base.a2dLeftCenter)
+        DirectFrame.__init__(self)
         self.initialiseoptions(SceneGui)
         self.kitchen = None
         self.scene_frame = None
@@ -21,6 +20,7 @@ class SceneGui(DirectFrame):
         self.scene_confirm = None
 
     def load_gui(self):
+        self.reparent_to(self.kitchen.a2dLeftCenter)
         trash_geom = PlaneModel(MG.EDITOR_MAP_PATH + MG.TRASH)
         inspect_geom = PlaneModel(MG.EDITOR_MAP_PATH + MG.INSPECT)
         window_geom = PlaneModel(MG.EDITOR_MAP_PATH + MG.MENU_VERT_1)
@@ -44,7 +44,7 @@ class SceneGui(DirectFrame):
         self.scene_scroll.verticalScroll['frameColor'] = (.5, .5, .5, 1)
 
         self.scene_title = DirectFrame(parent=self.scene_frame,
-                                       text_font=base.computer_font,
+                                       text_font=self.kitchen.computer_font,
                                        text_fg=(1, 1, 1, 1),
                                        frameVisibleScale=(0, 0),
                                        text="SCENE ITEMS", pad=(0, 0),

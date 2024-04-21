@@ -130,7 +130,7 @@ class PropMenu:
         }
 
     def load_entity(self, directory):
-        self.prop = loader.load_model(directory)
+        self.prop = self.kitchen.load_model(directory)
         self.entity = self.prop
         self.prop.set_transparency(TransparencyAttrib.MDual)
         self.prop.reparent_to(self.kitchen.preview_render)

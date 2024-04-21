@@ -15,12 +15,12 @@ class CameraMover(CameraRotater, NodePath, FovScrollWheel):
 
     def __init__(self):
         CameraRotater.__init__(self, "temp_node2")
+        self.move_options = None
         self.kitchen = None
         self.move = True
         self.move_speed = BASE_MOVE_RATE
         self.turn_speed = BASE_TURN_RATE
         NodePath.__init__(self, "temp_node")
-
 
     def generate(self):
         NodePath.__init__(self, self.kitchen.scene_camera)
@@ -50,9 +50,9 @@ class CameraMover(CameraRotater, NodePath, FovScrollWheel):
 
     def start_movement(self, key, direction):
         self.kitchen.taskMgr.add(self.move_task, f"move_{key}",
-                    extraArgs=[key, direction], appendTask=True)
+                                 extraArgs=[direction], appendTask=True)
 
-    def move_task(self, key, index, task):
+    def move_task(self, index, task):
         if not self.move:
             return task.again
 

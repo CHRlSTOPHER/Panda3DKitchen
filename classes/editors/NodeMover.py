@@ -39,7 +39,7 @@ class NodeMover(NodeMoverGui, NodePath):
             click_and_drag.set_combined_entries(['SX', 'SY', 'SZ'])
             click_and_drag.set_kitchen(self.kitchen)
             self.click_and_drags.append(click_and_drag)
-        for object in self.click_and_drags[-3:]: # Scale entries
+        for object in self.click_and_drags[-3:]:  # Scale entries
             object.set_delete_value(1.0)
 
         self.scale_one['command'] = self.toggle_scale_type
@@ -150,7 +150,7 @@ class NodeMover(NodeMoverGui, NodePath):
 
     def set_click(self, click):
         self.allow_click = click
-    
+
     def set_kitchen(self, kitchen):
         self.kitchen = kitchen
 

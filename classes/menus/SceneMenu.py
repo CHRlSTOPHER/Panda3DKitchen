@@ -19,7 +19,7 @@ class SceneMenu(SceneGui, CanvasMenu, SceneLoader):
     def generate(self):
         self.load_gui()
         self.generate_canvas(self.kitchen.preview_menu, self.scene_frame,
-                            self.scene_scroll, 'scene')
+                             self.scene_scroll, 'scene')
         self.discard_frame = DiscardCanvasButtons('scene',
                                                   self.kitchen,
                                                   self,

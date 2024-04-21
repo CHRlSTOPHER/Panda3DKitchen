@@ -10,6 +10,7 @@ from classes.editors.NodeSelector import NodeSelector
 from classes.menus.LibraryMenu import LibraryMenu
 from classes.menus.PreviewMenu import PreviewMenu
 from classes.menus.SceneMenu import SceneMenu
+from classes.menus.SequenceSlider import SequenceSlider
 from classes.scene.SceneWindow import SceneWindow
 from classes.settings.Settings import load_settings
 from classes.menus.StartMenu import StartMenu
@@ -26,16 +27,20 @@ class Panda3DKitchen(ShowBase):
     def __init__(self):
         ShowBase.__init__(self)
         self.root_folder = CWD + "/"
-        self.scene_window = SceneWindow()
+        # classes with visual elements
         self.start_menu = StartMenu()
         self.gui_editor = GuiEditor()
-        self.camera_mover = CameraMover()
-        self.node_mover = NodeMover()
-        self.node_selector = NodeSelector(self.node_mover)
-        self.preview_menu = PreviewMenu()
+        self.sequence_slider = SequenceSlider()
+        self.scene_window = SceneWindow()
         self.library_menu = LibraryMenu()
+        self.preview_menu = PreviewMenu()
         self.scene_menu = SceneMenu()
+        self.node_mover = NodeMover()
+        self.camera_mover = CameraMover()
+        self.node_selector = NodeSelector(self.node_mover)
+
         self.class_objects = [self.start_menu, self.gui_editor,
+                              self.sequence_slider,
                               self.camera_mover, self.node_mover,
                               self.node_selector, self.library_menu,
                               self.scene_menu, self.preview_menu]

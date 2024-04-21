@@ -32,6 +32,8 @@ class PreviewMenu(PreviewGui):
 
     def __init__(self):
         PreviewGui.__init__(self)
+        self.preview_bg = None
+        self.preview_window = None
         self.kitchen = None
         self.preview_render = None
         self.preview_cam = None
@@ -134,7 +136,6 @@ class PreviewMenu(PreviewGui):
 
         if self.bg_textures:
             self.preview_bg.set_texture(self.bg_textures[self.current_bg], 1)
-
 
     def change_preview_size(self):
         self.mini_window = not self.mini_window

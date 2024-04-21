@@ -58,7 +58,7 @@ class LibraryMenu(CanvasMenu, LibraryGui):
             self.swap_button.wrt_reparent_to(self.library_window)
             self.kitchen.scene_frame.hide()
             self.kitchen.scene_menu.discard_frame.disable_trash_mode(
-                                                                restore=False)
+                restore=False)
             self.library_window.show()
 
     def choose_file(self, item_name=None, item_directory=None, search=True,
@@ -127,8 +127,9 @@ class LibraryMenu(CanvasMenu, LibraryGui):
         self.preview_menu.hide_special_buttons()
 
     def capture_and_save_image(self):
-        buffer = self.kitchen.win.make_texture_buffer("buffer", 128, 128, Texture(),
-                                              to_ram=True)
+        buffer = self.kitchen.win.make_texture_buffer("buffer", 128, 128,
+                                                      Texture(),
+                                                      to_ram=True)
         buffer.set_sort(-100)
 
         camera = self.kitchen.make_camera(buffer)
@@ -190,8 +191,8 @@ class LibraryMenu(CanvasMenu, LibraryGui):
         class_mode = self.kitchen.preview_menu.get_mode_class()
 
         if self.kitchen.scene_window.within:
-                self.kitchen.scene_menu.add_item_to_xml(
-                    self.button_copy.get_name())
+            self.kitchen.scene_menu.add_item_to_xml(
+                self.button_copy.get_name())
 
         if self.kitchen.preview_menu.within:
             item_name = self.button_copy.get_name()

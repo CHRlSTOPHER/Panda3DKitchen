@@ -10,6 +10,7 @@ class LibraryGui(DirectFrame):
 
     def __init__(self):
         DirectFrame.__init__(self)
+        self.kitchen = None
         self.initialiseoptions(LibraryGui)
         self.library_window = None
         self.library_scroll = None

@@ -21,12 +21,18 @@ class NodeMoverGui(DirectFrame):
 
     def __init__(self):
         DirectFrame.__init__(self)
+        self.last_tab_entry = None
+        self.scale_all = None
+        self.scale_one = None
+        self.mover_title = None
+        self.mover_frame = None
         self.kitchen = None
         self.initialiseoptions(NodeMoverGui)
         self.entries = []
 
     def load_gui(self):
-        self.reparent_to(self.kitchen.a2dTopCenter)
+        if self.kitchen:
+            self.reparent_to(self.kitchen.a2dTopCenter)
         geom = PlaneModel(MG.EDITOR_MAP_PATH + MG.MENU_HOR_3)
         scale_all_geom = PlaneModel(MG.EDITOR_MAP_PATH + MG.SCALE_ALL_TEXTURE)
         scale_one_geom = PlaneModel(MG.EDITOR_MAP_PATH + MG.SCALE_ONE_TEXTURE)
@@ -44,7 +50,7 @@ class NodeMoverGui(DirectFrame):
                                       geom=scale_one_geom,
                                       pos=(0.9, 0.0, -0.15),
                                       scale=(0.106, 0.904, 0.562),
-                                      pad=(-0.485, -0.2),)
+                                      pad=(-0.485, -0.2), )
         self.scale_all = DirectButton(parent=self.mover_frame,
                                       geom=scale_all_geom,
                                       pos=(0.9, 0.0, -0.15),
@@ -62,7 +68,7 @@ class NodeMoverGui(DirectFrame):
         entry.set_name(label)
 
         DirectFrame(parent=self.mover_frame, text=label, relief=0,
-                    pos=(pos[0]-.124, pos[1], pos[2]-.011),
+                    pos=(pos[0] - .124, pos[1], pos[2] - .011),
                     scale=(0.1, 0.766, 0.256), text_fg=(0, 0, 0, 1))
         self.entries.append(entry)
 
@@ -73,14 +79,15 @@ class NodeMoverGui(DirectFrame):
         for drag_object in self.click_and_drags:
             if drag_object.in_focus:
                 in_focus = True
-                break # we found the current selected entry. leave
+                break  # we found the current selected entry. leave
             index += 1
 
-        if in_focus: # determine the next tab based on the current index
+        if in_focus:  # determine the next tab based on the current index
             index += direction
             index = self.validate_entry_index(index)
             self.entries[index]['focus'] = 1
-        elif self.last_tab_entry != None: # use last tab entry to get next tab.
+        elif self.last_tab_entry is not None:  # use last tab entry to get 
+            # next tab.
             index = self.validate_entry_index(self.last_tab_entry + direction)
             self.entries[index]['focus'] = 1
         # store the last tab for later
