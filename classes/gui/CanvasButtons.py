@@ -72,8 +72,8 @@ class CanvasButtons:
 
         self.scroll_frame['verticalScroll_range'] = scroll_range
 
-    def load_picture_list(self, mode, database_dict, set_list, binds,
-                          color=None):
+    def generate_picture_list(self, mode, database_dict, set_list, binds,
+                          command, color):
         if mode == 'Texture':  # load the json file
             json_path = f"{G.DATABASE_DIRECTORY}{G.TEXTURE_LIBRARY}.json"
             texture_json = json.loads(open(json_path).read())
@@ -101,9 +101,12 @@ class CanvasButtons:
                                   pos=(x, 0, z), scale=MG.CANVAS_BUTTON_SCALE,
                                   frameVisibleScale=(.91, .91), pad=(.2, .2),
                                   pressEffect=0)
+            button.set_name(name)
             if color:
                 button['frameColor'] = color
-            button.set_name(name)  # we'll need the name later on.
+            button['command'] = command
+            button['extraArgs'] = [button]
+
             self.bind_button(button, binds)
             self.current_button_set.append(button)
 

@@ -64,6 +64,7 @@ class Panda3DKitchen(ShowBase):
 
         self.computer_font = self.load_font(COMPUTER_FONT)
 
+
     def generate_classes(self):
         self.scene_window.generate()
         self.scene_camera = self.scene_window.scene_cam
@@ -82,6 +83,9 @@ class Panda3DKitchen(ShowBase):
 
     def set_project_location(self, project_location):
         self.project_location = project_location
+
+    def update_selected_node(self, node):
+        self.scene_menu.update_selected_node(node)
 
     def set_kitchens(self):
         self.scene_window.set_kitchen(self)

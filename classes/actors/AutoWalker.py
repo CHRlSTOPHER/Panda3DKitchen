@@ -25,6 +25,7 @@ class AutoWalker:
 
     def __init__(self, actor, speed=13, run_threshold=1.25, run_div=2.0,
                  neutral_anim="neutral", walk_anim="walk", run_anim=None):
+        self.kitchen = None
         self.actor = actor
         self.speed = speed
         self.run_threshold = run_threshold
@@ -41,8 +42,11 @@ class AutoWalker:
 
         self.previous_pos = actor.get_pos()
         self.previous_hpr = actor.get_hpr()
+
+    def generate(self):
         if json_settings[G.AUTO_WALKER]:
-            taskMgr.add(self.update_actor_anim_task, AUTO_WALKER_TASK)
+            self.kitchen.taskMgr.add(self.update_actor_anim_task,
+                                     AUTO_WALKER_TASK)
 
     def update_actor_anim_task(self, task):
         self.update_actor_anim()
@@ -82,10 +86,10 @@ class AutoWalker:
 
         return magnitude * self.speed
 
-    def find_direction(
-            self):  # Thanks to Ashy for those fat math solutions lol
+    def find_direction(self):  # Thanks Ashy. Those were fat math solutions lol
         forward_vector = Vec3(0, 1, 0)
-        forward_vector = render.getRelativeVector(self.actor, forward_vector)
+        forward_vector = self.kitchen.scene_render.getRelativeVector(
+                                                    self.actor, forward_vector)
         velocity = self.actor.get_pos() - self.previous_pos
         actor_direction = forward_vector.dot(velocity)
         direction = 1
@@ -131,7 +135,7 @@ class AutoWalker:
         self.old_anim_state = self.new_anim_state
 
         # stop any currently running tasks and reset controls.
-        taskMgr.remove(ANIM_TRANSITION_TASK)
+        self.kitchen.taskMgr.remove(ANIM_TRANSITION_TASK)
         if self.old_anim_control == 0:  # the previous transition finished.
             self.old_anim_control = 1
             self.new_anim_control = 0
@@ -143,8 +147,9 @@ class AutoWalker:
         self.actor.enable_blend()
         self.actor.loop(old_anim, 0)  # 0 lets the anim start at current pose.
         self.actor.loop(new_anim, 0)
-        taskMgr.add(self.transition_between_anims, ANIM_TRANSITION_TASK,
-                    extraArgs=[old_anim, new_anim], appendTask=True)
+        self.kitchen.taskMgr.add(self.transition_between_anims,
+                                 ANIM_TRANSITION_TASK, appendTask=True,
+                                 extraArgs=[old_anim, new_anim])
 
     def transition_between_anims(self, old_anim, new_anim, task):
         if self.new_anim_control > 0.99:
@@ -161,6 +166,9 @@ class AutoWalker:
     def set_multiplier(self, speed):
         self.speed = speed
 
+    def set_kitchen(self, kitchen):
+        self.kitchen = kitchen
+
     def cleanup_walker(self):
-        taskMgr.remove(AUTO_WALKER_TASK)
-        taskMgr.remove(ANIM_TRANSITION_TASK)
+        self.kitchen.taskMgr.remove(AUTO_WALKER_TASK)
+        self.kitchen.taskMgr.remove(ANIM_TRANSITION_TASK)

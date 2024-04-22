@@ -10,8 +10,11 @@ class SceneLoader:
 
     def __init__(self):
         self.kitchen = None
-        self.actors = []
-        self.props = []
+        self.nodepaths = {
+            'Actor': [],
+            'Prop': [],
+            'Particle': []
+        }
 
     def generate_actor(self, model, anims):
         actor = Actor(model, anims)
@@ -42,33 +45,40 @@ class SceneLoader:
         json_data = json.loads(open(json_path).read())
         # cleanup and load
         if mode == AG.ACTORS:
-            for actor in self.actors:
+            for actor in self.nodepaths.get('Actor'):
                 actor.delete()
 
+            self.nodepaths['Actor'] = []
             for data_name in node_data:
-                name, index, part = data_name.split("|")
+                full_name = data_name  # store name before it gets split
+                name, index, part, mode = data_name.split("|")
                 model, anims = json_data[name]
                 node = self.generate_actor(model, anims)
+                node.set_name(full_name)
                 self.set_transforms(node, node_data[data_name])
-                self.actors.append(node)
+                self.nodepaths.get('Actor').append(node)
 
         if mode == AG.PROPS:
-            for prop in self.props:
+            for prop in self.nodepaths.get('Prop'):
                 prop.remove_node()
 
+            self.nodepaths['Prop'] = []
             for data_name in node_data:
-                name, index, part = data_name.split("|")
+                full_name = data_name  # store name before it gets split
+                name, index, part, mode = data_name.split("|")
                 if name not in G.SPECIAL_NODES:
                     model = json_data[name]
                     node = self.generate_node(model)
+                    node.set_name(full_name)
                     self.set_transforms(node, node_data[data_name])
-                    self.props.append(node)
+                    self.nodepaths.get('Prop').append(node)
                 elif name == 'camera':
                     self.set_transforms(self.kitchen.scene_camera,
                                         node_data[data_name])
 
         if mode == AG.PARTICLES:
-            pass
+            self.nodepaths['Particle'] = []
+            return
 
     def set_kitchen(self, kitchen):
         self.kitchen = kitchen

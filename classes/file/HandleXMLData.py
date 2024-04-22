@@ -28,13 +28,14 @@ def delete_xml_entries(project_location, mode, names):
     for element in root:
         name = element.attrib['name']
         index = element.attrib['index']
+        mode = element.tag.capitalize()
         # keep track of which index is being matched with
         # remove the matched items from both lists to reduce the amount
         # of checks python has to do for future comparisons.
         i = 0
         # check if any of the discarded names match the element
-        for dis_name, dis_index, dis_part in split_names:
-            if name == dis_name and index == dis_index:
+        for dis_name, dis_index, dis_part, dis_mode in split_names:
+            if name == dis_name and index == dis_index and mode == dis_mode:
                 # found a match. remove the element from the xml.
                 root.remove(element)
                 # remove the name from the split names.
@@ -56,6 +57,7 @@ def get_node_data(xml_file):
     node_list = {}
     # get each top level element (either actor or prop in this case)
     for element in root:
+        mode = element.tag.capitalize()
         name = element.attrib['name']
         index = element.attrib['index']
 
@@ -64,7 +66,7 @@ def get_node_data(xml_file):
         for node in element:
             for i in range(0, 5):
                 transforms.append(convert_string_to_tuple(node[i].text))
-            node_list[f"{name}|{index}|{node.tag}"] = transforms
+            node_list[f"{name}|{index}|{node.tag}|{mode}"] = transforms
 
     return node_list
 

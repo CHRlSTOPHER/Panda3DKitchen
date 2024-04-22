@@ -37,7 +37,8 @@ class CanvasMenu:
         self.canvas_buttons.update_canvas_range()
 
     def load_picture_list(self, data_dict, button_increase=False,
-                          button_copy=None, add_to_scene=None, color=None):
+                          button_copy=None, add_to_scene=None,
+                          command=None, color=None):
         mode = self.preview_menu.get_mode()
         class_mode = self.preview_menu.get_mode_class()
         frame_buttons = class_mode.set_buttons_dict[self.menu_name]
@@ -51,9 +52,9 @@ class CanvasMenu:
         if add_to_scene:
             bind_list.append(add_to_scene)
 
-        self.canvas_buttons.load_picture_list(mode, data_dict,
-                                              frame_buttons, bind_list,
-                                              color=color)
+        self.canvas_buttons.generate_picture_list(mode, data_dict,
+                                                  frame_buttons, bind_list,
+                                                  command, color)
 
     def scroll_up(self, mouse_data):
         self.scroll[MG.VALUE] -= 1

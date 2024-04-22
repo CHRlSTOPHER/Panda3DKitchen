@@ -47,6 +47,7 @@ class PreviewMenu(PreviewGui):
         self.mode = 'Actor'
         self.modes = {}
         self.mode_buttons = []
+        self.last_mode = None
         self.add_item = False
         self.mini_window = False
         self.hide_preview_nodes = []
@@ -200,6 +201,7 @@ class PreviewMenu(PreviewGui):
         if not mode:
             self.modes[self.mode].cleanup_entity()
         else:
+            self.last_mode = mode
             self.modes[mode].cleanup_entity()
             self.mode = mode
             # update the buttons that are enabled and disabled.
@@ -232,6 +234,8 @@ class PreviewMenu(PreviewGui):
             button['geom'] = geom
             i += 1
 
+        if not disable_button:
+            disable_button = self.entity_mode_buttons.get(self.last_mode)
         disable_button['state'] = DGG.DISABLED  # disable click
         colored_geom = PlaneModel(
             f"{G.EDITOR}/maps/add-{self.mode}-color.png")

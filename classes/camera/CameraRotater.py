@@ -20,7 +20,7 @@ class CameraRotater(DirectObject):
         self.kitchen = None
         self.camera = camera
         self.window_properties = WindowProperties()
-        self.toggle_value = True
+        self.toggle_value = False
         self.disabled = False
         self.cam_task = True
 
@@ -31,6 +31,7 @@ class CameraRotater(DirectObject):
         if self.disabled or not self.kitchen.preview_menu.mini_window:
             return
 
+        self.toggle_value = not self.toggle_value
         self.window_properties.set_cursor_hidden(self.toggle_value)
 
         if self.toggle_value:
@@ -41,7 +42,6 @@ class CameraRotater(DirectObject):
             self.kitchen.taskMgr.remove(ROT_CAM_TASK)
 
         self.kitchen.win.request_properties(self.window_properties)
-        self.toggle_value = not self.toggle_value
 
     def recenter_mouse_cursor(self):
         mouse_x_center = self.kitchen.win.get_x_size() // 2
