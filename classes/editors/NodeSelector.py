@@ -59,16 +59,20 @@ class NodeSelector(DirectObject):
         # Look through entries for the closest selected node that is valid.
         for entry in range(0, self.collision_handler.get_num_entries()):
             node = self.get_node_from_handler(entry)
-            if node and hasattr(self.class_object, "set_node"):
-                # ignore selecting grid for now
-                if node.getName() == "DirectGrid":
-                    continue
-                # self.class_object.set_node(node)
+            valid_node = self.verify_node(node)
+            if valid_node:
                 self.kitchen.update_selected_node(node)
                 break
 
         # If we keep the collider, the ray will do unnecessary extra work.
         self.coll_traverser.remove_collider(self.ray_node)
+
+    def verify_node(self, node):
+        if node and hasattr(self.class_object, "set_node"):
+            if node.get_name() in G.SPECIAL_NODES:
+                return False  # this node got the fake timbs
+            else:
+                return True  # we found a valid node
 
     def get_node_from_handler(self, index):
         node = self.collision_handler.getEntry(index).get_into_node_path()

@@ -1,4 +1,4 @@
-from panda3d.core import NodePath, Filename
+from panda3d.core import Filename
 from direct.gui.DirectGui import DirectButton
 
 from classes.apps import AppGlobals as AG

@@ -51,7 +51,7 @@ MIDDLE_MOUSE_BUTTON = "mouse2"
 RIGHT_MOUSE_BUTTON = "mouse3"
 
 SPECIAL_NODE_IFIER_FLAG = ["~", "!"]
-SPECIAL_NODES = ['camera']
+SPECIAL_NODES = ['camera', "DirectGrid"]
 
 BASE_FOV = 50.0
 MINIMUM_SCROLL_FOV = 0

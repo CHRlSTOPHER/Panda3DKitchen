@@ -1,5 +1,6 @@
 import json
 
+from direct.directtools.DirectGrid import DirectGrid
 from direct.actor.Actor import Actor
 
 from classes.apps import AppGlobals as AG
@@ -81,7 +82,6 @@ class SceneLoader:
             return
 
     def generate_grid(self):
-        from direct.directtools.DirectGrid import DirectGrid
         grid = DirectGrid(parent=self.kitchen.scene_render)
         return grid
 

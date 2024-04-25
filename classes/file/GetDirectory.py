@@ -10,8 +10,8 @@ PATH_NOT_FOUND = ("cannot be not found using the directories defined in "
 
 
 # Returns the directory relative to resources and the file name.
-def get_resource_and_filename(title="", initialdir="", multiple=False, file_type=None):
-
+def get_resource_and_filename(title="", initialdir="", multiple=False,
+                              file_type=None):
     def get_resource_directory(file_location):
         item_name = ""
         filepath = ""
@@ -52,12 +52,12 @@ def get_resource_and_filename(title="", initialdir="", multiple=False, file_type
 
     if multiple:
         file_location = (filedialog.askopenfilenames(
-            title = title, initialdir = initialdir,
+            title=title, initialdir=initialdir,
             **filedialog_kwargs
         ))
     else:
         file_location = filedialog.askopenfilename(
-            title = title, initialdir = initialdir,
+            title=title, initialdir=initialdir,
             **filedialog_kwargs
         )
     root.destroy()

@@ -15,6 +15,10 @@ class SceneWindow(SceneWindowGui):
 
     def __init__(self):
         SceneWindowGui.__init__(self)
+        self.scene_region = None
+        self.scene_cam = None
+        self.scene_render = None
+        self.scene_mouse_watcher = None
         self.kitchen = None
         self.within = False
 

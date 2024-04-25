@@ -1,2 +1,3 @@
-Panda3D
-python -m pip install lxml
+Panda3D~=1.10.14
+# direct is included with Panda3D
+lxml~=5.2.1

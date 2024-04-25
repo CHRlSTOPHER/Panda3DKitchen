@@ -73,7 +73,7 @@ class CanvasButtons:
         self.scroll_frame['verticalScroll_range'] = scroll_range
 
     def generate_picture_list(self, mode, database_dict, set_list, binds,
-                          command, color):
+                              command, color):
         if mode == 'Texture':  # load the json file
             json_path = f"{G.DATABASE_DIRECTORY}{G.TEXTURE_LIBRARY}.json"
             texture_json = json.loads(open(json_path).read())

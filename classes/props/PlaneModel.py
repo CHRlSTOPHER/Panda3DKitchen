@@ -92,7 +92,9 @@ class PlaneModel(NodePath):
 
     def apply_texture(self):
         if isinstance(self.texture_path, list):
-            texture = loader.load_texture(self.texture_path[0], self.texture_path[1], okMissing=True)
+            texture = loader.load_texture(self.texture_path[0],
+                                          self.texture_path[1],
+                                          okMissing=True)
         else:
             texture = loader.load_texture(self.texture_path, okMissing=True)
         # Failover texture

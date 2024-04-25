@@ -106,7 +106,7 @@ class LibraryMenu(CanvasMenu, LibraryGui):
         if self.mode == 'Texture':
             texture_names, texture_dirs = get_resource_and_filename(
                 title='Select Textures', initialdir=self.resources,
-                multiple=True, file_type = FILENAME_DESC_IMAGE
+                multiple=True, file_type=FILENAME_DESC_IMAGE
             )
             self.class_mode.set_textures(texture_names, texture_dirs)
 
@@ -114,7 +114,7 @@ class LibraryMenu(CanvasMenu, LibraryGui):
         if self.mode == 'Actor':
             anim_names, anim_dirs = get_resource_and_filename(
                 title='Select Animations', initialdir=self.resources,
-                multiple=True, file_type = FILENAME_DESC_MODEL
+                multiple=True, file_type=FILENAME_DESC_MODEL
             )
             self.class_mode.set_anims(anim_names, anim_dirs)
             self.preview_menu.show_dice()

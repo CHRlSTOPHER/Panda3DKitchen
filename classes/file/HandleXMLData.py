@@ -1,7 +1,5 @@
 from lxml import etree as ET
 
-from panda3d.core import Filename
-
 from classes.apps import AppGlobals as AG
 
 transform_data = {

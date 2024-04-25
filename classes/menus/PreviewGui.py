@@ -1,7 +1,6 @@
 from direct.gui.DirectGui import DirectFrame, DirectButton, DGG
 
 from classes.props.PlaneModel import PlaneModel
-from classes.settings import Globals as G
 from classes.menus import MenuGlobals as MG
 
 
