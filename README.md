@@ -1,18 +1,23 @@
 # Panda3DKitchen
 
 
-ADJUSTABLE KEYBINDS:
-- WASD, space, control - camera movements
-- arrow keys, Q, E - camera rotation
-- while moving camera with keyboard, hold numpad 0 to speed up or 1-3 to slow down
-SET KEYBINDS
-- RMB - activate mouse rotation
-- RMB again to disable it
-- MMB to select the camera and assign it to node mover
-- LMB to select actors or props in the scene
-- tab/shift-tab to move between entry boxes
+| Adjustable Keybind  | Description                            |
+|---------------------|----------------------------------------|
+| WASD                | Move the camera along the x or y axis  |
+| Shift/Control       | Move the camera along the z axis       |
+| Arrow Keys          | Move the camera along the h or p axis  |
+| Q/E                 | Move the camera along the r axis       |
+| Numpad 0            | Speed up camera movement (Hold)        |
+| Numpad 1, 2, 3      | Slow down camera movement (Hold)       |
+
+| Set Keybinds  |
+|---------------|-----------------------------------------------|
+| RMB           | enable / disable mouse rotation               |
+| MMB           | select the camera and assign it to node mover |
+| LMB           | select existing objects in the scene          |
+| tab/shift-tab | move between entry boxes (when in focus)      |
 
 
-WARNINGS:
-- Do not change your software rendering to DirectX (pandadx9 in the config.prc)
-  (it will bug out picture screenshots)
+## WARNINGS:
+__Do not change your software rendering to DirectX__ (pandadx9 in the config.prc)
+(it will bug out picture screenshots)
