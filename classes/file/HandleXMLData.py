@@ -1,4 +1,7 @@
 from lxml import etree as ET
+
+from panda3d.core import Filename
+
 from classes.apps import AppGlobals as AG
 
 transform_data = {
@@ -14,12 +17,14 @@ TRANSFORM_NAMES = ['pos', 'hpr', 'scale', 'color', 'color_scale']
 def load_xml(xml_file):
     # load xml in a way that allows for pretty print
     parser = ET.XMLParser(remove_blank_text=True)
+
     # XML files may get confused if the drive path is weird
     try:
         tree = ET.parse(xml_file, parser)
     except OSError as e:
         print(f"Couldn't parse XML file {xml_file}!\nException: {e}")
         return None, None
+
     root = tree.getroot()
     return tree, root
 
