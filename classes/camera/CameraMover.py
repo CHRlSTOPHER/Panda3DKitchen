@@ -34,9 +34,7 @@ class CameraMover(CameraRotater, NodePath, FovScrollWheel):
     def listen_for_key_inputs(self):
         index = 0
         # Add input detection for node transformations.
-        for key in KBS:
-            if key == G.NM_SPEEDS[0][0]:
-                break  # stop at speed modifiers.
+        for key in G.CAM_TRANSFORM_NAMES:
             self.accept(KBS[key], self.start_movement, extraArgs=[key, index])
             self.accept(KBS[key] + "-up", self.stop_move_task, extraArgs=[key])
             index += 1

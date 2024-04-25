@@ -1,7 +1,7 @@
 WINDOW_TITLE = "PANDA3D KITCHEN"
 ICON_FILENAME = "/maps/panda3d-chef.ico"
 SETTINGS_JSON = 'json/prc_settings.json'
-KEYBINDINGS_JSON = "json/keybindings.json"
+KEYBINDINGS_JSON = "json/keybinds.json"
 FILE_JSON = "json/files.json"
 RESOURCES = 'resources/'
 EXTERNAL_RESOURCES = "external-resources"
@@ -106,9 +106,17 @@ TRANSFORM_FUNCTION_NAMES = [
     "POS & HPR",
     "SCALE",
 ]
+# cam move/rotate names in json file
+CAM_TRANSFORM_NAMES = [
+    "move_forward", "move_left", "move_back", "move_right",
+    "move_up", "move_down",
+    "turn_back", "turn_forward",
+    "turn_left_horizontal", "turn_right_horizontal",
+    "turn_right_vertical", "turn_left_vertical"
+]
 # Node Mover
 NM_SPEEDS = [
-    ("faster", 0.33),
+    ("faster", 0.25),
     ("slower", 2.25),
     ("much_slower", 4.50),
     ("molasses", 40.0),

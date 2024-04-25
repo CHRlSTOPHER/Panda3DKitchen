@@ -4,7 +4,7 @@
 	"move_back":    "s",
 	"move_right":   "d",
 	"move_up":      "space",
-	"move_down":    "shift",
+	"move_down":    "control",
 
 	"turn_back":             "arrow_up",
 	"turn_forward":          "arrow_down",
