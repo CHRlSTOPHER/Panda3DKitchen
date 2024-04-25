@@ -80,5 +80,10 @@ class SceneLoader:
             self.nodepaths['Particle'] = []
             return
 
+    def generate_grid(self):
+        from direct.directtools.DirectGrid import DirectGrid
+        grid = DirectGrid(parent=self.kitchen.scene_render)
+        return grid
+
     def set_kitchen(self, kitchen):
         self.kitchen = kitchen

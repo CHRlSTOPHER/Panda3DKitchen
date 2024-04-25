@@ -60,6 +60,9 @@ class NodeSelector(DirectObject):
         for entry in range(0, self.collision_handler.get_num_entries()):
             node = self.get_node_from_handler(entry)
             if node and hasattr(self.class_object, "set_node"):
+                # ignore selecting grid for now
+                if node.getName() == "DirectGrid":
+                    continue
                 # self.class_object.set_node(node)
                 self.kitchen.update_selected_node(node)
                 break
