@@ -32,9 +32,6 @@ class SceneWindow(SceneWindowGui):
         self.scene_window.bind(DGG.WITHOUT, self.set_within, extraArgs=[False])
 
     def load_scene_region(self):
-        json_settings = json.loads(open(G.SETTINGS_JSON).read())
-        fov = json_settings['fov']
-
         # First, make display region that will render the main scene
         self.scene_region = self.kitchen.win.makeDisplayRegion(*SCENE_REGION)
         self.scene_region.set_clear_color_active(1)
@@ -43,7 +40,7 @@ class SceneWindow(SceneWindowGui):
         # Second, we need a camera for the new display region
         scene_cam_node = Camera('main_cam')
         self.scene_cam = NodePath(scene_cam_node)
-        self.scene_cam.node().get_lens().set_fov(fov)
+        self.scene_cam.node().get_lens().set_fov(G.DEFAULT_FOV)
         self.scene_region.setCamera(self.scene_cam)
 
         # Third, define the main area nodes will be reparented object too.

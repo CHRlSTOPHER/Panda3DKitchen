@@ -14,18 +14,12 @@ MAXIMUM_FOV = G.MAXIMUM_SCROLL_FOV - G.FOV_SCROLL_AMOUNT
 
 class FovScrollWheel(DirectObject):
 
-    def __init__(self, fov, _camera, mouse_watcher):
+    def __init__(self, _camera, mouse_watcher):
         DirectObject.__init__(self)
-
-        if not fov:  # Default to the fov in settings.
-            json_settings = json.loads(open(G.SETTINGS_JSON).read())
-            fov = json_settings['fov']
-
         self.camera = _camera
         self.mouse_watcher = mouse_watcher
-
-        self.current_fov = fov
-        self.new_fov = fov
+        self.current_fov = G.DEFAULT_FOV
+        self.new_fov = G.DEFAULT_FOV
         self.fov_increment = 1
 
         self.accept(G.MOUSE_WHEEL_UP, self.zoom_in)

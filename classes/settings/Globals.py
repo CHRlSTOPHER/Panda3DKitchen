@@ -1,6 +1,6 @@
 WINDOW_TITLE = "PANDA3D KITCHEN"
 ICON_FILENAME = "/maps/panda3d-chef.ico"
-SETTINGS_JSON = 'json/settings.json'
+SETTINGS_JSON = 'json/prc_settings.json'
 KEYBINDINGS_JSON = "json/keybindings.json"
 FILE_JSON = "json/files.json"
 RESOURCES = 'resources/'
@@ -42,6 +42,7 @@ ROTATIONAL_CAM_MOUSE_SENSITIVITY = 70
 FOV_MODIFIER = 90
 FOV_SCROLL_AMOUNT = 5
 PREVIEW_FOV = 35
+DEFAULT_FOV = 50
 
 ESCAPE = 'escape'
 MOUSE_WHEEL_UP = 'wheel_up'

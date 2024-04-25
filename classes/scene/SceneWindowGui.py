@@ -37,11 +37,10 @@ class SceneWindowGui(DirectFrame):
                                      pos=(-0.867, 0.0, -0.939),
                                      scale=(0.067, 0.088, 0.088))
 
-        settings = json.loads(open(G.SETTINGS_JSON).read())
         self.fov_entry = DirectEntry(parent=self.scene_window,
                                      pos=(-0.753, 0.0, -0.936),
                                      scale=(0.073, 0.1, 0.1), width=2,
-                                     initialText=str(settings['fov']),
+                                     initialText=str(G.DEFAULT_FOV),
                                      frameVisibleScale=(0, 0))
 
     def set_kitchen(self, kitchen):
