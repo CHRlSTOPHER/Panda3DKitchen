@@ -92,14 +92,17 @@ class PlaneModel(NodePath):
 
     def apply_texture(self):
         if isinstance(self.texture_path, list):
-            texture = loader.load_texture(self.texturePath[0],
-                                          self.texturePath[1])
+            texture = loader.load_texture(self.texture_path[0], self.texture_path[1], okMissing=True)
         else:
-            texture = loader.load_texture(self.texture_path)
+            texture = loader.load_texture(self.texture_path, okMissing=True)
+        # Failover texture
+        if not texture:
+            texture = loader.load_texture("editor/maps/icon-unknown.png")
         self.set_texture(texture, 1)
 
         if self.reload:
             texture.reload()
+
         # improve the texture rendering
         texture.set_magfilter(SamplerState.FT_nearest)
         self.set_transparency(TransparencyAttrib.MDual)
