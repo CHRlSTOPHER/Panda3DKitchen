@@ -3,12 +3,14 @@ from tkinter import filedialog
 
 from panda3d.core import ConfigVariableList
 
+from classes.settings.Globals import SUPPORTED_FILETYPES
+
 PATH_NOT_FOUND = ("cannot be not found using the directories defined in "
                   "'external-resources' (json/files.json)")
 
 
 # Returns the directory relative to resources and the file name.
-def get_resource_and_filename(title="", initialdir="", multiple=False):
+def get_resource_and_filename(title="", initialdir="", multiple=False, file_type=None):
 
     def get_resource_directory(file_location):
         item_name = ""
@@ -38,12 +40,26 @@ def get_resource_and_filename(title="", initialdir="", multiple=False):
 
     root = tk.Tk()
     root.withdraw()  # Hide the tk box that pops up.
+
+    filedialog_kwargs = dict()
+
+    specific_filetypes = SUPPORTED_FILETYPES.get(file_type)
+    if specific_filetypes:
+        file_extensions = set()
+        for file_extension in specific_filetypes:
+            file_extensions.add((file_type, f"*{file_extension}"))
+        filedialog_kwargs["filetypes"] = file_extensions
+
     if multiple:
         file_location = (filedialog.askopenfilenames(
-                            title=title, initialdir=initialdir))
+            title = title, initialdir = initialdir,
+            **filedialog_kwargs
+        ))
     else:
         file_location = filedialog.askopenfilename(
-                            title=title, initialdir=initialdir)
+            title = title, initialdir = initialdir,
+            **filedialog_kwargs
+        )
     root.destroy()
 
     if not multiple:
