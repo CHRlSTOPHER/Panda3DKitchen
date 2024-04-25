@@ -1,3 +1,3 @@
 @echo off
-python StartKitchen.py
+python Panda3DKitchen.py
 pause

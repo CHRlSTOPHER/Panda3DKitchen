@@ -1,7 +1,7 @@
 """ SETTINGS CONFIG, AN ESSENTIAL FILE FOR BASIC NEEDS """
 import json
 
-from panda3d.core import loadPrcFileData, CullBinManager
+from panda3d.core import loadPrcFileData, CullBinManager, Filename
 
 from classes.settings import Globals as G
 
@@ -14,12 +14,12 @@ def load_settings(current_path):
     # Define external resource directories.
     model_paths = file_settings[G.EXTERNAL_RESOURCES]
     # Define and add the default resource directory
-    default_path = current_path + G.RESOURCES
+    default_path = f"{current_path}/{G.RESOURCES}"
     model_paths.append(default_path)
 
     # Add resource directories to the prc model-path variable
     for path in model_paths:
-        loadPrcFileData("", f"model-path {path}/")
+        loadPrcFileData("", f"model-path {Filename(path)}")
 
     loadPrcFileData("", f"default-model-extension "
                         f"{json_settings['default_model_extension']}")
