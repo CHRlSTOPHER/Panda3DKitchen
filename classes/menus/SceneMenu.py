@@ -1,4 +1,4 @@
-from panda3d.core import NodePath
+from panda3d.core import NodePath, Filename
 from direct.gui.DirectGui import DirectButton
 
 from classes.apps import AppGlobals as AG
@@ -23,6 +23,7 @@ class SceneMenu(SceneGui, CanvasMenu, SceneLoader):
         self.add_item = False
         self.last_node = None
         self.last_button = None
+        self.grid = None
 
     def generate(self):
         self.load_gui()
@@ -35,6 +36,7 @@ class SceneMenu(SceneGui, CanvasMenu, SceneLoader):
                                                   self.scene_trash,
                                                   self.scene_confirm,
                                                   self.scene_inspect, xml=True)
+        self.grid = self.generate_grid()
 
     def add_item_to_xml(self, item_name):
         mode = self.kitchen.preview_menu.get_mode().lower()
@@ -52,7 +54,10 @@ class SceneMenu(SceneGui, CanvasMenu, SceneLoader):
             mode = self.kitchen.preview_menu.get_mode().lower() + "s"
         if not xml_file:
             xml_file = f"{self.kitchen.project_location}/{mode}.xml"
-        node_data = get_node_data(xml_file)
+
+        xml_file = Filename().fromOsSpecific(xml_file)
+
+        node_data = get_node_data(xml_file.toOsSpecific())
         self.load_nodes(mode, node_data)
         self.load_canvas_buttons(node_data)
 

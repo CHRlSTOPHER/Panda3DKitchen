@@ -29,6 +29,15 @@ EGG = ".egg"
 BAM = ".bam"
 JSON = ".json"
 
+FILENAME_DESC_MODEL = "Panda3D Model Files"
+FILENAME_DESC_IMAGE = "Image File"
+
+# Used for opening files through tkinter
+SUPPORTED_FILETYPES = {
+    FILENAME_DESC_MODEL: [EGG, BAM],
+    FILENAME_DESC_IMAGE: [JPG, PNG]
+}
+
 ROTATIONAL_CAM_MOUSE_SENSITIVITY = 70
 FOV_MODIFIER = 90
 FOV_SCROLL_AMOUNT = 5

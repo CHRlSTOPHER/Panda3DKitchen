@@ -7,6 +7,7 @@ from classes.gui.DiscardCanvasButtons import DiscardCanvasButtons
 from classes.menus.CanvasMenu import CanvasMenu
 from classes.menus.LibraryGui import LibraryGui
 from classes.settings import Globals as G
+from classes.settings.Globals import FILENAME_DESC_IMAGE, FILENAME_DESC_MODEL
 
 BUTTON_MOVE_TASK = 'button_move'
 
@@ -104,15 +105,17 @@ class LibraryMenu(CanvasMenu, LibraryGui):
     def check_for_textures(self):
         if self.mode == 'Texture':
             texture_names, texture_dirs = get_resource_and_filename(
-                title='Select Animations', initialdir=self.resources,
-                multiple=True)
+                title='Select Textures', initialdir=self.resources,
+                multiple=True, file_type = FILENAME_DESC_IMAGE
+            )
             self.class_mode.set_textures(texture_names, texture_dirs)
 
     def check_for_anims(self):
         if self.mode == 'Actor':
             anim_names, anim_dirs = get_resource_and_filename(
                 title='Select Animations', initialdir=self.resources,
-                multiple=True)
+                multiple=True, file_type = FILENAME_DESC_MODEL
+            )
             self.class_mode.set_anims(anim_names, anim_dirs)
             self.preview_menu.show_dice()
 
