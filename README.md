@@ -1,7 +1,7 @@
 # Panda3DKitchen
 
 
-| Adjustable Keybind  | Description                            |
+| Adjustable Keybinds | Description                            |
 |---------------------|----------------------------------------|
 | WASD                | Move the camera along the x or y axis  |
 | Shift/Control       | Move the camera along the z axis       |
@@ -10,7 +10,8 @@
 | Numpad 0            | Speed up camera movement (Hold)        |
 | Numpad 1, 2, 3      | Slow down camera movement (Hold)       |
 
-| Set Keybinds  |
+
+| Set Keybinds  | Description                                   |
 |---------------|-----------------------------------------------|
 | RMB           | enable / disable mouse rotation               |
 | MMB           | select the camera and assign it to node mover |
