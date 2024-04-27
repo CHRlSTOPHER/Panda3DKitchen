@@ -36,10 +36,15 @@ class LibraryMenu(CanvasMenu, LibraryGui):
                              self.library_scroll, 'library')
         update_selected_node = self.kitchen.scene_menu.update_selected_node
         self.discard_frame = DiscardCanvasButtons(
-            'library', self.kitchen, self,
-            self.library_scroll, self.library_trash,
-            self.library_confirm, self.library_folder,
-            disable_command=update_selected_node, disable_args=[None],
+            menu_name='library',
+            kitchen=self.kitchen,
+            reload_menu=self,
+            scroll_frame=self.library_scroll,
+            trash_button=self.library_trash,
+            confirm_button=self.library_confirm,
+            left_button=self.library_folder,
+            disable_command=update_selected_node,
+            disable_args=[None],
         )
         self.bind_gui()
 

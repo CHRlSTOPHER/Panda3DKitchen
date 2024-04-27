@@ -27,11 +27,17 @@ class SceneMenu(SceneGui, CanvasMenu, SceneLoader):
         self.generate_canvas(self.kitchen.preview_menu, self.scene_frame,
                              self.scene_scroll, 'scene')
         self.discard_frame = DiscardCanvasButtons(
-            'scene', self.kitchen, self,
-            self.scene_scroll, self.scene_trash,
-            self.scene_confirm, self.scene_inspect,
-            disable_command=self.update_selected_node, disable_args=[None],
-            command=self.update_selected_node, xml=True
+            menu_name='scene',
+            kitchen=self.kitchen,
+            reload_menu=self,
+            scroll_frame=self.scene_scroll,
+            trash_button=self.scene_trash,
+            confirm_button=self.scene_confirm,
+            left_button=self.scene_inspect,
+            disable_command=self.update_selected_node,
+            disable_args=[None],
+            command=self.update_selected_node,
+            xml=True
         )
         self.grid = self.generate_grid()
 
