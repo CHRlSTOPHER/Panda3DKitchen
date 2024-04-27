@@ -19,7 +19,6 @@ class SceneMenu(SceneGui, CanvasMenu, SceneLoader):
         self.kitchen = None
         self.discard_frame = None
         self.add_item = False
-        self.last_node = None
         self.last_button = None
         self.grid = None
 
@@ -27,13 +26,13 @@ class SceneMenu(SceneGui, CanvasMenu, SceneLoader):
         self.load_gui()
         self.generate_canvas(self.kitchen.preview_menu, self.scene_frame,
                              self.scene_scroll, 'scene')
-        self.discard_frame = DiscardCanvasButtons('scene',
-                                                  self.kitchen,
-                                                  self,
-                                                  self.scene_scroll,
-                                                  self.scene_trash,
-                                                  self.scene_confirm,
-                                                  self.scene_inspect, xml=True)
+        self.discard_frame = DiscardCanvasButtons(
+            'scene', self.kitchen, self,
+            self.scene_scroll, self.scene_trash,
+            self.scene_confirm, self.scene_inspect,
+            disable_command=self.update_selected_node, disable_args=[None],
+            command=self.update_selected_node, xml=True
+        )
         self.grid = self.generate_grid()
 
     def add_item_to_xml(self, item_name):
@@ -67,10 +66,15 @@ class SceneMenu(SceneGui, CanvasMenu, SceneLoader):
 
         # remake all scene buttons in preview mode's scene_button dict.
         self.load_picture_list(node_data, command=self.update_selected_node,
-                               color=MG.SCENE_BUTTON_COLOR)
+                               color=MG.FRAME_COLOR['scene'])
 
     def update_selected_node(self, node):
-        name = node.get_name()
+        name = None
+        if node:
+            name = node.get_name()
+        scene_trash_mode = self.discard_frame.trash_mode
+        library_trash_mode = self.kitchen.library_menu.discard_frame.trash_mode
+
         # check if the user clicked on a DirectButton or the actual node.
         if isinstance(node, DirectButton):
             button = node
@@ -78,16 +82,43 @@ class SceneMenu(SceneGui, CanvasMenu, SceneLoader):
         elif isinstance(node, NodePath):
             node = node
             button = self.get_button_by_name(name)
+        elif not node:
+            button = None
         else:
             print(f'"{node}" is not a valid selection.')
             return  # we don't know what the frick this thing is.
 
+        # add selection to discard list instead of selecting it to move around.
+        if scene_trash_mode:
+            mode_of_node = None
+            if node:
+                mode_of_node = node.get_name().split("|")[3]
+            # only allow user to add nodes that match the current mode.
+            # verify that the node mode matches the current menu mode.
+            if mode_of_node == self.discard_frame.mode:
+                self.select_node_for_discarding(node)
+
+        elif library_trash_mode:
+            if node:
+                print("Cannot select scene nodes in \"Library Delete\" mode.")
+
+        else:
+            # update which node is selected in the scene.
+            self.kitchen.node_mover.set_node(node)
+            if node:
+                self.update_menu(node, button)
+
+        self.last_button = button
+
+    def select_node_for_discarding(self, node):
+        print(node)
+
+    def update_menu(self, node, button):
         # reset color on last button and apply color to selected button.
         if self.last_button:
-            self.last_button['frameColor'] = MG.SCENE_BUTTON_COLOR
+            self.last_button['frameColor'] = MG.FRAME_COLOR['scene']
         button['frameColor'] = MG.SELECTED_BUTTON_COLOR
 
-        self.kitchen.node_mover.set_node(node)
         # along with changing the selected node, change the menu
         mode = node.get_name().split("|")[3]
         self.preview_menu.set_mode(mode)
@@ -95,8 +126,6 @@ class SceneMenu(SceneGui, CanvasMenu, SceneLoader):
         # switch to scene menu if not already active.
         if not self.kitchen.library_menu.swap_menu:
             self.kitchen.library_menu.swap_menus()
-
-        self.last_button = button
 
     def get_node_by_name(self, name):
         mode = name.split("|")[3]
@@ -115,10 +144,8 @@ class SceneMenu(SceneGui, CanvasMenu, SceneLoader):
                 return button
         return None
 
-    def color_selected_button(self, selected_button):
-        for button in self.canvas_buttons.current_button_set:
-            button['frameColor'] = SCENE_BUTTON_COLOR
-        selected_button['frameColor'] = SELECTED_BUTTON_COLOR
+    def get_last_button(self):
+        return self.last_button
 
     def set_kitchen(self, kitchen):
         self.kitchen = kitchen

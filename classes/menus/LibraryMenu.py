@@ -8,6 +8,7 @@ from classes.menus.CanvasMenu import CanvasMenu
 from classes.menus.LibraryGui import LibraryGui
 from classes.settings import Globals as G
 from classes.settings.Globals import FILENAME_DESC_IMAGE, FILENAME_DESC_MODEL
+from classes.menus import MenuGlobals as MG
 
 BUTTON_MOVE_TASK = 'button_move'
 
@@ -33,14 +34,13 @@ class LibraryMenu(CanvasMenu, LibraryGui):
         self.load_gui()
         self.generate_canvas(self.kitchen.preview_menu, self.library_window,
                              self.library_scroll, 'library')
-        self.discard_frame = DiscardCanvasButtons('library',
-                                                  self.kitchen,
-                                                  self,
-                                                  self.library_scroll,
-                                                  self.library_trash,
-                                                  self.library_confirm,
-                                                  self.library_folder,
-                                                  json=True)
+        update_selected_node = self.kitchen.scene_menu.update_selected_node
+        self.discard_frame = DiscardCanvasButtons(
+            'library', self.kitchen, self,
+            self.library_scroll, self.library_trash,
+            self.library_confirm, self.library_folder,
+            disable_command=update_selected_node, disable_args=[None],
+        )
         self.bind_gui()
 
     def bind_gui(self):
@@ -161,7 +161,7 @@ class LibraryMenu(CanvasMenu, LibraryGui):
                                button_increase=True,
                                button_copy=self.make_button_copy,
                                add_to_scene=self.add_item_to_scene,
-                               color=(.9, .9, .7, 1))
+                               color=MG.FRAME_COLOR['library'])
 
     def make_button_copy(self, button, mouse_data):
         if self.discard_frame.trash_mode:  # Don't move during trash mode.

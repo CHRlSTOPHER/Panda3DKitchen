@@ -6,9 +6,17 @@ ENTITY_MODE_BUTTONS = [
     ["Particle", (0.691, 0.0, -0.755), (0.199, 0.097, 0.141), (-0.003, 0.116)]
 ]
 DISABLED_COLOR = (.9, .9, .9, 1)
+DISABLED_COLOR_2 = (.5, .5, .5, 1)
 ENABLED_COLOR = (1, 1, 1, 1)
-SCENE_BUTTON_COLOR = (.7, .9, .9, 1)
 SELECTED_BUTTON_COLOR = (0, .2, .2, 1)
+FRAME_COLOR = {
+    'library': (.9, .9, .7, 1),
+    'scene': (.7, .9, .9, 1)
+}
+COLOR_SCALE = {
+    'library': (.8, .8, .8, 1),
+    'scene': (.8, .8, .8, 1)
+}
 
 BASE_CANVAS_SIZE = (-1, 1, 0, 1)
 ENTITY_FRAME_POS = (-1.38, 0, 0)

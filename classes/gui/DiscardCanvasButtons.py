@@ -5,8 +5,10 @@ from direct.gui.DirectGui import DGG
 from classes.file.HandleJsonData import delete_json_entries
 from classes.file.HandleXMLData import delete_xml_entries
 from classes.settings import Globals as G
+from classes.menus import MenuGlobals as MG
 
-RED_COLOR = (.9, .4, .4, 1)
+# make red color unique so it doesn't conflict with red color scaling.
+RED_COLOR = (.901, .4105, .4105, 1.0)
 BASE_GUI_COLOR = (.8, .8, .8, 1)
 BRIGHT_RED = (.9, 0, 0, 1)
 
@@ -15,21 +17,25 @@ class DiscardCanvasButtons:
 
     def __init__(self, menu_name, kitchen, reload_menu, scroll_frame,
                  trash_button, confirm_button, left_button,
-                 json=False, xml=False):
-        self.menu_name = menu_name
+                 disable_command=None, disable_args=[],
+                 command=None, json=False, xml=False):
         self.kitchen = kitchen
+        self.menu_name = menu_name
         self.preview_menu = kitchen.preview_menu
         self.reload_menu = reload_menu
         self.scroll_frame = scroll_frame
         self.trash_button = trash_button
         self.confirm_button = confirm_button
         self.left_button = left_button
+        self.disable_command = disable_command
+        self.disable_args = disable_args
+        self.command = command
         self.trash_mode = False
         self.frame_buttons = []
         self.discarded_buttons = []
         self.discarded_names = []
-        self.last_button_color = (1, 1, 1, 1)
-        self.last_color_scale = (.75, .75, .75, 1)
+        self.color_scale = None
+        self.frame_color = None
         self.json = json
         self.xml = xml
 
@@ -51,20 +57,15 @@ class DiscardCanvasButtons:
             self.disable_trash_mode(restore)
             self.refresh_lists()
 
-        self.define_button_colors()
-
-    def define_button_colors(self):
-        if self.frame_buttons:
-            first_button = self.frame_buttons[0]
-            self.last_button_color = first_button['frameColor']
-            self.last_color_scale = first_button.get_color_scale()
-
     def enable_trash_mode(self):
         self.confirm_button.show()
         self.left_button.hide()
         self.trash_button['frameColor'] = RED_COLOR
         self.trash_button.set_color_scale(.9, .75, .75, 1)
         self.update_button_commands(self.discard)
+        self.restore_buttons(command=False)  # clear selected button coloring.
+        if self.disable_command:
+            self.disable_command(*self.disable_args)
 
     def disable_trash_mode(self, restore):
         self.confirm_button.hide()
@@ -73,7 +74,12 @@ class DiscardCanvasButtons:
         self.trash_button.set_color_scale(1, 1, 1, 1)
         if restore:
             self.update_button_commands(None)
-            self.restore_selected_buttons()
+            self.restore_buttons()
+
+        # reapply selection color to selected button
+        last_button = self.kitchen.scene_menu.get_last_button()
+        if last_button:
+            last_button['frameColor'] = MG.SELECTED_BUTTON_COLOR
 
     def update_button_commands(self, command):
         self.determine_frame_buttons()
@@ -91,8 +97,8 @@ class DiscardCanvasButtons:
         self.discarded_buttons.append(button)
 
     def restore(self, button):
-        button.set_color_scale(self.last_color_scale)
-        button['frameColor'] = self.last_button_color
+        button.set_color_scale(self.color_scale)
+        button['frameColor'] = self.frame_color
         button['relief'] = DGG.RAISED
         button['command'] = self.discard
         index = self.discarded_buttons.index(button)
@@ -130,12 +136,13 @@ class DiscardCanvasButtons:
         except FileNotFoundError as FNFE:
             print(FNFE)
 
-    def restore_selected_buttons(self):
+    def restore_buttons(self, command=True):
         for button in self.frame_buttons:
-            button.set_color_scale(*self.last_color_scale)
-            button['frameColor'] = self.last_button_color
-            button['command'] = None
-            button['relief'] = DGG.RAISED
+            button.set_color_scale(*self.color_scale)
+            button['frameColor'] = self.frame_color
+            if command:
+                button['command'] = self.command
+                button['relief'] = DGG.RAISED
 
     def refresh_lists(self):
         self.frame_buttons = []
@@ -144,4 +151,7 @@ class DiscardCanvasButtons:
 
     def determine_frame_buttons(self):
         mode_class = self.preview_menu.get_mode_class()
+        self.mode = self.preview_menu.get_mode()  # we use this later.
         self.frame_buttons = mode_class.get_buttons_dict[self.menu_name]()
+        self.color_scale = MG.ENABLED_COLOR
+        self.frame_color = MG.FRAME_COLOR[self.menu_name]

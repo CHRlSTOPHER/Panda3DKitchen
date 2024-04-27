@@ -11,6 +11,7 @@ from classes.menus.PreviewModes import (ActorMenu, PropMenu,
 from classes.props.PlaneModel import PlaneModel
 from classes.scene.SceneWindow import SCENE_REGION
 from classes.settings import Globals as G
+from classes.menus import MenuGlobals as MG
 
 DISABLED_COLOR = (.9, .9, .9, 1)
 ENABLED_COLOR = (1, 1, 1, 1)
@@ -251,8 +252,23 @@ class PreviewMenu(PreviewGui):
                 button = self.mode_buttons[i]
                 button['state'] = DGG.DISABLED
                 button.set_color_scale(.5, .5, .5, 1)
+            self.disable_swap_buttons(True)
         else:
             self.change_button_states(self.last_disabled_button)
+            self.disable_swap_buttons(False)
+
+    def disable_swap_buttons(self, disable):
+        swap_buttons = [
+            self.kitchen.library_menu.swap_button, self.shrink_icon
+        ]
+        if disable:
+            for button in swap_buttons:
+                button.set_color_scale(MG.DISABLED_COLOR_2)
+                button['state'] = DGG.DISABLED
+        else:
+            for button in swap_buttons:
+                button.set_color_scale(ENABLED_COLOR)
+                button['state'] = DGG.NORMAL
 
     def change_menu_buttons(self, key):
         for name in self.modes:

@@ -26,6 +26,7 @@ class SceneWindow(SceneWindowGui):
         self.load_gui()
         self.load_scene_region()
         self.bind_gui()
+        # self.kitchen.taskMgr.add(self.update_fov, "update_fov")
 
     def bind_gui(self):
         self.scene_window.bind(DGG.WITHIN, self.set_within, extraArgs=[True])
@@ -56,6 +57,9 @@ class SceneWindow(SceneWindowGui):
         # Fifth, fix display region aspect ratio.
         aspect_ratio = self.kitchen.get_aspect_ratio()
         self.scene_cam.node().get_lens().set_aspect_ratio(aspect_ratio)
+
+    def update_fov(self, task):
+        return task.again
 
     def set_within(self, state, mouse_data):
         self.within = state
