@@ -1,4 +1,4 @@
-from panda3d.core import Filename
+from panda3d.core import Filename, NodePath
 from direct.gui.DirectGui import DirectButton
 
 from classes.apps import AppGlobals as AG
@@ -7,9 +7,7 @@ from classes.gui.DiscardCanvasButtons import DiscardCanvasButtons
 from classes.menus.CanvasMenu import CanvasMenu
 from classes.menus.SceneGui import SceneGui
 from classes.scene.SceneLoader import SceneLoader
-
-SCENE_BUTTON_COLOR = (.7, .9, .9, 1)
-SELECTED_BUTTON_COLOR = (0, .2, .2, 1)
+from classes.menus import MenuGlobals as MG
 
 
 class SceneMenu(SceneGui, CanvasMenu, SceneLoader):
@@ -63,43 +61,51 @@ class SceneMenu(SceneGui, CanvasMenu, SceneLoader):
 
     def load_canvas_buttons(self, node_data):
         mode_class = self.kitchen.preview_menu.get_mode_class()
-        mode = self.kitchen.preview_menu.get_mode()
-        nodepath_list = self.nodepaths.get(mode)
         # cleanup all scene buttons
         for button in mode_class.scene_buttons:
             button.destroy()
 
         # remake all scene buttons in preview mode's scene_button dict.
         self.load_picture_list(node_data, command=self.update_selected_node,
-                               color=SCENE_BUTTON_COLOR)
+                               color=MG.SCENE_BUTTON_COLOR)
 
     def update_selected_node(self, node):
-        # check if the on clicked on the DirectButton in the menu.
+        name = node.get_name()
+        # check if the user clicked on a DirectButton or the actual node.
         if isinstance(node, DirectButton):
-            # Figure out what node the user wants based on the name
-            node = self.get_node_by_name(node)
+            button = node
+            node = self.get_node_by_name(name)
+        elif isinstance(node, NodePath):
+            node = node
+            button = self.get_button_by_name(name)
+        else:
+            print(f'"{node}" is not a valid selection.')
+            return  # we don't know what the frick this thing is.
+
+        # reset color on last button and apply color to selected button.
+        if self.last_button:
+            self.last_button['frameColor'] = MG.SCENE_BUTTON_COLOR
+        button['frameColor'] = MG.SELECTED_BUTTON_COLOR
 
         self.kitchen.node_mover.set_node(node)
         # along with changing the selected node, change the menu
         mode = node.get_name().split("|")[3]
         self.preview_menu.set_mode(mode)
-        # switch to scene menu if not already active,
+
+        # switch to scene menu if not already active.
         if not self.kitchen.library_menu.swap_menu:
             self.kitchen.library_menu.swap_menus()
 
-        button = self.find_button_in_list(node.get_name())
-        if button:
-            self.color_selected_button(button)
+        self.last_button = button
 
-    def get_node_by_name(self, node):
-        name = node.get_name()
+    def get_node_by_name(self, name):
         mode = name.split("|")[3]
         for node in self.nodepaths[mode]:
             if name in node.get_name():
                 return node
         return None
 
-    def find_button_in_list(self, name):
+    def get_button_by_name(self, name):
         node_name = name  # store name
         mode = name.split("|")[3]  # get the mode that is stored in the name,
         preview_mode = self.kitchen.preview_menu.modes[mode]
