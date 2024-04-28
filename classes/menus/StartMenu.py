@@ -91,6 +91,7 @@ class StartMenu(DirectObject):
         self.kitchen.sequence_slider.set_sequence(Sequence(Wait(50)))
         self.kitchen.generate_classes()
         self.kitchen.define_variable_names()
+        self.kitchen.node_mover.deselect_node()
 
     def delete_project(self):
         self.project_location = self.get_folder_location()

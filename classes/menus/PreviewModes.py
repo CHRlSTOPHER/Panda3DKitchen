@@ -62,7 +62,7 @@ class ActorMenu:
 
         # get y2 and y1 for the distance formula
         distance = get_distance(self.actor)
-        self.kitchen.node_mover.set_node(self.actor, flash_red=False)
+        self.kitchen.node_mover.set_node(self.actor, outline=False)
         self.kitchen.node_mover.set_pos(0, distance * 2.0, -(distance / 2.0))
         self.kitchen.node_mover.set_click(False)
 
@@ -138,7 +138,7 @@ class PropMenu:
         self.prop.node().set_final(1)
 
         distance = get_distance(self.prop)
-        self.kitchen.node_mover.set_node(self.prop, flash_red=False)
+        self.kitchen.node_mover.set_node(self.prop, outline=False)
         self.kitchen.node_mover.set_pos(0, distance * 2.0, -(distance / 2.0))
         self.kitchen.node_mover.set_click(False)
 

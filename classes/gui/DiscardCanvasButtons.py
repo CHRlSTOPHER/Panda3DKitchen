@@ -17,7 +17,6 @@ class DiscardCanvasButtons:
 
     def __init__(self, menu_name, kitchen, reload_menu, scroll_frame,
                  trash_button, confirm_button, left_button,
-                 disable_command=None, disable_args=[],
                  command=None, json=False, xml=False):
         self.kitchen = kitchen
         self.menu_name = menu_name
@@ -27,10 +26,9 @@ class DiscardCanvasButtons:
         self.trash_button = trash_button
         self.confirm_button = confirm_button
         self.left_button = left_button
-        self.disable_command = disable_command
-        self.disable_args = disable_args
         self.command = command
         self.trash_mode = False
+        self.mode = None
         self.frame_buttons = []
         self.discarded_buttons = []
         self.discarded_names = []
@@ -64,8 +62,7 @@ class DiscardCanvasButtons:
         self.trash_button.set_color_scale(.9, .75, .75, 1)
         self.update_button_commands(self.discard)
         self.restore_buttons(command=False)  # clear selected button coloring.
-        if self.disable_command:
-            self.disable_command(*self.disable_args)
+        self.kitchen.node_mover.deselect_node()
 
     def disable_trash_mode(self, restore):
         self.confirm_button.hide()
@@ -76,9 +73,11 @@ class DiscardCanvasButtons:
             self.update_button_commands(None)
             self.restore_buttons()
 
-        # reapply selection color to selected button
+        # reapply node selection
+        last_node = self.kitchen.scene_menu.last_node
         last_button = self.kitchen.scene_menu.get_last_button()
-        if last_button:
+        if last_node and last_button:
+            self.kitchen.node_mover.set_node(last_node)
             last_button['frameColor'] = MG.SELECTED_BUTTON_COLOR
 
     def update_button_commands(self, command):

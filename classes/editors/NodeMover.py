@@ -29,7 +29,7 @@ class NodeMover(NodeMoverGui, NodePath):
         self.accept(G.MIDDLE_MOUSE_BUTTON, self.set_node,
                     extraArgs=[self.kitchen.scene_camera])
         self.accept("tab", self.go_to_next_entry, extraArgs=[1])
-        self.accept("shift-tab", self.go_to_next_entry, extraArgs=[-1])
+        self.accept("control-tab", self.go_to_next_entry, extraArgs=[-1])
         self.bind_gui()
 
     def bind_gui(self):
@@ -60,7 +60,7 @@ class NodeMover(NodeMoverGui, NodePath):
             self.scale_one.show()
             self.scale_all.hide()
 
-    def set_node(self, node, flash_red=True):
+    def set_node(self, node, outline=True):
         if node and self.allow_click:
             NodePath.__init__(self, node)
             # apply necessary steps for direct entries
@@ -68,19 +68,18 @@ class NodeMover(NodeMoverGui, NodePath):
                 drag.set_func_catalog(self.get_func_catalog())
                 drag.set_node(node)
                 drag.enable_entry()
+            self.kitchen.taskMgr.remove("update_de_entries")
             self.kitchen.taskMgr.doMethodLater(.01, self.update_entries,
                                                "update_de_entries")
 
-            if not flash_red:
-                return
-            # Make a short sequence to show it was selected.
-            og_color_scale = node.get_color_scale()
-            node.set_color_scale(G.RED)
-            Sequence(
-                Func(self.toggle_click), Wait(.3),
-                Func(node.set_color_scale, *og_color_scale),
-                Func(self.toggle_click)
-            ).start()
+            if outline:
+                # outline node code here
+                pass
+
+    def deselect_node(self):
+        self.node = None
+        self.disable_entries()
+        self.kitchen.taskMgr.remove("update_de_entries")
 
     # update very often in case node mover changed the transform values
     def update_entries(self, task):

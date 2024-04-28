@@ -5,6 +5,7 @@ Hello and welcome to the kitchen! Let's cook something good!
 *No assets from external sources are included in this repo, but you can link up the directory of external sources in files.json. It will automatically add the directory to the model-path.*
 
 
+
 | Adjustable Keybinds | Description                            |
 |---------------------|----------------------------------------|
 | WASD                | Move the camera along the x or y axis  |

@@ -34,7 +34,6 @@ class LibraryMenu(CanvasMenu, LibraryGui):
         self.load_gui()
         self.generate_canvas(self.kitchen.preview_menu, self.library_window,
                              self.library_scroll, 'library')
-        update_selected_node = self.kitchen.scene_menu.update_selected_node
         self.discard_frame = DiscardCanvasButtons(
             menu_name='library',
             kitchen=self.kitchen,
@@ -43,8 +42,6 @@ class LibraryMenu(CanvasMenu, LibraryGui):
             trash_button=self.library_trash,
             confirm_button=self.library_confirm,
             left_button=self.library_folder,
-            disable_command=update_selected_node,
-            disable_args=[None],
         )
         self.bind_gui()
 
@@ -58,13 +55,10 @@ class LibraryMenu(CanvasMenu, LibraryGui):
             self.swap_button.wrt_reparent_to(self.kitchen.
                                              scene_menu.scene_frame)
             self.kitchen.scene_frame.show()
-            self.discard_frame.disable_trash_mode(restore=False)
             self.library_window.hide()
         else:
             self.swap_button.wrt_reparent_to(self.library_window)
             self.kitchen.scene_frame.hide()
-            self.kitchen.scene_menu.discard_frame.disable_trash_mode(
-                restore=False)
             self.library_window.show()
 
     def choose_file(self, item_name=None, item_directory=None, search=True,

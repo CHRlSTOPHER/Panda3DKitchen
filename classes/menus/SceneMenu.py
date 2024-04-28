@@ -19,6 +19,7 @@ class SceneMenu(SceneGui, CanvasMenu, SceneLoader):
         self.kitchen = None
         self.discard_frame = None
         self.add_item = False
+        self.last_node = None
         self.last_button = None
         self.grid = None
 
@@ -34,8 +35,6 @@ class SceneMenu(SceneGui, CanvasMenu, SceneLoader):
             trash_button=self.scene_trash,
             confirm_button=self.scene_confirm,
             left_button=self.scene_inspect,
-            disable_command=self.update_selected_node,
-            disable_args=[None],
             command=self.update_selected_node,
             xml=True
         )
@@ -103,18 +102,21 @@ class SceneMenu(SceneGui, CanvasMenu, SceneLoader):
             # verify that the node mode matches the current menu mode.
             if mode_of_node == self.discard_frame.mode:
                 self.select_node_for_discarding(node)
+            else:
+                return  # don't set this node as last node / button
 
         elif library_trash_mode:
             if node:
                 print("Cannot select scene nodes in \"Library Delete\" mode.")
 
-        else:
+        elif node:
             # update which node is selected in the scene.
             self.kitchen.node_mover.set_node(node)
             if node:
                 self.update_menu(node, button)
 
-        self.last_button = button
+            self.last_node = node
+            self.last_button = button
 
     def select_node_for_discarding(self, node):
         print(node)
@@ -142,7 +144,7 @@ class SceneMenu(SceneGui, CanvasMenu, SceneLoader):
 
     def get_button_by_name(self, name):
         node_name = name  # store name
-        mode = name.split("|")[3]  # get the mode that is stored in the name,
+        mode = name.split("|")[3]  # get the mode that is stored in the name.
         preview_mode = self.kitchen.preview_menu.modes[mode]
         # search through the button list for the button with the matching name,
         for button in preview_mode.scene_buttons:
