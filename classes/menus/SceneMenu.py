@@ -74,40 +74,29 @@ class SceneMenu(SceneGui, CanvasMenu, SceneLoader):
                                color=MG.FRAME_COLOR['scene'])
 
     def update_selected_node(self, node):
-        name = None
-        if node:
-            name = node.get_name()
         scene_trash_mode = self.discard_frame.trash_mode
         library_trash_mode = self.kitchen.library_menu.discard_frame.trash_mode
 
         # check if the user clicked on a DirectButton or the actual node.
         if isinstance(node, DirectButton):
             button = node
-            node = self.get_node_by_name(name)
+            node = self.get_node_by_name(node.get_name())
         elif isinstance(node, NodePath):
             node = node
-            button = self.get_button_by_name(name)
-        elif not node:
-            button = None
+            button = self.get_button_by_name(node.get_name())
         else:
             print(f'"{node}" is not a valid selection.')
             return  # we don't know what the frick this thing is.
 
         # add selection to discard list instead of selecting it to move around.
-        if scene_trash_mode:
-            mode_of_node = None
-            if node:
-                mode_of_node = node.get_name().split("|")[3]
+        if scene_trash_mode and node:
+            mode_of_node = node.get_name().split("|")[3]
             # only allow user to add nodes that match the current mode.
-            # verify that the node mode matches the current menu mode.
             if mode_of_node == self.discard_frame.mode:
-                self.select_node_for_discarding(node)
-            else:
-                return  # don't set this node as last node / button
+                self.discard_frame.discard(button)
 
-        elif library_trash_mode:
-            if node:
-                print("Cannot select scene nodes in \"Library Delete\" mode.")
+        elif library_trash_mode and node:
+            print("Cannot select scene nodes in \"Library Delete\" mode.")
 
         elif node:
             # update which node is selected in the scene.
@@ -117,9 +106,6 @@ class SceneMenu(SceneGui, CanvasMenu, SceneLoader):
 
             self.last_node = node
             self.last_button = button
-
-    def select_node_for_discarding(self, node):
-        print(node)
 
     def update_menu(self, node, button):
         # reset color on last button and apply color to selected button.

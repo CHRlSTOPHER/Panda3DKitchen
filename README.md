@@ -5,7 +5,6 @@ Hello and welcome to the kitchen! Let's cook something good!
 *No assets from external sources are included in this repo, but you can link up the directory of external sources in files.json. It will automatically add the directory to the model-path.*
 
 
-
 | Adjustable Keybinds | Description                            |
 |---------------------|----------------------------------------|
 | WASD                | Move the camera along the x or y axis  |
@@ -23,6 +22,7 @@ Hello and welcome to the kitchen! Let's cook something good!
 | LMB               | select existing objects in the scene          |
 | tab / control-tab | move between entry boxes (when in focus)      |
 | control-a         | delete data in entry box                      |
+
 
 ## WARNINGS:
 __Do not change your software rendering to DirectX__ (pandadx9 in the config.prc)

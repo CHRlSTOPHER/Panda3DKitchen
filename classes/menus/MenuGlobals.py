@@ -52,3 +52,5 @@ MENU_HOR_3 = "menu4.jpg"
 VALUE = 'verticalScroll_value'
 
 EDITOR_MAP_PATH = f"{EDITOR}/maps/"
+
+SCENE_NAME_ARGS = 4

@@ -7,10 +7,9 @@ from classes.file.HandleXMLData import delete_xml_entries
 from classes.settings import Globals as G
 from classes.menus import MenuGlobals as MG
 
-# make red color unique so it doesn't conflict with red color scaling.
 RED_COLOR = (.901, .4105, .4105, 1.0)
 BASE_GUI_COLOR = (.8, .8, .8, 1)
-BRIGHT_RED = (.9, 0, 0, 1)
+BRIGHT_RED = (.91, .01, .01, 1.00)
 
 
 class DiscardCanvasButtons:
@@ -94,8 +93,10 @@ class DiscardCanvasButtons:
         button['relief'] = DGG.SUNKEN
         button['command'] = self.restore
         self.discarded_buttons.append(button)
+        self.handle_scene_node(button)
 
     def restore(self, button):
+        self.handle_scene_node(button, force_clear=True)
         button.set_color_scale(self.color_scale)
         button['frameColor'] = self.frame_color
         button['relief'] = DGG.RAISED
@@ -138,6 +139,8 @@ class DiscardCanvasButtons:
     def restore_buttons(self, command=True):
         for button in self.frame_buttons:
             button.set_color_scale(*self.color_scale)
+            self.handle_scene_node(button, force_clear=True)
+
             button['frameColor'] = self.frame_color
             if command:
                 button['command'] = self.command
@@ -154,3 +157,21 @@ class DiscardCanvasButtons:
         self.frame_buttons = mode_class.get_buttons_dict[self.menu_name]()
         self.color_scale = MG.ENABLED_COLOR
         self.frame_color = MG.FRAME_COLOR[self.menu_name]
+
+    def handle_scene_node(self, button, node=None, force_clear=False):
+        # check if the node is a scene node
+        name_arg_length = len(button.get_name().split("|"))
+        if name_arg_length == MG.SCENE_NAME_ARGS:
+            node = self.kitchen.scene_menu.get_node_by_name(button.get_name())
+
+        if node:
+            r, g, b, a = node.get_color_scale()
+            color_scale = [round(color, 2) for color in [r, g, b, a]]
+            if force_clear:
+                node.clear_color_scale()
+            elif color_scale == [*BRIGHT_RED]:
+                # the user is deselecting the node. restore it to normal.
+                node.clear_color_scale()
+                self.restore(button)
+            else:
+                node.set_color_scale(BRIGHT_RED)
