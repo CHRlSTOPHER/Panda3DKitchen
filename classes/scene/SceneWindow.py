@@ -1,6 +1,5 @@
-import json
-
 from direct.gui.DirectGui import DGG
+from direct.directtools.DirectGrid import DirectGrid
 from panda3d.core import NodePath, Camera, MouseWatcher
 
 from classes.scene.SceneWindowGui import SceneWindowGui
@@ -21,16 +20,25 @@ class SceneWindow(SceneWindowGui):
         self.scene_mouse_watcher = None
         self.kitchen = None
         self.within = False
+        self.grid = None
 
     def generate(self):
         self.load_gui()
         self.load_scene_region()
         self.bind_gui()
         # self.kitchen.taskMgr.add(self.update_fov, "update_fov")
+        self.grid = DirectGrid(parent=self.scene_render)
 
     def bind_gui(self):
         self.scene_window.bind(DGG.WITHIN, self.set_within, extraArgs=[True])
         self.scene_window.bind(DGG.WITHOUT, self.set_within, extraArgs=[False])
+        self.grid_checkbox['command'] = self.toggle_grid
+
+    def toggle_grid(self, show):
+        if show:
+            self.grid.show()
+        else:
+            self.grid.hide()
 
     def load_scene_region(self):
         # First, make display region that will render the main scene

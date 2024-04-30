@@ -1,6 +1,5 @@
 import json
 
-from direct.directtools.DirectGrid import DirectGrid
 from direct.actor.Actor import Actor
 
 from classes.apps import AppGlobals as AG
@@ -80,10 +79,6 @@ class SceneLoader:
         if mode == AG.PARTICLES:
             self.nodepaths['Particle'] = []
             return
-
-    def generate_grid(self):
-        grid = DirectGrid(parent=self.kitchen.scene_render)
-        return grid
 
     def set_kitchen(self, kitchen):
         self.kitchen = kitchen

@@ -93,6 +93,10 @@ class StartMenu(DirectObject):
         self.kitchen.define_variable_names()
         self.kitchen.node_mover.deselect_node()
 
+        # gui editing
+        # self.kitchen.gui_editor.set_gui(
+        #     self.kitchen.scene_window.grid_checkbox)
+
     def delete_project(self):
         self.project_location = self.get_folder_location()
         self.validate_file(delete_mode=True)

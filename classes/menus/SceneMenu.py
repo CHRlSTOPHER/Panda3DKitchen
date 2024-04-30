@@ -21,7 +21,6 @@ class SceneMenu(SceneGui, CanvasMenu, SceneLoader):
         self.add_item = False
         self.last_node = None
         self.last_button = None
-        self.grid = None
 
     def generate(self):
         self.load_gui()
@@ -38,7 +37,6 @@ class SceneMenu(SceneGui, CanvasMenu, SceneLoader):
             command=self.update_selected_node,
             xml=True
         )
-        self.grid = self.generate_grid()
 
     def add_item_to_xml(self, item_name):
         mode = self.kitchen.preview_menu.get_mode().lower()

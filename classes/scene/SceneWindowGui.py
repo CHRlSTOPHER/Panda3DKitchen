@@ -1,6 +1,5 @@
-import json
-
-from direct.gui.DirectGui import DirectFrame, DirectEntry, DGG
+from direct.gui.DirectGui import (DirectFrame, DirectEntry, DGG,
+                                  DirectCheckButton)
 
 from classes.menus import MenuGlobals as MG
 from classes.props.PlaneModel import PlaneModel
@@ -15,7 +14,7 @@ class SceneWindowGui(DirectFrame):
         self.scene_window = None
         self.fov_title = None
         self.fov_entry = None
-
+        self.grid_checkbox = None
         self.initialiseoptions(SceneWindowGui)
 
     def load_gui(self):
@@ -42,6 +41,12 @@ class SceneWindowGui(DirectFrame):
                                      scale=(0.073, 0.1, 0.1), width=2,
                                      initialText=str(G.DEFAULT_FOV),
                                      frameVisibleScale=(0, 0))
+
+        self.grid_checkbox = DirectCheckButton(self.scene_window,
+                                               text="GRID",
+                                               indicatorValue=1,
+                                               pos=(0.867, 0.0, -0.948),
+                                               scale=(0.073, 0.103, 0.091))
 
     def set_kitchen(self, kitchen):
         self.kitchen = kitchen

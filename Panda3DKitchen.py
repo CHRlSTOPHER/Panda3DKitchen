@@ -27,7 +27,6 @@ class Panda3DKitchen(ShowBase):
     def __init__(self):
         ShowBase.__init__(self)
         self.root_folder = CWD + "/"
-        # classes with visual elements
         self.start_menu = StartMenu()
         self.gui_editor = GuiEditor()
         self.sequence_slider = SequenceSlider()
@@ -44,6 +43,7 @@ class Panda3DKitchen(ShowBase):
                               self.camera_mover, self.node_mover,
                               self.node_selector, self.library_menu,
                               self.scene_menu, self.preview_menu]
+
         self.scene_camera = None
         self.scene_render = None
         self.scene_mw = None
