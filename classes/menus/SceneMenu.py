@@ -33,7 +33,7 @@ class SceneMenu(SceneGui, CanvasMenu, SceneLoader):
             scroll_frame=self.scene_scroll,
             trash_button=self.scene_trash,
             confirm_button=self.scene_confirm,
-            left_button=self.scene_inspect,
+            left_button=self.scene_save,
             command=self.update_selected_node,
             xml=True
         )

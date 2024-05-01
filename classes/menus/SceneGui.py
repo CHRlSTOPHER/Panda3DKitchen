@@ -22,7 +22,7 @@ class SceneGui(DirectFrame):
     def load_gui(self):
         self.reparent_to(self.kitchen.a2dLeftCenter)
         trash_geom = PlaneModel(MG.EDITOR_MAP_PATH + MG.TRASH)
-        inspect_geom = PlaneModel(MG.EDITOR_MAP_PATH + MG.INSPECT)
+        save_geom = PlaneModel(MG.EDITOR_MAP_PATH + MG.SAVE_TRANSFORM)
         window_geom = PlaneModel(MG.EDITOR_MAP_PATH + MG.MENU_VERT_1)
         check_geom = PlaneModel(MG.EDITOR_MAP_PATH + MG.CHECK_TEXTURE)
 
@@ -50,11 +50,10 @@ class SceneGui(DirectFrame):
                                        text="SCENE ITEMS", pad=(0, 0),
                                        pos=(-0.483, 0.0, 0.843),
                                        scale=(0.16, 0.196, 0.106))
-        self.scene_inspect = DirectButton(self.scene_frame,
-                                          geom=inspect_geom,
-                                          pos=(-0.441, 0.0, -0.732),
-                                          scale=(0.214, 0.199, 0.172),
-                                          pad=(0.993, 0.057))
+        self.scene_save = DirectButton(self.scene_frame, geom=save_geom,
+                                       pos=(-0.441, 0.0, -0.732),
+                                       scale=(0.214, 0.199, 0.172),
+                                       pad=(0.993, 0.057))
         self.scene_trash = DirectButton(self.scene_frame, geom=trash_geom,
                                         pos=(0.456, 0.0, -0.732),
                                         scale=(0.202, 0.142, 0.19),
