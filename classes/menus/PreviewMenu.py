@@ -70,7 +70,8 @@ class PreviewMenu(PreviewGui):
 
         # load assets
         for mode in ['Particle', 'Texture', 'Prop', 'Actor']:  # reverse order
-            self.set_mode(mode, self.entity_mode_buttons[mode], reload=True)
+            self.set_mode(mode, self.entity_mode_buttons[mode],
+                          reload=True, startup=True)
 
     def load_preview_region(self):
         self.preview_window = PlaneModel(pos=(0.0133, 0, 0.0788),
@@ -197,7 +198,8 @@ class PreviewMenu(PreviewGui):
     def cancel_preview(self):
         self.set_mode(reload=False)
 
-    def set_mode(self, mode=None, disable_button=None, reload=False):
+    def set_mode(self, mode=None, disable_button=None, reload=False,
+                 startup=False):
         # clean up any leftover assets
         if not mode:
             self.modes[self.mode].cleanup_entity()
@@ -212,8 +214,8 @@ class PreviewMenu(PreviewGui):
 
         if reload:
             # load the new data from the specified library.
-            self.kitchen.library_menu.reload()
-            self.kitchen.scene_menu.reload()
+            self.kitchen.library_menu.load()
+            self.kitchen.scene_menu.load(startup=startup)
 
         # update canvas sizes
         library_buttons = self.get_mode_class().library_buttons

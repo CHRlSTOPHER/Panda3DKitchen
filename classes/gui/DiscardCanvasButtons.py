@@ -113,7 +113,7 @@ class DiscardCanvasButtons:
         if self.xml:
             delete_xml_entries(self.kitchen.project_location,
                                mode, self.discarded_names)
-        self.reload_menu.reload()
+        self.reload_menu.remove_items(self.discarded_names)
         self.toggle_trash_mode(restore=False)
 
     def remove_discarded_files(self, mode):
@@ -151,13 +151,6 @@ class DiscardCanvasButtons:
         self.discarded_buttons = []
         self.discarded_names = []
 
-    def determine_frame_buttons(self):
-        mode_class = self.preview_menu.get_mode_class()
-        self.mode = self.preview_menu.get_mode()  # we use this later.
-        self.frame_buttons = mode_class.get_buttons_dict[self.menu_name]()
-        self.color_scale = MG.ENABLED_COLOR
-        self.frame_color = MG.FRAME_COLOR[self.menu_name]
-
     def handle_scene_node(self, button, node=None, force_clear=False):
         # check if the node is a scene node
         name_arg_length = len(button.get_name().split("|"))
@@ -175,3 +168,10 @@ class DiscardCanvasButtons:
                 self.restore(button)
             else:
                 node.set_color_scale(BRIGHT_RED)
+
+    def determine_frame_buttons(self):
+        mode_class = self.preview_menu.get_mode_class()
+        self.mode = self.preview_menu.get_mode()  # we use this later.
+        self.frame_buttons = mode_class.get_buttons_dict[self.menu_name]()
+        self.color_scale = MG.ENABLED_COLOR
+        self.frame_color = MG.FRAME_COLOR[self.menu_name]

@@ -2,7 +2,8 @@ from panda3d.core import Filename, NodePath
 from direct.gui.DirectGui import DirectButton
 
 from classes.apps import AppGlobals as AG
-from classes.file.HandleXMLData import append_node_data, get_node_data
+from classes.file.HandleXMLData import (append_node_data, get_node_data,
+                                        get_new_index)
 from classes.gui.DiscardCanvasButtons import DiscardCanvasButtons
 from classes.menus.CanvasMenu import CanvasMenu
 from classes.menus.SceneGui import SceneGui
@@ -45,9 +46,9 @@ class SceneMenu(SceneGui, CanvasMenu, SceneLoader):
             xml_file = xml_file.format(f"{mode}s")
             append_node_data(xml_file, mode, item_name)
 
-        self.reload(xml_file)
+        self.load(xml_file, item_name=item_name)
 
-    def reload(self, xml_file=None, mode=None):
+    def load(self, xml_file=None, mode=None, item_name=None, startup=False):
         if mode == AG.TEXTURES:
             return
         if not mode:
@@ -58,8 +59,48 @@ class SceneMenu(SceneGui, CanvasMenu, SceneLoader):
         xml_file = Filename().fromOsSpecific(xml_file)
 
         node_data = get_node_data(xml_file.toOsSpecific())
-        self.load_nodes(mode, node_data)
+        if startup:  # load all nodes from xml file.
+            self.load_nodes(mode, node_data)
+        elif item_name:  # only load the new node.
+            index = get_new_index(self.kitchen.project_location,
+                                  mode, item_name)
+            mode = self.kitchen.preview_menu.get_mode()
+            full_name = f"{item_name}|{index}|root_node|{mode}"
+            self.load_node(mode, item_name, full_name)
+        else:
+            return  # don't mess with the canvas buttons.
+
         self.load_canvas_buttons(node_data)
+
+    def remove_items(self, discarded_names):
+        if discarded_names:
+            name, index, part, mode = discarded_names[0].split("|")
+            preview_mode = self.kitchen.preview_menu.modes.get(mode)
+            scene_buttons = preview_mode.scene_buttons
+        else:
+            return
+
+        for full_name in discarded_names:
+            name, index, part, mode = full_name.split("|")
+
+            # find node in the scene and remove it.
+            nodes = self.nodepaths.get(mode)
+            node = self.get_node_by_name(full_name)
+            node_index = nodes.index(node)
+            print(mode)
+            node.remove_node()
+            nodes.pop(node_index)
+
+            # find button and remove it.
+            button = self.get_button_by_name(full_name)
+            button_index = scene_buttons.index(button)
+            button.destroy()
+            scene_buttons.pop(button_index)
+
+        # remake the scene button list
+        preview_mode = self.kitchen.preview_menu.modes.get(mode)
+        scene_buttons = preview_mode.scene_buttons
+        self.load_canvas_buttons(scene_buttons)
 
     def load_canvas_buttons(self, node_data):
         mode_class = self.kitchen.preview_menu.get_mode_class()

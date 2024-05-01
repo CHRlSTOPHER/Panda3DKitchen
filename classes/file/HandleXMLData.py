@@ -118,3 +118,33 @@ def append_node_data(xml_file, node_type, item_name):
     add_default_transform(root_node)
 
     tree.write(xml_file, pretty_print=True, encoding="utf-8")
+
+
+def check_index_for_match(element, index, name):
+    if name == element.attrib['name']:
+        element_index = element.attrib['index']
+        if index == element_index:  # this index is being used. increment.
+            index += 1
+
+        return index
+
+def get_new_index(project_location, mode, name):
+    xml_file = f"{project_location}/{mode}.xml"
+    tree, root = load_xml(xml_file)
+    previous_index = 0
+    current_index = 0
+    index_found = False
+    # run through all the elements until a new index is found
+    while index_found is False:
+        for element in root:
+            current_index = check_index_for_match(element, current_index, name)
+        if previous_index == current_index:
+            # this index is not currently being used in the xml.
+            index_found = True
+        else:
+            # update previous_index
+            previous_index = current_index
+    # we have to run through the entire list multiple time
+    # in case the indexes get mixed around due to editing/deletions.
+
+    return current_index

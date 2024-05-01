@@ -42,6 +42,7 @@ class LibraryMenu(CanvasMenu, LibraryGui):
             trash_button=self.library_trash,
             confirm_button=self.library_confirm,
             left_button=self.library_folder,
+            json=True
         )
         self.bind_gui()
 
@@ -125,7 +126,7 @@ class LibraryMenu(CanvasMenu, LibraryGui):
         if self.mode != 'Texture':
             self.preview_menu.flash_screen()  # play a camera flash animation
             self.capture_and_save_image()
-        self.reload()
+        self.load()
         self.preview_menu.hide_special_buttons()
 
     def capture_and_save_image(self):
@@ -148,7 +149,7 @@ class LibraryMenu(CanvasMenu, LibraryGui):
         self.kitchen.graphicsEngine.remove_window(buffer)
         camera.remove_node()
 
-    def reload(self):
+    def load(self):
         mode = self.preview_menu.get_mode()
         mode_class = self.preview_menu.get_mode_class()
         library_path = f"{G.DATABASE_DIRECTORY}{mode}Library.json"
@@ -161,6 +162,9 @@ class LibraryMenu(CanvasMenu, LibraryGui):
                                button_copy=self.make_button_copy,
                                add_to_scene=self.add_item_to_scene,
                                color=MG.FRAME_COLOR['library'])
+
+    def remove_items(self, discarded_names):
+        self.load()
 
     def make_button_copy(self, button, mouse_data):
         if self.discard_frame.trash_mode:  # Don't move during trash mode.

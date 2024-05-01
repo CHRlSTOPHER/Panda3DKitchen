@@ -38,11 +38,27 @@ class SceneLoader:
         if color_scale != [1, 1, 1, 1]:
             node.set_color_scale(*color_scale)
 
+    def load_node(self, mode, name, full_name):
+        json_data = self.get_json_data(mode.lower() + "s")
+
+        if mode == AG.ACTORS:
+            model, anims = json_data[name]
+            node = self.generate_actor(model, anims)
+            node.set_name(full_name)
+            self.nodepaths.get('Actor').append(node)
+
+        if mode == AG.PROPS:
+            if name not in G.SPECIAL_NODES:
+                model = json_data[name]
+                node = self.generate_node(model)
+                node.set_name(full_name)
+                self.nodepaths.get('Prop').append(node)
+
+        if mode == AG.PARTICLES:
+            return
+
     def load_nodes(self, mode, node_data):
-        # slice off the plural
-        mode_filename = mode.capitalize()[:-1]
-        json_path = f"{G.DATABASE_DIRECTORY}{mode_filename}Library{G.JSON}"
-        json_data = json.loads(open(json_path).read())
+        json_data = self.get_json_data(mode)
         # cleanup and load
         if mode == AG.ACTORS:
             for actor in self.nodepaths.get('Actor'):
@@ -79,6 +95,12 @@ class SceneLoader:
         if mode == AG.PARTICLES:
             self.nodepaths['Particle'] = []
             return
+
+    def get_json_data(self, mode):
+        # slice off the plural
+        mode_filename = mode.capitalize()[:-1]
+        json_path = f"{G.DATABASE_DIRECTORY}{mode_filename}Library{G.JSON}"
+        return  json.loads(open(json_path).read())
 
     def set_kitchen(self, kitchen):
         self.kitchen = kitchen
