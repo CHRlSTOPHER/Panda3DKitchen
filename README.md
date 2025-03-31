@@ -2,7 +2,7 @@
 
 Hello and welcome to the kitchen! Let's cook something good!
 
-*No assets from external sources are included in this repo, but you can link up the directory of external sources in files.json. It will automatically add the directory to the model-path.*
+*Folders with custom assets can be linked by adding the directory to the "external-resources" list in json/files.json.*
 
 
 | Adjustable Keybinds | Description                            |
@@ -14,14 +14,16 @@ Hello and welcome to the kitchen! Let's cook something good!
 | Numpad 0            | Speed up camera movement (Hold)        |
 | Numpad 1, 2, 3      | Slow down camera movement (Hold)       |
 
+These keybinds listed above can be changed in json/keybinds.
 
-| Set Keybinds      | Description                                   |
-|-------------------|-----------------------------------------------|
-| RMB               | enable / disable mouse rotation               |
-| MMB               | select the camera and assign it to node mover |
-| LMB               | select existing objects in the scene          |
-| tab / control-tab | move between entry boxes (when in focus)      |
-| control-a         | delete data in entry box                      |
+
+| Permanent Keybinds | Description                                      |
+|------------------- |-----------------------------------------------   |
+| RMB                | enable / disable mouse rotation                  |
+| MMB                | selects the camera as the currently focused node |
+| LMB                | select scene objects                             |
+| tab / control-tab  | move between entry boxes (when in focus)         |
+| control-a          | delete data in entry box                         |
 
 
 ## WARNINGS:

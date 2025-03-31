@@ -123,7 +123,7 @@ def append_node_data(xml_file, node_type, item_name):
 def check_index_for_match(element, index, name):
     if name == element.attrib['name']:
         element_index = element.attrib['index']
-        if index == element_index:  # this index is being used. increment.
+        if index == int(element_index):  # this index is being used. increment.
             index += 1
 
         return index

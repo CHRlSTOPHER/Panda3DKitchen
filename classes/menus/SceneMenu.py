@@ -87,8 +87,10 @@ class SceneMenu(SceneGui, CanvasMenu, SceneLoader):
             nodes = self.nodepaths.get(mode)
             node = self.get_node_by_name(full_name)
             node_index = nodes.index(node)
-            print(mode)
-            node.remove_node()
+            if mode == AG.ACTOR:
+                node.delete()
+            elif mode == AG.PROP:
+                node.remove_node()
             nodes.pop(node_index)
 
             # find button and remove it.
@@ -98,9 +100,8 @@ class SceneMenu(SceneGui, CanvasMenu, SceneLoader):
             scene_buttons.pop(button_index)
 
         # remake the scene button list
-        preview_mode = self.kitchen.preview_menu.modes.get(mode)
-        scene_buttons = preview_mode.scene_buttons
-        self.load_canvas_buttons(scene_buttons)
+        button_names = [button.get_name() for button in scene_buttons]
+        self.load_canvas_buttons(button_names)
 
     def load_canvas_buttons(self, node_data):
         mode_class = self.kitchen.preview_menu.get_mode_class()
@@ -120,9 +121,11 @@ class SceneMenu(SceneGui, CanvasMenu, SceneLoader):
         if isinstance(node, DirectButton):
             button = node
             node = self.get_node_by_name(node.get_name())
+            print(f"Button was clicked. Find the node: {node}")
         elif isinstance(node, NodePath):
             node = node
             button = self.get_button_by_name(node.get_name())
+            print(f"Node was clicked. Find the Button: {button}")
         else:
             print(f'"{node}" is not a valid selection.')
             return  # we don't know what the frick this thing is.
@@ -147,6 +150,9 @@ class SceneMenu(SceneGui, CanvasMenu, SceneLoader):
             self.last_button = button
 
     def update_menu(self, node, button):
+        mode = node.get_name().split("|")[3]
+        preview_mode = self.kitchen.preview_menu.modes[mode]
+
         # reset color on last button and apply color to selected button.
         if self.last_button:
             self.last_button['frameColor'] = MG.FRAME_COLOR['scene']
@@ -165,6 +171,7 @@ class SceneMenu(SceneGui, CanvasMenu, SceneLoader):
         for node in self.nodepaths[mode]:
             if name in node.get_name():
                 return node
+
         return None
 
     def get_button_by_name(self, name):

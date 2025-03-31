@@ -17,8 +17,8 @@ DISABLED_COLOR = (.9, .9, .9, 1)
 ENABLED_COLOR = (1, 1, 1, 1)
 ENTITY_FRAME_POS = [0.0, 0.0, -0.159]
 ENTITY_FRAME_SCALE = [0.514, 0.943, 0.713]
-MINI_FRAME_POS = [0.5, 0.0, -0.267]
-MINI_FRAME_SCALE = [0.49, 0.919, 0.689]
+MINI_FRAME_POS = [0.455, 0.0, -0.231]
+MINI_FRAME_SCALE = [0.442, 0.871, 0.641]
 
 MODES = {
     'Actor': ActorMenu,
@@ -183,7 +183,7 @@ class PreviewMenu(PreviewGui):
         self.entity_title.wrt_reparent_to(self.entity_frame)
         self.entity_frame.reparent_to(self.kitchen.aspect2d)
 
-        self.entity_button_frame.set_pos((0, 0, 0))
+        self.entity_button_frame.set_pos(0, 0, 0)
         self.entity_frame.set_pos(*ENTITY_FRAME_POS)
         self.entity_frame.set_scale(*ENTITY_FRAME_SCALE)
         self.entity_frame['frameSize'] = (-1, 1, -1, 1)

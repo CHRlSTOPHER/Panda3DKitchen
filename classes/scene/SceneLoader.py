@@ -39,15 +39,16 @@ class SceneLoader:
             node.set_color_scale(*color_scale)
 
     def load_node(self, mode, name, full_name):
+        node = None
         json_data = self.get_json_data(mode.lower() + "s")
 
-        if mode == AG.ACTORS:
+        if mode == AG.ACTOR:
             model, anims = json_data[name]
             node = self.generate_actor(model, anims)
             node.set_name(full_name)
             self.nodepaths.get('Actor').append(node)
 
-        if mode == AG.PROPS:
+        if mode == AG.PROP:
             if name not in G.SPECIAL_NODES:
                 model = json_data[name]
                 node = self.generate_node(model)
@@ -55,7 +56,9 @@ class SceneLoader:
                 self.nodepaths.get('Prop').append(node)
 
         if mode == AG.PARTICLES:
-            return
+            return None
+
+        return node
 
     def load_nodes(self, mode, node_data):
         json_data = self.get_json_data(mode)
