@@ -63,7 +63,7 @@ class SceneMenu(SceneGui, CanvasMenu, SceneLoader):
             self.load_nodes(mode, node_data)
         elif item_name:  # only load the new node.
             index = get_new_index(self.kitchen.project_location,
-                                  mode, item_name)
+                                  mode, item_name) - 1
             mode = self.kitchen.preview_menu.get_mode()
             full_name = f"{item_name}|{index}|root_node|{mode}"
             self.load_node(mode, item_name, full_name)

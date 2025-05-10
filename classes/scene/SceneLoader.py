@@ -38,6 +38,7 @@ class SceneLoader:
         if color_scale != [1, 1, 1, 1]:
             node.set_color_scale(*color_scale)
 
+    # these are individual nodes appended during the session.
     def load_node(self, mode, name, full_name):
         node = None
         json_data = self.get_json_data(mode.lower() + "s")
@@ -60,6 +61,7 @@ class SceneLoader:
 
         return node
 
+    # these are the nodes loaded at start up
     def load_nodes(self, mode, node_data):
         json_data = self.get_json_data(mode)
         # cleanup and load
