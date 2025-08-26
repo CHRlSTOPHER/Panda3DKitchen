@@ -14,11 +14,11 @@ MAXIMUM_FOV = G.MAXIMUM_SCROLL_FOV - G.FOV_SCROLL_AMOUNT
 
 class FovScrollWheel(DirectObject):
 
-    def __init__(self, _camera, mouse_watcher):
+    def __init__(self, _camera, mouse_watcher, fov_entry):
         DirectObject.__init__(self)
         self.camera = _camera
         self.mouse_watcher = mouse_watcher
-        self.current_fov = G.DEFAULT_FOV
+        self.fov_entry = fov_entry
         self.new_fov = G.DEFAULT_FOV
         self.fov_increment = 1
 
@@ -39,6 +39,17 @@ class FovScrollWheel(DirectObject):
 
     def set_fov(self, fov):
         self.camera.node().get_lens().set_fov(fov)
+        # update scroll wheel fov value in case the scene window entry
+        # is the basis for the new fov value
+        self.new_fov = fov
+
+        # update scene window fov entry value
+        if self.fov_entry:
+            self.update_entry_text(str(fov))
+
+    def update_entry_text(self, text):
+        # thank you panda3d for forced camel case :)
+        self.fov_entry.enterText(text)
 
     def cleanup(self):
         self.ignore_all()

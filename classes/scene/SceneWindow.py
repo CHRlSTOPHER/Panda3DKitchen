@@ -8,6 +8,7 @@ from classes.settings import Globals as G
 SCENE_BUFFER = [1920, 1080]
 SCENE_REGION = [0.268, 0.735, 0.278, 0.755]
 BG_COLOR = (.7, .65, .7, 1)
+FOV_ERROR_TEXT = "The FOV value entered is not an integer."
 
 
 class SceneWindow(SceneWindowGui):
@@ -26,13 +27,13 @@ class SceneWindow(SceneWindowGui):
         self.load_gui()
         self.load_scene_region()
         self.bind_gui()
-        # self.kitchen.taskMgr.add(self.update_fov, "update_fov")
         self.grid = DirectGrid(parent=self.scene_render)
 
     def bind_gui(self):
         self.scene_window.bind(DGG.WITHIN, self.set_within, extraArgs=[True])
         self.scene_window.bind(DGG.WITHOUT, self.set_within, extraArgs=[False])
         self.grid_checkbox['command'] = self.toggle_grid
+        self.fov_entry['command'] = self.update_fov
 
     def toggle_grid(self, show):
         if show:
@@ -66,8 +67,15 @@ class SceneWindow(SceneWindowGui):
         aspect_ratio = self.kitchen.get_aspect_ratio()
         self.scene_cam.node().get_lens().set_aspect_ratio(aspect_ratio)
 
-    def update_fov(self, task):
-        return task.again
+    def update_fov(self, fov):
+        # check if fov is an integer between min and max values
+        if fov.isdigit:
+            fov = int(fov)
+            fov = min(fov, G.MAXIMUM_SCROLL_FOV)
+            fov = max(fov, G.MINIMUM_SCROLL_FOV)
+            self.kitchen.camera_mover.set_fov(fov)
+        else:
+            print(FOV_ERROR_TEXT)
 
     def set_within(self, state, mouse_data):
         self.within = state

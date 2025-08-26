@@ -26,7 +26,8 @@ class CameraMover(CameraRotater, NodePath, FovScrollWheel):
         NodePath.__init__(self, self.kitchen.scene_camera)
         super().generate()
         FovScrollWheel.__init__(self, self.kitchen.scene_camera,
-                                self.kitchen.scene_mw)
+                                self.kitchen.scene_mw,
+                                self.kitchen.scene_window.fov_entry)
         super().generate()
         self.define_move_options()
         self.listen_for_key_inputs()
